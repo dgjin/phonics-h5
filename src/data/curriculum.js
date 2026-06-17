@@ -4,7 +4,7 @@
  * p 不填时，拼词游戏按单词字母拆分。
  * 每个 unit 的 acts 决定生成哪些题型: flashcard / listen / match / spell
  */
-window.CURRICULUM = [
+export const CURRICULUM = [
   {
     id: 'preschool', title: 'Preschool', cn: '字母 A–Z 认知', color: 'purple', icon: 'ti-abc',
     desc: '认识 26 个字母的名称、发音和例词',
@@ -279,3 +279,20 @@ window.CURRICULUM = [
     ],
   },
 ];
+
+export const ACTIVITY_LABELS = {
+  flashcard: '学习卡', listen: '听音选择', match: '连线匹配', spell: '拼单词', trace: '描红写字'
+};
+
+export const ACTIVITY_ICONS = {
+  flashcard: 'ti-cards', listen: 'ti-ear', match: 'ti-link', spell: 'ti-pencil', trace: 'ti-writing'
+};
+
+export function findLevel(levelId) {
+  return CURRICULUM.find(l => l.id === levelId);
+}
+
+export function findUnit(levelId, unitId) {
+  const level = findLevel(levelId);
+  return level ? level.units.find(u => u.id === unitId) : null;
+}

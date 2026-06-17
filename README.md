@@ -1,7 +1,7 @@
 # Phonics Fun · 自然拼读 H5
 
 面向儿童的自然拼读互动学习网站，内容改编自 KizPhonics 分级教材（Preschool → G2）。
-基于 **Vite** 构建（原生 JS，无框架），自适应手机 / 平板 / 电脑，可安装为 PWA 离线使用。
+基于 **React 19 + Vite**（React Router 哈希路由），自适应手机 / 平板 / 电脑，可安装为 PWA 离线使用。
 
 ## 功能
 
@@ -36,9 +36,9 @@ npm run preview      # 本地预览 dist（默认 http://localhost:4173）
 
 1. 在 https://supabase.com 创建一个免费项目。
 2. 进入 **Project Settings → API**，复制 `Project URL` 和 `anon public` key，
-   填入 [`js/config.js`](js/config.js)：
+   填入 [`src/config.js`](src/config.js)：
    ```js
-   window.CONFIG = {
+   export const CONFIG = {
      SUPABASE_URL: 'https://xxxx.supabase.co',
      SUPABASE_ANON_KEY: 'eyJhbGci....',
    };
@@ -80,8 +80,8 @@ HTTPS 下 PWA 安装/离线、Web Speech 才完整可用。无需自建后端（
 ## 目录结构
 
 ```
-index.html               Vite 入口（引用 /src/main.js）
-vite.config.js
+index.html               Vite 入口（引用 /src/main.jsx）
+vite.config.js           含 @vitejs/plugin-react
 package.json
 public/                  原样拷贝到 dist 根目录
   manifest.json          PWA 清单
@@ -89,25 +89,36 @@ public/                  原样拷贝到 dist 根目录
   icons/                 PWA 图标（192/512/maskable）
   audio/                 单词与字母发音 m4a（141 词 + 26 字母）
 src/
-  main.js                入口，按序导入下列模块
-  styles.css
-  config.js              Supabase 密钥（自填）
-  auth.js                登录/注册（import @supabase/supabase-js）
-  curriculum.js          课程数据
-  audio-manifest.js      可用音频清单（由生成脚本产出）
-  tts.js                 发音（音频文件优先，TTS 回退）
-  progress.js            进度 + 打卡 + 云端同步
-  util.js / activities.js / screens.js / app.js
+  main.jsx               入口：挂载 React，包裹 AuthProvider → ProgressProvider → HashRouter，
+                         并 import 字体 / 图标 / styles.css
+  App.jsx                路由表（home / level / unit / game / result）
+  styles.css             全部样式（主题色 c-{color}、响应式、动效）
+  config.js              Supabase 密钥（自填，export const CONFIG）
+  audio-manifest.js      可用音频清单（由生成脚本产出，挂 window.AUDIO_MANIFEST）
+  data/
+    curriculum.js        课程数据 + findLevel/findUnit/ACTIVITY_ICONS
+    utils.js             shuffle / sample / tilesOf / starsFor / highlight
+  lib/
+    auth.jsx             AuthProvider + useAuth（Supabase 登录/注册）
+    progress.jsx         ProgressProvider + useProgress（星星/打卡 + 云端同步）
+    tts.js               发音（音频文件优先，Web Speech 回退）
+  components/
+    HomePage / LevelPage / UnitPage / GamePage / ResultPage
+    activities.jsx       5 种题型：Flashcard / Trace / Listen / Match / Spell
+    common.jsx           Header / Button / Stars / ProgressDots / Feedback / Confetti
+    LoginModal.jsx       登录/注册弹窗
 ```
 
 ## 自定义 / 维护
 
-- **改内容**：编辑 `src/curriculum.js`。item 格式
+- **改内容**：编辑 `src/data/curriculum.js`。item 格式
   `{ l:'a', s:'/æ/', w:'cat', e:'🐱', p:['c','a','t'] }`（l=焦点字母，s=发音，w=单词，e=emoji，p=拼词分块可选）。
-  `acts` 决定该单元题型：`flashcard / trace / listen / match / spell`。
+  `acts` 决定该单元题型：`flashcard / trace / listen / match / spell`（字符串数组）。
+- **加新题型**：在 `src/components/activities.jsx` 写一个 `({ unit, onFinish }) => …` 组件，
+  并注册进文件末尾的 `ACTIVITIES` 映射；在 `GamePage.jsx`/`UnitPage.jsx` 的标签表里加中文名即可。
 - **重新生成音频**（新增单词后，在 macOS 上运行）：用 `say -v Samantha` 输出 aiff，
   再 `afconvert -f m4af -d aac` 转 m4a 放入 `public/audio/`，并刷新 `src/audio-manifest.js`
-  （遍历 `src/curriculum.js` 中所有 `w` 与 A–Z 字母名）。
+  （遍历 `src/data/curriculum.js` 中所有 `w` 与 A–Z 字母名）。
 - **更新缓存**：构建产物文件名自动带哈希，无需手动改版本；如需强制刷新 SW，提升 `public/sw.js`
   顶部的 `VERSION`。
 

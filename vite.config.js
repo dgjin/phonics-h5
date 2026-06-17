@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  // 相对路径，方便部署到任意子目录（GitHub Pages 等）
   base: './',
+  plugins: [react()],
   build: {
     outDir: 'dist',
     target: 'es2018',
