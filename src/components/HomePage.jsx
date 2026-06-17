@@ -81,6 +81,14 @@ export default function HomePage() {
         <p className="hero-sub">自然拼读 · 听音 · 拼词 · 闯关学习</p>
       </div>
       <Dashboard />
+      <button className="review-entry c-amber" onClick={() => navigate('/review')}>
+        <div className="re-icon"><i className="ti ti-cards"></i></div>
+        <div className="re-main">
+          <div className="re-title">背单词</div>
+          <div className="re-cn">真人发音 · 美式/英式 · 翻卡复习</div>
+        </div>
+        <i className="ti ti-chevron-right re-arrow"></i>
+      </button>
       <div className="level-grid">
         {CURRICULUM.map((lv) => {
           const st = levelStars(lv);

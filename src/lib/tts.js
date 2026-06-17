@@ -43,8 +43,16 @@ function webspeak(text, opts = {}) {
   if (!synth || !text) return;
   synth.cancel();
   const u = new SpeechSynthesisUtterance(String(text));
-  if (voice) u.voice = voice;
-  u.lang = (voice && voice.lang) || 'en-US';
+  if (opts.lang) {
+    const vs = synth.getVoices();
+    const want = opts.lang.replace('_', '-').toLowerCase();
+    const v = vs.find((x) => x.lang && x.lang.replace('_', '-').toLowerCase() === want);
+    if (v) u.voice = v; else if (voice) u.voice = voice;
+    u.lang = opts.lang;
+  } else {
+    if (voice) u.voice = voice;
+    u.lang = (voice && voice.lang) || 'en-US';
+  }
   u.rate = opts.rate != null ? opts.rate : 0.85;
   u.pitch = opts.pitch != null ? opts.pitch : 1.05;
   synth.speak(u);
@@ -55,14 +63,15 @@ export function stop() {
   if (synth) synth.cancel();
 }
 
-function playFile(src, fallbackText, onend) {
+function playFile(src, fallback, onend) {
   const a = getEl();
   try { a.pause(); } catch (e) {}
+  const fb = () => { if (typeof fallback === 'function') fallback(); else if (fallback) webspeak(fallback); };
   a.onended = () => { a.onended = null; if (onend) onend(); };
-  a.onerror = () => { a.onerror = null; if (fallbackText) webspeak(fallbackText); if (onend) onend(); };
+  a.onerror = () => { a.onerror = null; fb(); if (onend) onend(); };
   try { a.src = src; a.currentTime = 0; } catch (e) {}
   const p = a.play();
-  if (p && p.catch) p.catch(() => { if (fallbackText) webspeak(fallbackText); if (onend) onend(); });
+  if (p && p.catch) p.catch(() => { fb(); if (onend) onend(); });
 }
 
 export function speak(text, opts) {
@@ -92,6 +101,27 @@ export function speakItem(item) {
   }
 }
 
+/* ---------- 真人发音：在线有道词典，支持美式 / 英式 ---------- */
+const ACCENT_KEY = 'phonics_accent';
+export function getAccent() {
+  try { return localStorage.getItem(ACCENT_KEY) === 'uk' ? 'uk' : 'us'; } catch (e) { return 'us'; }
+}
+export function setAccent(a) {
+  try { localStorage.setItem(ACCENT_KEY, a === 'uk' ? 'uk' : 'us'); } catch (e) {}
+}
+function youdaoUrl(word, accent) {
+  const type = accent === 'uk' ? 1 : 2; // 1=英式  2=美式
+  return 'https://dict.youdao.com/dictvoice?type=' + type + '&audio=' + encodeURIComponent(word);
+}
+/* 播放真人美/英发音；联网失败时回退到对应口音的浏览器语音 */
+export function speakReal(word, accent, onend) {
+  if (!word) { if (onend) onend(); return; }
+  stop();
+  const acc = accent === 'uk' ? 'uk' : 'us';
+  const lang = acc === 'uk' ? 'en-GB' : 'en-US';
+  playFile(youdaoUrl(word, acc), () => webspeak(word, { lang }), onend);
+}
+
 /* 在用户手势内调用：解锁音频与语音引擎 */
 export function unlock() {
   if (unlocked) return;
@@ -119,4 +149,4 @@ if (typeof window !== 'undefined') {
   events.forEach((ev) => window.addEventListener(ev, fire, { passive: true }));
 }
 
-export const TTS = { speak, speakItem, speakLetter, stop, unlock };
+export const TTS = { speak, speakItem, speakLetter, speakReal, getAccent, setAccent, stop, unlock };
