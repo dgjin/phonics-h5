@@ -7,6 +7,6 @@
  * 留空则应用以「本地访客」模式运行（进度仅存本设备，仍可离线使用）。
  */
 export const CONFIG = {
-  SUPABASE_URL: 'https://ipahbcjaudktdlndhnph.supabase.co',
+  SUPABASE_URL: 'https://gdrruugeqttiyufqqaug.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkcnJ1dWdlcXR0aXl1ZnFxYXVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NjUyMzgsImV4cCI6MjA4NjI0MTIzOH0.BzKuhMdGycaBJvXO1dmYByvnw1lKdQ-mkG-mQPjgvTA',
 };
