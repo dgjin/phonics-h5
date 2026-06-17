@@ -1,0 +1,17 @@
+{
+  "name": "Phonics Fun 自然拼读",
+  "short_name": "Phonics Fun",
+  "description": "面向儿童的自然拼读互动学习：听音、拼词、描红、闯关。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f4fb",
+  "theme_color": "#7F77DD",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

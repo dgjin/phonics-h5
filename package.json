@@ -1,0 +1,21 @@
+{
+  "name": "phonics-fun",
+  "version": "1.0.0",
+  "description": "自然拼读互动学习 H5（Vite）",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/fredoka": "^5.2.10",
+    "@fontsource/nunito": "^5.2.7",
+    "@supabase/supabase-js": "^2.45.0",
+    "@tabler/icons-webfont": "^3.44.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
