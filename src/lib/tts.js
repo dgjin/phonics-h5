@@ -1,10 +1,23 @@
-/* 发音：优先播放本地音频文件(Samantha 录制)，回退浏览器 Web Speech */
+/* 发音：优先播放本地音频文件(Samantha 录制)，回退浏览器 Web Speech。
+ * 移动端（iOS Safari 等）要求音频首次播放发生在用户手势内，否则被静默拦截。
+ * 解决：复用同一个 Audio 元素，并在首次用户手势时解锁它（之后程序化播放即被允许）。 */
 import '../audio-manifest.js'; // 设置 window.AUDIO_MANIFEST
 
 const manifest = window.AUDIO_MANIFEST || { words: {}, letters: {} };
 const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
 let voice = null;
-let cur = null;
+let audioEl = null;     // 复用的单个音频元素
+let unlocked = false;
+
+function getEl() {
+  if (!audioEl) {
+    audioEl = new Audio();
+    audioEl.preload = 'auto';
+    audioEl.playsInline = true;
+    audioEl.setAttribute('playsinline', '');
+  }
+  return audioEl;
+}
 
 function pickVoice() {
   if (!synth) return;
@@ -38,20 +51,18 @@ function webspeak(text, opts = {}) {
 }
 
 export function stop() {
-  if (cur) {
-    try { cur.pause(); } catch (e) {}
-    cur = null;
-  }
+  if (audioEl) { try { audioEl.pause(); } catch (e) {} audioEl.onended = null; audioEl.onerror = null; }
   if (synth) synth.cancel();
 }
 
 function playFile(src, fallbackText, onend) {
-  const a = new Audio(src);
-  cur = a;
-  a.onended = () => { if (cur === a) cur = null; if (onend) onend(); };
-  a.onerror = () => { if (cur === a) cur = null; if (fallbackText) webspeak(fallbackText); if (onend) onend(); };
-  a.play().catch(() => { if (fallbackText) webspeak(fallbackText); if (onend) onend(); });
-  return a;
+  const a = getEl();
+  try { a.pause(); } catch (e) {}
+  a.onended = () => { a.onended = null; if (onend) onend(); };
+  a.onerror = () => { a.onerror = null; if (fallbackText) webspeak(fallbackText); if (onend) onend(); };
+  try { a.src = src; a.currentTime = 0; } catch (e) {}
+  const p = a.play();
+  if (p && p.catch) p.catch(() => { if (fallbackText) webspeak(fallbackText); if (onend) onend(); });
 }
 
 export function speak(text, opts) {
@@ -62,6 +73,7 @@ export function speak(text, opts) {
 }
 
 export function speakLetter(letter, onend) {
+  stop();
   const k = String(letter).toLowerCase();
   if (manifest.letters[k]) playFile('audio/l_' + k + '.m4a', letter, onend);
   else { webspeak(letter); if (onend) setTimeout(onend, 600); }
@@ -69,7 +81,6 @@ export function speakLetter(letter, onend) {
 
 export function speakItem(item) {
   if (!item) return;
-  stop();
   const l = item.l || '';
   const isLetterCard = l.length === 2 && l[0].toLowerCase() === l[1].toLowerCase();
   if (isLetterCard && item.w) {
@@ -81,4 +92,31 @@ export function speakItem(item) {
   }
 }
 
-export const TTS = { speak, speakItem, speakLetter, stop };
+/* 在用户手势内调用：解锁音频与语音引擎 */
+export function unlock() {
+  if (unlocked) return;
+  unlocked = true;
+  try {
+    const a = getEl();
+    // 关键：必须在手势内“非静音”地播放真实音频才能解锁 iOS 的可发声播放。
+    // 用一段真正的静音片段（不出声但完成一次播放），从而解锁后续程序化播放。
+    a.muted = false;
+    a.src = 'audio/_silence.wav';
+    a.currentTime = 0;
+    const p = a.play();
+    if (p && p.then) p.then(() => { try { a.pause(); a.currentTime = 0; } catch (e) {} }).catch(() => {});
+  } catch (e) {}
+  try {
+    if (synth) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; synth.speak(u); }
+  } catch (e) {}
+}
+
+// 首次用户手势自动解锁
+if (typeof window !== 'undefined') {
+  const fire = () => { unlock(); cleanup(); };
+  const events = ['pointerdown', 'touchend', 'click', 'keydown'];
+  const cleanup = () => events.forEach((ev) => window.removeEventListener(ev, fire));
+  events.forEach((ev) => window.addEventListener(ev, fire, { passive: true }));
+}
+
+export const TTS = { speak, speakItem, speakLetter, stop, unlock };
