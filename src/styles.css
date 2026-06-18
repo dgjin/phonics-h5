@@ -398,6 +398,9 @@ i.ti { line-height: 1; vertical-align: -2px; }
 /* 错题 chip */
 .scope-chip.mk { border-color: #f0c4b4; color: #b0481f; }
 .scope-chip.mk.on { background: #e2673c; border-color: #e2673c; color: #fff; }
+/* 教材 chip */
+.scope-chip.tb { border-color: #cfe3b6; color: #3b6d11; }
+.scope-chip.tb.on { background: #6fa82a; border-color: #6fa82a; color: #fff; }
 
 /* 错题库页 */
 .mk-actions { display: flex; gap: 12px; margin-bottom: 16px; }

@@ -4,6 +4,7 @@ import { useAuth } from '../lib/auth.jsx';
 import { useProgress } from '../lib/progress.jsx';
 import { useIsMobile } from '../lib/useIsMobile';
 import { getAccent, setAccent } from '../lib/tts';
+import { TEXTBOOK } from '../data/textbook';
 import { Header } from './common.jsx';
 import LoginModal from './LoginModal.jsx';
 
@@ -100,6 +101,18 @@ export default function ProfilePage() {
         <div className="pstat"><div className="pstat-num">{completedUnits()}</div><div className="pstat-lab">已学单元</div></div>
         <div className="pstat"><div className="pstat-num">{streak()}</div><div className="pstat-lab">连续天数</div></div>
       </div>
+
+      <button
+        className="entry-card c-green"
+        onClick={() => navigate('/review', { state: { scope: 'tb:' + TEXTBOOK.units[0].id } })}
+      >
+        <div className="entry-icon"><i className="ti ti-book-2"></i></div>
+        <div className="entry-main">
+          <div className="entry-title">教材同步{TEXTBOOK.sample ? '（示例）' : ''}</div>
+          <div className="entry-sub">{TEXTBOOK.name} · {TEXTBOOK.volume}</div>
+        </div>
+        <i className="ti ti-chevron-right entry-arrow"></i>
+      </button>
 
       <button className="entry-card c-coral" onClick={() => navigate('/mistakes')}>
         <div className="entry-icon"><i className="ti ti-alert-triangle"></i></div>

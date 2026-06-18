@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CURRICULUM } from '../data/curriculum';
+import { TEXTBOOK, textbookWords } from '../data/textbook';
 import { cnOf } from '../data/word-cn';
 import { speakReal, getAccent, setAccent, stop } from '../lib/tts';
 import { shuffle } from '../data/utils';
@@ -50,7 +51,7 @@ export default function ReviewPage() {
 
   const [accent, setAcc] = useState(getAccent());
   const [mode, setMode] = useState(init.mode === 'dictation' ? 'dictation' : 'flip'); // flip | dictation
-  const [scope, setScope] = useState(init.scope === 'mistakes' ? 'mistakes' : 'all');
+  const [scope, setScope] = useState(init.scope || 'all'); // all | mistakes | <levelId> | tb:<unitId>
   const [mastered, setMastered] = useState(loadMastered);
   const autoStarted = useRef(false);
   const [queue, setQueue] = useState(null); // null = 设置页
@@ -66,7 +67,11 @@ export default function ReviewPage() {
     () => mistakes.map((m) => ({ w: m.w, e: m.e, s: m.s, cn: cnOf(m.w), level: m.level || '错题' })),
     [mistakes]
   );
-  const allWords = scope === 'mistakes' ? mistakeWords : buildWords(scope);
+  const allWords = scope === 'mistakes'
+    ? mistakeWords
+    : scope.indexOf('tb:') === 0
+      ? textbookWords(scope.slice(3))
+      : buildWords(scope);
   const unmastered = allWords.filter((w) => !mastered.has(w.w)).length;
   const current = queue && queue[0];
 
@@ -147,6 +152,14 @@ export default function ReviewPage() {
             {CURRICULUM.map((lv) => (
               <button key={lv.id} className={'scope-chip' + (scope === lv.id ? ' on' : '')} onClick={() => setScope(lv.id)}>
                 {lv.title}
+              </button>
+            ))}
+          </div>
+          <div className="rv-field-label">教材同步 · {TEXTBOOK.volume}{TEXTBOOK.sample ? '（示例）' : ''}</div>
+          <div className="scope-chips">
+            {TEXTBOOK.units.map((u) => (
+              <button key={u.id} className={'scope-chip tb' + (scope === 'tb:' + u.id ? ' on' : '')} onClick={() => setScope('tb:' + u.id)}>
+                <i className="ti ti-book-2"></i> {u.title}
               </button>
             ))}
           </div>
