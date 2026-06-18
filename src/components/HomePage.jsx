@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CURRICULUM } from '../data/curriculum';
 import { useProgress } from '../lib/progress.jsx';
 import { useAuth } from '../lib/auth.jsx';
+import { useIsMobile } from '../lib/useIsMobile';
 import LoginModal from './LoginModal.jsx';
 
 function UserBar({ onLogin }) {
@@ -70,10 +71,11 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { levelStars } = useProgress();
   const [showLogin, setShowLogin] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <>
-      <UserBar onLogin={() => setShowLogin(true)} />
+      {!isMobile && <UserBar onLogin={() => setShowLogin(true)} />}
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
       <div className="hero">
         <div className="hero-emoji">🔤</div>
@@ -81,14 +83,16 @@ export default function HomePage() {
         <p className="hero-sub">自然拼读 · 听音 · 拼词 · 闯关学习</p>
       </div>
       <Dashboard />
-      <button className="review-entry c-amber" onClick={() => navigate('/review')}>
-        <div className="re-icon"><i className="ti ti-cards"></i></div>
-        <div className="re-main">
-          <div className="re-title">背单词</div>
-          <div className="re-cn">真人发音 · 美式/英式 · 翻卡复习</div>
-        </div>
-        <i className="ti ti-chevron-right re-arrow"></i>
-      </button>
+      {!isMobile && (
+        <button className="review-entry c-amber" onClick={() => navigate('/review')}>
+          <div className="re-icon"><i className="ti ti-cards"></i></div>
+          <div className="re-main">
+            <div className="re-title">背单词</div>
+            <div className="re-cn">真人发音 · 美式/英式 · 翻卡复习</div>
+          </div>
+          <i className="ti ti-chevron-right re-arrow"></i>
+        </button>
+      )}
       <div className="level-grid">
         {CURRICULUM.map((lv) => {
           const st = levelStars(lv);

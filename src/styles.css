@@ -314,6 +314,39 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .btn.dont { background: #ef9f4e; color: #fff; box-shadow: 0 6px 0 #cf7f2e; }
 .btn.dont:active { box-shadow: 0 2px 0 #cf7f2e; transform: translateY(3px); }
 
+/* ===== iOS 风格底部标签栏（移动端） ===== */
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: rgba(255, 255, 255, .82);
+  backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid rgba(40, 30, 90, .08); box-shadow: 0 -2px 16px rgba(40, 30, 90, .05); }
+.tabbar-inner { max-width: 760px; margin: 0 auto; display: flex; }
+.tab { flex: 1; background: none; border: none; cursor: pointer; padding: 8px 0 7px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px; color: #9a9aa8;
+  font-family: var(--font-head); font-weight: 600; font-size: 11px; transition: color .15s, transform .12s; }
+.tab i { font-size: 25px; line-height: 1; }
+.tab.on { color: var(--accent); }
+.tab:active { transform: scale(.9); }
+.has-tabbar #app { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+
+/* ===== 「我的」页 ===== */
+.page-title { font-family: var(--font-head); font-weight: 700; font-size: 30px; color: var(--accent-deep);
+  margin: 6px 2px 4px; }
+.profile-head { text-align: center; padding: 18px 0 4px; }
+.profile-avatar { width: 78px; height: 78px; margin: 0 auto 12px; border-radius: 50%; background: var(--accent-soft);
+  color: var(--accent-dark); display: grid; place-items: center; font-family: var(--font-head); font-weight: 700;
+  font-size: 34px; box-shadow: var(--shadow); }
+.profile-name { font-family: var(--font-head); font-weight: 700; font-size: 24px; color: var(--accent-deep); line-height: 1.1; }
+.profile-tag { color: var(--muted); font-weight: 600; font-size: 13px; margin: 5px 0 16px; }
+.profile-stats { display: flex; gap: 10px; margin: 18px 0; }
+.pstat { flex: 1; background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 16px 6px; text-align: center; }
+.pstat-num { font-family: var(--font-head); font-weight: 700; font-size: 26px; color: var(--accent-deep); line-height: 1; }
+.pstat-lab { color: var(--muted); font-weight: 600; font-size: 12px; margin-top: 6px; }
+.profile-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; margin-bottom: 16px; }
+.pcard-title { font-family: var(--font-head); font-weight: 700; font-size: 17px; color: var(--accent-deep); }
+.pcard-title .ti { color: var(--accent); }
+.pcard-sub { color: var(--muted); font-weight: 600; font-size: 13px; margin: 4px 0 14px; }
+
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 @keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
