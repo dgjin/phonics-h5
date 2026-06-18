@@ -143,8 +143,8 @@ export const CURRICULUM = [
     ],
   },
   {
-    id: 'g1', title: 'G1', cn: '辅音 · S连缀 · 双字母组合', color: 'green', icon: 'ti-book',
-    desc: '辅音回顾、s 连缀以及 ch / sh / th / wh / ph 双字母音',
+    id: 'g1', title: 'G1', cn: '辅音 · S连缀 · 双字母 · 硬软音', color: 'green', icon: 'ti-book',
+    desc: '辅音回顾、s 连缀、ch/sh/th/wh/ph 双字母音，以及 c/g 的硬软音和三字母连缀',
     units: [
       { id: 's-blends', title: 'S Blends', cn: 's 连缀', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
         { l: 'sn', s: '/sn/', w: 'snail', e: '🐌', p: ['sn', 'ail'] },
@@ -178,11 +178,37 @@ export const CURRICULUM = [
         { l: 'ph', s: '/f/', w: 'phone', e: '📱', p: ['ph', 'one'] },
         { l: 'ph', s: '/f/', w: 'photo', e: '📷', p: ['ph', 'oto'] },
       ]},
+      { id: 'hard-soft-c', title: 'Hard & Soft c', cn: '硬音 /k/ 与软音 /s/', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'c', s: '/k/', w: 'cat', e: '🐱' },
+        { l: 'c', s: '/k/', w: 'cup', e: '☕' },
+        { l: 'c', s: '/k/', w: 'coat', e: '🧥' },
+        { l: 'c', s: '/s/', w: 'city', e: '🏙️' },
+        { l: 'c', s: '/s/', w: 'cell', e: '🔬' },
+        { l: 'c', s: '/s/', w: 'cinema', e: '🎬' },
+      ]},
+      { id: 'hard-soft-g', title: 'Hard & Soft g', cn: '硬音 /g/ 与软音 /dʒ/', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'g', s: '/g/', w: 'goat', e: '🐐' },
+        { l: 'g', s: '/g/', w: 'gum', e: '🍬' },
+        { l: 'g', s: '/g/', w: 'guitar', e: '🎸' },
+        { l: 'g', s: '/dʒ/', w: 'giraffe', e: '🦒', p: ['g', 'ir', 'affe'] },
+        { l: 'g', s: '/dʒ/', w: 'ginger', e: '🫚' },
+        { l: 'g', s: '/dʒ/', w: 'gym', e: '🏋️' },
+      ]},
+      { id: 'trigraphs', title: 'Trigraphs', cn: '三字母连缀 shr/spl/str/thr', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'shr', s: '/ʃr/', w: 'shrimp', e: '🦐', p: ['sh', 'rimp'] },
+        { l: 'shr', s: '/ʃr/', w: 'shred', e: '📄', p: ['sh', 'red'] },
+        { l: 'spl', s: '/spl/', w: 'splash', e: '💦', p: ['spl', 'ash'] },
+        { l: 'spl', s: '/spl/', w: 'split', e: '✂️', p: ['spl', 'it'] },
+        { l: 'str', s: '/str/', w: 'string', e: '🧵', p: ['str', 'ing'] },
+        { l: 'str', s: '/str/', w: 'street', e: '🛣️', p: ['str', 'eet'] },
+        { l: 'thr', s: '/θr/', w: 'thread', e: '🧵', p: ['th', 'read'] },
+        { l: 'thr', s: '/θr/', w: 'throne', e: '👑', p: ['th', 'rone'] },
+      ]},
     ],
   },
   {
-    id: 'g1-2', title: 'G1–2', cn: 'L/R 连缀 · 长元音 a/e/i', color: 'pink', icon: 'ti-puzzle',
-    desc: 'bl/cl/fl/gl/pl、br/cr/dr… 连缀，以及长元音 a / e / i',
+    id: 'g1-2', title: 'G1–2', cn: 'L/R 连缀 · 长元音 · 词尾', color: 'pink', icon: 'ti-puzzle',
+    desc: 'L/R 连缀、长元音 a/e/i，以及词尾 -le 和 y 发长 e 音',
     units: [
       { id: 'l-blends', title: 'L Blends', cn: 'L 连缀', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
         { l: 'bl', s: '/bl/', w: 'blue', e: '🟦', p: ['bl', 'ue'] },
@@ -227,6 +253,22 @@ export const CURRICULUM = [
         { l: 'i_e', s: '/aɪ/', w: 'five', e: '5️⃣', p: ['f', 'i', 'v', 'e'] },
         { l: 'i_e', s: '/aɪ/', w: 'nine', e: '9️⃣', p: ['n', 'i', 'n', 'e'] },
       ]},
+      { id: 'ending-le', title: 'Ending -le', cn: '词尾 -le 音', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'ble', s: '/bəl/', w: 'table', e: '🪑', p: ['ta', 'ble'] },
+        { l: 'ble', s: '/bəl/', w: 'cable', e: '🔌', p: ['ca', 'ble'] },
+        { l: 'cle', s: '/kəl/', w: 'circle', e: '⭕', p: ['cir', 'cle'] },
+        { l: 'dle', s: '/dəl/', w: 'candle', e: '🕯️', p: ['can', 'dle'] },
+        { l: 'gle', s: '/gəl/', w: 'eagle', e: '🦅', p: ['ea', 'gle'] },
+        { l: 'ple', s: '/pəl/', w: 'apple', e: '🍎', p: ['ap', 'ple'] },
+      ]},
+      { id: 'ending-y-long-e', title: 'Ending y (长 e)', cn: '词尾 y 发长 e 音', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'y', s: '/iː/', w: 'happy', e: '😊', p: ['hap', 'py'] },
+        { l: 'y', s: '/iː/', w: 'baby', e: '👶', p: ['ba', 'by'] },
+        { l: 'y', s: '/iː/', w: 'candy', e: '🍬', p: ['can', 'dy'] },
+        { l: 'y', s: '/iː/', w: 'sunny', e: '☀️', p: ['sun', 'ny'] },
+        { l: 'y', s: '/iː/', w: 'funny', e: '😄', p: ['fun', 'ny'] },
+        { l: 'y', s: '/iː/', w: 'puppy', e: '🐶', p: ['pup', 'py'] },
+      ]},
     ],
   },
   {
@@ -248,6 +290,14 @@ export const CURRICULUM = [
         { l: 'ow', s: '/oʊ/', w: 'snow', e: '❄️', p: ['sn', 'ow'] },
         { l: 'ow', s: '/oʊ/', w: 'bow', e: '🎀', p: ['b', 'ow'] },
       ]},
+      { id: 'short-oo', title: 'Short oo', cn: '短 oo /ʊ/', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'oo', s: '/ʊ/', w: 'book', e: '📖', p: ['b', 'oo', 'k'] },
+        { l: 'oo', s: '/ʊ/', w: 'cook', e: '👨‍🍳', p: ['c', 'oo', 'k'] },
+        { l: 'oo', s: '/ʊ/', w: 'foot', e: '🦶', p: ['f', 'oo', 't'] },
+        { l: 'oo', s: '/ʊ/', w: 'look', e: '👀', p: ['l', 'oo', 'k'] },
+        { l: 'oo', s: '/ʊ/', w: 'good', e: '👍', p: ['g', 'oo', 'd'] },
+        { l: 'oo', s: '/ʊ/', w: 'wood', e: '🪵', p: ['w', 'oo', 'd'] },
+      ]},
       { id: 'long-u-oo', title: 'Long u / oo', cn: '长 u — u_e / oo', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
         { l: 'u_e', s: '/juː/', w: 'cube', e: '🧊', p: ['c', 'u', 'b', 'e'] },
         { l: 'u_e', s: '/juː/', w: 'tube', e: '🧪', p: ['t', 'u', 'b', 'e'] },
@@ -255,12 +305,33 @@ export const CURRICULUM = [
         { l: 'oo', s: '/uː/', w: 'boot', e: '🥾', p: ['b', 'oo', 't'] },
         { l: 'oo', s: '/uː/', w: 'food', e: '🍔', p: ['f', 'oo', 'd'] },
       ]},
-      { id: 'r-controlled', title: 'R-Controlled', cn: 'r 控制 — ar / or / er', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+      { id: 'r-controlled-ar', title: 'R-Controlled ar', cn: 'R 控制元音 ar', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
         { l: 'ar', s: '/ɑːr/', w: 'car', e: '🚗', p: ['c', 'ar'] },
         { l: 'ar', s: '/ɑːr/', w: 'star', e: '⭐', p: ['st', 'ar'] },
+        { l: 'ar', s: '/ɑːr/', w: 'arm', e: '💪', p: ['ar', 'm'] },
+        { l: 'ar', s: '/ɑːr/', w: 'farm', e: '🌾', p: ['f', 'ar', 'm'] },
+      ]},
+      { id: 'r-controlled-or', title: 'R-Controlled or', cn: 'R 控制元音 or', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
         { l: 'or', s: '/ɔːr/', w: 'corn', e: '🌽', p: ['c', 'or', 'n'] },
         { l: 'or', s: '/ɔːr/', w: 'fork', e: '🍴', p: ['f', 'or', 'k'] },
+        { l: 'or', s: '/ɔːr/', w: 'horse', e: '🐴', p: ['h', 'or', 'se'] },
+        { l: 'or', s: '/ɔːr/', w: 'born', e: '👶', p: ['b', 'or', 'n'] },
+      ]},
+      { id: 'r-controlled-er', title: 'R-Controlled er', cn: 'R 控制元音 er', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'er', s: '/ɜːr/', w: 'sister', e: '👧', p: ['sis', 'ter'] },
+        { l: 'er', s: '/ɜːr/', w: 'mother', e: '👩', p: ['mo', 'ther'] },
         { l: 'er', s: '/ɜːr/', w: 'flower', e: '🌸', p: ['flow', 'er'] },
+        { l: 'er', s: '/ɜːr/', w: 'water', e: '💧', p: ['wa', 'ter'] },
+      ]},
+      { id: 'r-controlled-ir-ur', title: 'R-Controlled ir/ur', cn: 'R 控制元音 ir/ur /ɜːr/', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
+        { l: 'ir', s: '/ɜːr/', w: 'bird', e: '🐦', p: ['b', 'ir', 'd'] },
+        { l: 'ir', s: '/ɜːr/', w: 'girl', e: '👧', p: ['g', 'ir', 'l'] },
+        { l: 'ir', s: '/ɜːr/', w: 'shirt', e: '👕', p: ['sh', 'ir', 't'] },
+        { l: 'ir', s: '/ɜːr/', w: 'skirt', e: '👗', p: ['sk', 'ir', 't'] },
+        { l: 'ur', s: '/ɜːr/', w: 'fur', e: '🧶', p: ['f', 'ur'] },
+        { l: 'ur', s: '/ɜːr/', w: 'turtle', e: '🐢', p: ['t', 'ur', 'tle'] },
+        { l: 'ur', s: '/ɜːr/', w: 'turn', e: '🔄', p: ['t', 'ur', 'n'] },
+        { l: 'ur', s: '/ɜːr/', w: 'nurse', e: '👩‍⚕️', p: ['n', 'ur', 'se'] },
       ]},
       { id: 'diphthongs', title: 'Diphthongs', cn: '双元音 ou / ow / oi / oy', acts: ['flashcard', 'listen', 'match', 'spell'], items: [
         { l: 'ow', s: '/aʊ/', w: 'cow', e: '🐄', p: ['c', 'ow'] },
