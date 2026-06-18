@@ -624,3 +624,41 @@ i.ti { line-height: 1; vertical-align: -2px; }
   .user-btn { font-size: 13px; padding: 6px 12px; border-radius: 20px; }
   .user-btn.solid { padding: 7px 16px; font-size: 13px; }
 }
+
+/* ===== 首页内嵌帮助区 ===== */
+.home-help { margin: 10px 0 4px; border-radius: var(--radius); overflow: hidden;
+  background: var(--card); box-shadow: var(--shadow); }
+
+.home-help-hd { display: flex; align-items: center; gap: 8px; width: 100%;
+  background: none; border: none; padding: 14px 16px; cursor: pointer;
+  font-family: var(--font-head); font-weight: 700; font-size: 15px; color: var(--accent-deep); }
+.home-help-hd .ti-help-circle { font-size: 18px; color: var(--accent); }
+.home-help-hd span { flex: 1; text-align: left; }
+.home-help-chev { font-size: 16px; color: var(--muted); transition: color .15s; }
+.home-help-hd.open .home-help-chev { color: var(--accent); }
+.home-help-hd:active { background: var(--accent-soft); }
+
+.home-help-body { padding: 0 14px 16px; border-top: 1px solid var(--accent-soft); }
+.home-help-sub { font-family: var(--font-head); font-weight: 700; font-size: 12px;
+  color: var(--muted); letter-spacing: .05em; margin: 14px 2px 10px; }
+
+/* 玩法介绍列表 */
+.home-help-guide { display: flex; flex-direction: column; gap: 10px; }
+.home-guide-item { display: flex; align-items: flex-start; gap: 11px;
+  background: var(--bg); border-radius: 12px; padding: 11px 12px; }
+.home-guide-ic { font-size: 18px; color: var(--accent); margin-top: 1px; flex-shrink: 0; }
+.home-guide-title { font-family: var(--font-head); font-weight: 700; font-size: 13px;
+  color: var(--accent-deep); margin-bottom: 3px; }
+.home-guide-desc { font-size: 12px; color: var(--ink); line-height: 1.65; }
+
+/* 常见问题手风琴 */
+.home-faq { background: var(--bg); border-radius: 12px; margin-bottom: 8px;
+  cursor: pointer; overflow: hidden; }
+.home-faq-q { display: flex; align-items: center; gap: 8px; padding: 12px 12px;
+  font-family: var(--font-head); font-weight: 700; font-size: 13px; color: var(--text); }
+.home-faq-q span { flex: 1; }
+.home-faq-q .ti { font-size: 14px; color: var(--muted); flex-shrink: 0; }
+.home-faq.open .home-faq-q { color: var(--accent); }
+.home-faq.open .home-faq-q .ti { color: var(--accent); }
+.home-faq-a { padding: 0 12px 12px; font-size: 12px; color: var(--ink); line-height: 1.7;
+  border-top: 1px solid var(--accent-soft); padding-top: 10px; }

@@ -7,6 +7,61 @@ import { useAuth } from '../lib/auth.jsx';
 import { useIsMobile } from '../lib/useIsMobile';
 import LoginModal from './LoginModal.jsx';
 
+
+/* ===== 首页内嵌帮助区（折叠卡片） ===== */
+const GUIDE = [
+  { icon: 'ti-school', title: '闯关学习', desc: '6 个级别、32 个单元，5 种题型：学习卡、描红写字、听音选择、连线匹配、拼单词。每关最多得 3 颗星。' },
+  { icon: 'ti-cards', title: '背单词', desc: '「翻卡复习」看中文意思与图片；「听写练习」听发音写出单词。可选美式/英式真人发音。' },
+  { icon: 'ti-alert-triangle', title: '错题库', desc: '做题或听写答错的单词会自动收集，进入「我的 → 错题库」可专项练习，答对后自动移出。' },
+  { icon: 'ti-flame', title: '每日打卡', desc: '每天学习任意一关就自动打卡，记录连续天数，养成学习习惯。' },
+  { icon: 'ti-cloud', title: '账号与同步', desc: '登录后学习进度、错题、头像与昵称都会云端保存，换手机或电脑都能同步。' },
+];
+const FAQ = [
+  { q: '没有声音怎么办？', a: '移动端浏览器需先轻触屏幕解锁声音。真人发音需联网，离线时自动改用设备语音。' },
+  { q: '怎么切换美式/英式发音？', a: '在背单词页顶部切换，或到「我的 → 默认发音口音」全站设置。' },
+  { q: '学习进度会丢失吗？', a: '登录后云端保存并跨设备同步；未登录存在当前设备，清理浏览器数据可能丢失。' },
+];
+
+function HomeHelp() {
+  const [open, setOpen] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(null);
+  return (
+    <div className="home-help">
+      <button className={'home-help-hd' + (open ? ' open' : '')} onClick={() => setOpen(v => !v)}>
+        <i className="ti ti-help-circle"></i>
+        <span>使用帮助</span>
+        <i className={'ti ti-chevron-' + (open ? 'up' : 'down') + ' home-help-chev'}></i>
+      </button>
+      {open && (
+        <div className="home-help-body">
+          <div className="home-help-sub">玩法介绍</div>
+          <div className="home-help-guide">
+            {GUIDE.map((g) => (
+              <div key={g.title} className="home-guide-item">
+                <i className={'ti ' + g.icon + ' home-guide-ic'}></i>
+                <div>
+                  <div className="home-guide-title">{g.title}</div>
+                  <div className="home-guide-desc">{g.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="home-help-sub" style={{ marginTop: 14 }}>常见问题</div>
+          {FAQ.map((f, i) => (
+            <div key={i} className={'home-faq' + (faqOpen === i ? ' open' : '')} onClick={() => setFaqOpen(faqOpen === i ? null : i)}>
+              <div className="home-faq-q">
+                <span>{f.q}</span>
+                <i className={'ti ti-chevron-' + (faqOpen === i ? 'up' : 'down')}></i>
+              </div>
+              {faqOpen === i && <div className="home-faq-a">{f.a}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function UserBar({ onLogin }) {
   const navigate = useNavigate();
   const { configured, user, displayName, signOut } = useAuth();
@@ -122,6 +177,7 @@ export default function HomePage() {
           );
         })}
       </div>
+      <HomeHelp />
       <p className="foot">内容改编自 KizPhonics 分级教材 · 真人发音（美式 / 英式）</p>
     </>
   );
