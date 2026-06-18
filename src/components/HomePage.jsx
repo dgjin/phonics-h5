@@ -108,7 +108,7 @@ export default function HomePage() {
           );
         })}
       </div>
-      <p className="foot">内容改编自 KizPhonics 分级教材 · 发音由设备语音合成</p>
+      <p className="foot">内容改编自 KizPhonics 分级教材 · 真人发音（美式 / 英式）</p>
     </>
   );
 }

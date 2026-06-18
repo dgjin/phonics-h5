@@ -303,12 +303,39 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .rv-back { transform: rotateY(180deg); }
 .rv-word { font-family: var(--font-head); font-weight: 700; font-size: clamp(40px, 13vw, 66px); color: var(--accent-deep); line-height: 1; }
 .rv-word.sm { font-size: clamp(26px, 8vw, 36px); margin-top: 10px; }
+.rv-cn { font-family: var(--font-head); font-weight: 700; font-size: clamp(22px, 7vw, 30px); color: var(--accent-dark); margin-top: 12px; }
 .rv-ipa { color: var(--muted); font-weight: 700; font-size: 18px; margin-top: 10px; }
 .rv-emoji { font-size: clamp(72px, 24vw, 116px); line-height: 1; }
 .rv-play { margin-top: 16px; margin-bottom: 0; }
 .rv-hint { color: var(--muted); font-weight: 700; font-size: 13px; margin-top: 14px; }
 .rv-actions { display: flex; gap: 12px; width: 100%; max-width: 440px; margin-top: 22px; }
 .rv-actions .btn { flex: 1; }
+
+/* 练习方式切换 */
+.mode-tabs { display: flex; gap: 10px; }
+.mode-tab { flex: 1; border: 2px solid var(--accent-soft); background: #fff; color: var(--accent-deep);
+  border-radius: 16px; padding: 14px 8px; font-family: var(--font-head); font-weight: 600; font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform .1s; }
+.mode-tab:active { transform: scale(.97); }
+.mode-tab.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.mode-tab .ti { font-size: 20px; }
+
+/* 听写练习 */
+.dictation { width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; }
+.dict-hint { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 6px 0 18px; }
+.dict-emoji { font-size: clamp(64px, 20vw, 92px); line-height: 1; }
+.dict-cn { font-family: var(--font-head); font-weight: 700; font-size: 22px; color: var(--accent-deep); }
+.dict-input { width: 100%; border: 3px solid var(--accent-soft); border-radius: 16px; padding: 16px 18px;
+  font-family: var(--font-head); font-weight: 700; font-size: 24px; text-align: center; color: var(--accent-deep);
+  outline: none; background: #fff; transition: border-color .15s; letter-spacing: 1px; }
+.dict-input:focus { border-color: var(--accent); }
+.dict-input.ok { border-color: #46c08a; background: #eafaf2; }
+.dict-input.no { border-color: #ef6b6b; background: #fdeeee; }
+.dict-result { font-family: var(--font-head); font-weight: 700; font-size: 18px; margin-top: 14px; }
+.dict-result.ok { color: #2f9e6e; }
+.dict-result.no { color: #d6453f; }
+.dict-result b { letter-spacing: 1px; }
+.dictation .rv-actions { margin-top: 20px; }
 .btn.know { background: #46c08a; color: #fff; box-shadow: 0 6px 0 #2f9e6e; }
 .btn.know:active { box-shadow: 0 2px 0 #2f9e6e; transform: translateY(3px); }
 .btn.dont { background: #ef9f4e; color: #fff; box-shadow: 0 6px 0 #cf7f2e; }

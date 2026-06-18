@@ -1,13 +1,28 @@
-/* 发音：优先播放本地音频文件(Samantha 录制)，回退浏览器 Web Speech。
- * 移动端（iOS Safari 等）要求音频首次播放发生在用户手势内，否则被静默拦截。
- * 解决：复用同一个 Audio 元素，并在首次用户手势时解锁它（之后程序化播放即被允许）。 */
+/* 发音：统一优先「在线真人语音」（有道词典，支持美式 type=2 / 英式 type=1），
+ * 失败时回退本地 Samantha 音频(audio/*.m4a)，再回退浏览器 Web Speech。
+ * 移动端（iOS Safari 等）要求音频首次播放发生在用户手势内：复用同一个 Audio 元素，
+ * 并在首次手势时解锁它（之后程序化播放即被允许）。 */
 import '../audio-manifest.js'; // 设置 window.AUDIO_MANIFEST
 
 const manifest = window.AUDIO_MANIFEST || { words: {}, letters: {} };
 const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
 let voice = null;
-let audioEl = null;     // 复用的单个音频元素
+let audioEl = null; // 复用的单个音频元素
 let unlocked = false;
+
+/* ---------- 口音（全局，美式/英式） ---------- */
+const ACCENT_KEY = 'phonics_accent';
+export function getAccent() {
+  try { return localStorage.getItem(ACCENT_KEY) === 'uk' ? 'uk' : 'us'; } catch (e) { return 'us'; }
+}
+export function setAccent(a) {
+  try { localStorage.setItem(ACCENT_KEY, a === 'uk' ? 'uk' : 'us'); } catch (e) {}
+}
+function langOf(accent) { return accent === 'uk' ? 'en-GB' : 'en-US'; }
+function youdaoUrl(word, accent) {
+  const type = accent === 'uk' ? 1 : 2; // 1=英式  2=美式
+  return 'https://dict.youdao.com/dictvoice?type=' + type + '&audio=' + encodeURIComponent(word);
+}
 
 function getEl() {
   if (!audioEl) {
@@ -74,18 +89,39 @@ function playFile(src, fallback, onend) {
   if (p && p.catch) p.catch(() => { fb(); if (onend) onend(); });
 }
 
-export function speak(text, opts) {
+/* 在线真人发音（显式指定口音；用于背单词页等） */
+export function speakReal(word, accent, onend) {
+  if (!word) { if (onend) onend(); return; }
   stop();
-  const s = slug(text);
-  if (manifest.words[s]) playFile('audio/w_' + s + '.m4a', text);
-  else webspeak(text, opts);
+  const acc = accent === 'uk' ? 'uk' : accent === 'us' ? 'us' : getAccent();
+  playFile(youdaoUrl(word, acc), () => webspeak(word, { lang: langOf(acc) }), onend);
 }
 
-export function speakLetter(letter, onend) {
+/* 单词发音：在线真人(按全局口音) → 本地 m4a → 设备语音 */
+export function speak(text, opts) {
+  if (!text) return;
   stop();
+  const acc = getAccent();
+  const s = slug(text);
+  const local = manifest.words[s] ? 'audio/w_' + s + '.m4a' : null;
+  playFile(youdaoUrl(text, acc), () => {
+    if (local) playFile(local, () => webspeak(text, { lang: langOf(acc) }));
+    else webspeak(text, Object.assign({ lang: langOf(acc) }, opts));
+  });
+}
+
+/* 字母发音：在线真人(按全局口音) → 本地 m4a → 设备语音 */
+export function speakLetter(letter, onend) {
+  if (!letter) { if (onend) onend(); return; }
+  stop();
+  const acc = getAccent();
   const k = String(letter).toLowerCase();
-  if (manifest.letters[k]) playFile('audio/l_' + k + '.m4a', letter, onend);
-  else { webspeak(letter); if (onend) setTimeout(onend, 600); }
+  const local = manifest.letters[k] ? 'audio/l_' + k + '.m4a' : null;
+  const fb = () => {
+    if (local) playFile(local, () => webspeak(letter, { lang: langOf(acc) }));
+    else webspeak(letter, { lang: langOf(acc) });
+  };
+  playFile(youdaoUrl(letter, acc), fb, onend);
 }
 
 export function speakItem(item) {
@@ -101,35 +137,12 @@ export function speakItem(item) {
   }
 }
 
-/* ---------- 真人发音：在线有道词典，支持美式 / 英式 ---------- */
-const ACCENT_KEY = 'phonics_accent';
-export function getAccent() {
-  try { return localStorage.getItem(ACCENT_KEY) === 'uk' ? 'uk' : 'us'; } catch (e) { return 'us'; }
-}
-export function setAccent(a) {
-  try { localStorage.setItem(ACCENT_KEY, a === 'uk' ? 'uk' : 'us'); } catch (e) {}
-}
-function youdaoUrl(word, accent) {
-  const type = accent === 'uk' ? 1 : 2; // 1=英式  2=美式
-  return 'https://dict.youdao.com/dictvoice?type=' + type + '&audio=' + encodeURIComponent(word);
-}
-/* 播放真人美/英发音；联网失败时回退到对应口音的浏览器语音 */
-export function speakReal(word, accent, onend) {
-  if (!word) { if (onend) onend(); return; }
-  stop();
-  const acc = accent === 'uk' ? 'uk' : 'us';
-  const lang = acc === 'uk' ? 'en-GB' : 'en-US';
-  playFile(youdaoUrl(word, acc), () => webspeak(word, { lang }), onend);
-}
-
 /* 在用户手势内调用：解锁音频与语音引擎 */
 export function unlock() {
   if (unlocked) return;
   unlocked = true;
   try {
     const a = getEl();
-    // 关键：必须在手势内“非静音”地播放真实音频才能解锁 iOS 的可发声播放。
-    // 用一段真正的静音片段（不出声但完成一次播放），从而解锁后续程序化播放。
     a.muted = false;
     a.src = 'audio/_silence.wav';
     a.currentTime = 0;
