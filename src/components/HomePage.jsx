@@ -173,6 +173,14 @@ export default function HomePage() {
         </div>
         <i className="ti ti-chevron-right re-arrow"></i>
       </button>
+      <button className="review-entry c-teal" onClick={() => navigate('/story')}>
+        <div className="re-icon"><i className="ti ti-book"></i></div>
+        <div className="re-main">
+          <div className="re-title">绘本故事</div>
+          <div className="re-cn">分级阅读 · 整句朗读 · 读后小测</div>
+        </div>
+        <i className="ti ti-chevron-right re-arrow"></i>
+      </button>
       {!isMobile && (
         <button className="review-entry c-amber" onClick={() => navigate('/review')}>
           <div className="re-icon"><i className="ti ti-cards"></i></div>

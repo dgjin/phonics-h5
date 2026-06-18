@@ -468,6 +468,31 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .ach-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width .4s ease; }
 .ach-prog { color: var(--muted); font-weight: 700; font-size: 11px; margin-top: 5px; }
 
+/* 绘本故事 */
+.story-card { display: flex; align-items: center; gap: 14px; text-align: left; background: var(--card);
+  border: none; border-radius: 18px; padding: 12px 14px; box-shadow: var(--shadow); cursor: pointer;
+  border-left: 8px solid var(--accent); transition: transform .14s; }
+.story-card:active { transform: scale(.98); }
+.story-cover { width: 52px; height: 52px; flex: none; border-radius: 14px; background: var(--accent-soft);
+  display: grid; place-items: center; font-size: 30px; }
+.story-lv { font-family: var(--font-head); font-weight: 700; font-size: 12px; color: #fff; background: var(--accent);
+  border-radius: 999px; padding: 1px 8px; vertical-align: 2px; margin-left: 4px; }
+.story-page { width: 100%; max-width: 440px; background: var(--card); border-radius: 26px; box-shadow: var(--shadow-lift);
+  padding: 26px 22px 30px; text-align: center; cursor: pointer; border: 3px solid var(--accent-soft); animation: pop .35s ease; }
+.story-page:active { transform: scale(.99); }
+.story-page-emoji { font-size: clamp(64px, 22vw, 96px); line-height: 1; }
+.story-page-en { font-family: var(--font-head); font-weight: 700; font-size: clamp(26px, 7vw, 36px); color: var(--accent-deep); margin: 16px 0 8px; }
+.story-page-cn { color: var(--muted); font-weight: 700; font-size: 16px; }
+.story-page .tap-hint { margin-top: 14px; }
+.story-quiz-cn { font-family: var(--font-head); font-weight: 700; font-size: clamp(22px, 6vw, 28px); color: var(--accent-deep);
+  text-align: center; margin: 6px 0 22px; }
+.story-opts { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 440px; }
+.story-opt { background: var(--card); border: 3px solid #eee; border-radius: 16px; padding: 16px 18px; cursor: pointer;
+  font-family: var(--font-head); font-weight: 600; font-size: 19px; color: var(--accent-deep); text-align: center; transition: transform .12s, border-color .15s; }
+.story-opt:active { transform: scale(.97); }
+.story-opt.right { border-color: #46c08a; background: #eafaf2; }
+.story-opt.wrong { border-color: #ef6b6b; background: #fdeeee; }
+
 /* 家长周报 */
 .rep-row { display: flex; gap: 10px; margin-bottom: 14px; }
 .rep-stat { flex: 1; background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 16px 6px; text-align: center; }
