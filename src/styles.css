@@ -468,6 +468,31 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .ach-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width .4s ease; }
 .ach-prog { color: var(--muted); font-weight: 700; font-size: 11px; margin-top: 5px; }
 
+/* 家长周报 */
+.rep-row { display: flex; gap: 10px; margin-bottom: 14px; }
+.rep-stat { flex: 1; background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 16px 6px; text-align: center; }
+.rep-num { font-family: var(--font-head); font-weight: 700; font-size: 28px; color: var(--accent-deep); line-height: 1; }
+.rep-lab { color: var(--muted); font-weight: 600; font-size: 12px; margin-top: 6px; }
+.rep-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 14px; }
+.rep-title { font-family: var(--font-head); font-weight: 700; font-size: 16px; color: var(--accent-deep); margin-bottom: 12px; }
+.rep-title .ti { color: var(--accent); }
+.rep-bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; }
+.rep-bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.rep-bar-track { width: 100%; max-width: 28px; height: 80px; background: #f0eff7; border-radius: 8px; display: flex; align-items: flex-end; overflow: hidden; }
+.rep-bar-fill { width: 100%; background: linear-gradient(180deg, var(--accent), var(--accent-dark)); border-radius: 8px 8px 0 0; min-height: 3px; transition: height .4s ease; }
+.rep-bar-num { font-family: var(--font-head); font-weight: 700; font-size: 12px; color: var(--accent-dark); height: 14px; }
+.rep-bar-day { font-size: 11px; font-weight: 700; color: var(--muted); }
+.rep-bar-day.today { color: var(--accent); }
+.rep-facts { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.rep-facts > div { color: var(--muted); font-weight: 600; font-size: 14px; }
+.rep-facts b { font-family: var(--font-head); font-size: 18px; color: var(--accent-deep); margin-right: 3px; }
+.rep-mk { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.rep-mk-chip { background: var(--accent-soft); color: var(--accent-deep); border-radius: 999px; padding: 7px 12px; font-weight: 700; font-size: 14px; }
+.rep-mk-chip i { color: var(--muted); font-style: normal; font-weight: 600; font-size: 12px; }
+.rep-empty { color: var(--muted); font-weight: 600; font-size: 14px; }
+.rep-tips { margin: 0; padding-left: 18px; color: var(--ink); }
+.rep-tips li { font-weight: 600; font-size: 14px; line-height: 1.8; }
+
 /* 帮助页 */
 .help-section { margin-bottom: 6px; }
 .help-h { font-family: var(--font-head); font-weight: 700; color: var(--accent-deep); font-size: 18px; margin: 18px 4px 12px; }

@@ -254,12 +254,22 @@ export function ProgressProvider({ children }) {
     }));
     const achievedCount = achievements.filter((a) => a.got).length;
 
+    // 家长周报派生（近 7 天）
+    const srsMastered = Object.values(data.srs || {}).filter((x) => (x.box || 0) >= 4).length;
+    const weekReport = () => {
+      const days = recentDays(7).map((d) => ({
+        ...d, lessons: (data.daily && data.daily[d.date] && data.daily[d.date].lessons) || 0,
+      }));
+      return { days, activeDays: days.filter((d) => d.on).length, lessons: days.reduce((a, d) => a + d.lessons, 0) };
+    };
+
     return {
       getStars, setStars, levelStars, totalStars, completedUnits, streak, recentDays, checkedToday,
       mistakes, mistakeCount: mistakes.length, addMistake, removeMistake,
       profile: data.profile || {}, setProfile,
-      srsReview, srsDue, srsDueCount, srsTotal,
+      srsReview, srsDue, srsDueCount, srsTotal, srsMastered,
       dailyGoal, todayLessons, achievements, achievedCount, achievementTotal: achievements.length,
+      weekReport,
     };
   }, [data, getStars, setStars, addMistake, removeMistake, setProfile, srsReview]);
 

@@ -120,6 +120,15 @@ export default function ProfilePage() {
         <i className="ti ti-chevron-right entry-arrow"></i>
       </button>
 
+      <button className="entry-card c-pink" onClick={() => navigate('/report')}>
+        <div className="entry-icon"><i className="ti ti-chart-bar"></i></div>
+        <div className="entry-main">
+          <div className="entry-title">家长周报</div>
+          <div className="entry-sub">近 7 天学习概况与建议</div>
+        </div>
+        <i className="ti ti-chevron-right entry-arrow"></i>
+      </button>
+
       <button className="entry-card c-coral" onClick={() => navigate('/mistakes')}>
         <div className="entry-icon"><i className="ti ti-alert-triangle"></i></div>
         <div className="entry-main">
