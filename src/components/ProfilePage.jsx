@@ -102,19 +102,16 @@ export default function ProfilePage() {
         <div className="pstat"><div className="pstat-num">{streak()}</div><div className="pstat-lab">连续天数</div></div>
       </div>
 
-      <button
-        className="entry-card c-green"
-        onClick={() => navigate('/review', { state: { scope: 'tb:' + TEXTBOOK.units[0].id } })}
-      >
+      <button className="entry-card c-green" onClick={() => navigate('/tb')}>
         <div className="entry-icon"><i className="ti ti-book-2"></i></div>
         <div className="entry-main">
-          <div className="entry-title">教材同步{TEXTBOOK.sample ? '（示例）' : ''}</div>
-          <div className="entry-sub">{TEXTBOOK.name} · {TEXTBOOK.volume}</div>
+          <div className="entry-title">教材同步</div>
+          <div className="entry-sub">{TEXTBOOK.name} · {TEXTBOOK.volume} · 单元闯关</div>
         </div>
         <i className="ti ti-chevron-right entry-arrow"></i>
       </button>
 
-      <button className="entry-card c-coral" onClick={() => navigate('/mistakes')}>
+<button className="entry-card c-coral" onClick={() => navigate('/mistakes')}>
         <div className="entry-icon"><i className="ti ti-alert-triangle"></i></div>
         <div className="entry-main">
           <div className="entry-title">错题库</div>

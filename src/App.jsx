@@ -9,6 +9,10 @@ import ReviewPage from "./components/ReviewPage.jsx";
 import ProfilePage from "./components/ProfilePage.jsx";
 import MistakesPage from "./components/MistakesPage.jsx";
 import HelpPage from "./components/HelpPage.jsx";
+import TextbookHome from "./components/textbook/TextbookHome.jsx";
+import TextbookUnit from "./components/textbook/TextbookUnit.jsx";
+import TextbookGame from "./components/textbook/TextbookGame.jsx";
+import TextbookBoard from "./components/textbook/TextbookBoard.jsx";
 import TabBar from "./components/TabBar.jsx";
 import { useIsMobile } from "./lib/useIsMobile";
 
@@ -32,6 +36,10 @@ export default function App() {
         <Route path="/me" element={<ProfilePage />} />
         <Route path="/mistakes" element={<MistakesPage />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/tb" element={<TextbookBoard />} />
+        <Route path="/tb/home" element={<TextbookHome />} />
+        <Route path="/tb/:unitId" element={<TextbookUnit />} />
+        <Route path="/tb/:unitId/:type" element={<TextbookGame />} />
         <Route path="/level/:levelId" element={<LevelPage />} />
         <Route path="/unit/:levelId/:unitId" element={<UnitPage />} />
         <Route path="/game/:levelId/:unitId/:gameType" element={<GamePage />} />
