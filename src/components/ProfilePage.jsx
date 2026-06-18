@@ -31,7 +31,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { configured, user, displayName, signOut } = useAuth();
-  const { totalStars, completedUnits, streak, profile, setProfile, mistakeCount } = useProgress();
+  const { totalStars, completedUnits, streak, profile, setProfile, mistakeCount, achievedCount, achievementTotal } = useProgress();
   const [showLogin, setShowLogin] = useState(false);
   const [accent, setAcc] = useState(getAccent());
   const [name, setName] = useState(profile.name || '');
@@ -111,7 +111,16 @@ export default function ProfilePage() {
         <i className="ti ti-chevron-right entry-arrow"></i>
       </button>
 
-<button className="entry-card c-coral" onClick={() => navigate('/mistakes')}>
+      <button className="entry-card c-amber" onClick={() => navigate('/achievements')}>
+        <div className="entry-icon"><i className="ti ti-trophy"></i></div>
+        <div className="entry-main">
+          <div className="entry-title">成就徽章</div>
+          <div className="entry-sub">已获得 {achievedCount} / {achievementTotal} 枚</div>
+        </div>
+        <i className="ti ti-chevron-right entry-arrow"></i>
+      </button>
+
+      <button className="entry-card c-coral" onClick={() => navigate('/mistakes')}>
         <div className="entry-icon"><i className="ti ti-alert-triangle"></i></div>
         <div className="entry-main">
           <div className="entry-title">错题库</div>

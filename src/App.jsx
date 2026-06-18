@@ -9,6 +9,7 @@ import ReviewPage from "./components/ReviewPage.jsx";
 import ProfilePage from "./components/ProfilePage.jsx";
 import MistakesPage from "./components/MistakesPage.jsx";
 import HelpPage from "./components/HelpPage.jsx";
+import AchievementsPage from "./components/AchievementsPage.jsx";
 import TextbookHome from "./components/textbook/TextbookHome.jsx";
 import TextbookSelect from "./components/textbook/TextbookSelect.jsx";
 import TextbookUnit from "./components/textbook/TextbookUnit.jsx";
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="/me" element={<ProfilePage />} />
         <Route path="/mistakes" element={<MistakesPage />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/achievements" element={<AchievementsPage />} />
         <Route path="/tb" element={<TextbookSelect />} />
         <Route path="/tb/:bookId" element={<TextbookBoard />} />
         <Route path="/tb/:bookId/home" element={<TextbookHome />} />

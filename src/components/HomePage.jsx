@@ -93,10 +93,12 @@ function UserBar({ onLogin }) {
 }
 
 function Dashboard() {
-  const { totalStars, streak, completedUnits, recentDays, checkedToday } = useProgress();
+  const { totalStars, streak, completedUnits, recentDays, checkedToday, todayLessons, dailyGoal } = useProgress();
   const t = totalStars();
   const pct = t.total ? Math.round((t.got / t.total) * 100) : 0;
   const days = recentDays(7);
+  const goalMet = todayLessons >= dailyGoal;
+  const goalPct = Math.min(100, Math.round((todayLessons / dailyGoal) * 100));
 
   return (
     <div className="dash">
@@ -123,7 +125,16 @@ function Dashboard() {
           </div>
         ))}
       </div>
-      <div className="dash-tip">{checkedToday() ? '今天已打卡，继续保持！🎉' : '今天还没学习，做一关就打卡啦～'}</div>
+      <div className="dash-goal">
+        <div className="dash-goal-top">
+          <span><i className="ti ti-target"></i> 今日目标</span>
+          <span>{Math.min(todayLessons, dailyGoal)}/{dailyGoal} 关</span>
+        </div>
+        <div className="dash-bar"><div className="dash-fill" style={{ width: goalPct + '%' }}></div></div>
+      </div>
+      <div className="dash-tip">
+        {goalMet ? '今日目标已完成，太棒啦！🎉' : checkedToday() ? '今天已打卡，再做一关冲目标～' : '今天还没学习，做一关就打卡啦～'}
+      </div>
     </div>
   );
 }

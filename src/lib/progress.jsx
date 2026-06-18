@@ -15,9 +15,10 @@ function load(uid) {
       mistakes: d.mistakes || {},
       profile: d.profile || {},
       srs: d.srs || {},
+      daily: d.daily || {},
     };
   } catch {
-    return { stars: {}, checkins: [], mistakes: {}, profile: {}, srs: {} };
+    return { stars: {}, checkins: [], mistakes: {}, profile: {}, srs: {}, daily: {} };
   }
 }
 
@@ -62,7 +63,13 @@ function mergeData(local, remote) {
     const a = ls[k], b = rsrs[k];
     srs[k] = (!b || (a && (a.ts || 0) >= (b.ts || 0))) ? a : b;
   });
-  return { stars, checkins, mistakes, profile, srs };
+  // 每日学习计数：按日期取较大次数
+  const daily = {};
+  const ld = local.daily || {}, rd = remote.daily || {};
+  new Set([...Object.keys(ld), ...Object.keys(rd)]).forEach((d) => {
+    daily[d] = { lessons: Math.max((ld[d] && ld[d].lessons) || 0, (rd[d] && rd[d].lessons) || 0) };
+  });
+  return { stars, checkins, mistakes, profile, srs, daily };
 }
 
 export function ProgressProvider({ children }) {
@@ -107,10 +114,11 @@ export function ProgressProvider({ children }) {
   const setStars = useCallback((levelId, unitId, stars) => {
     setData((prev) => {
       const k = keyOf(levelId, unitId);
-      const next = { ...prev, stars: { ...prev.stars }, checkins: prev.checkins.slice() };
+      const next = { ...prev, stars: { ...prev.stars }, checkins: prev.checkins.slice(), daily: { ...(prev.daily || {}) } };
       if (stars > (next.stars[k] || 0)) next.stars[k] = stars;
       const t = todayStr();
       if (next.checkins.indexOf(t) < 0) next.checkins.push(t);
+      next.daily[t] = { lessons: ((prev.daily && prev.daily[t] && prev.daily[t].lessons) || 0) + 1 };
       save(ctxRef.current.userId, next);
       pushRemote(next);
       return next;
@@ -218,11 +226,40 @@ export function ProgressProvider({ children }) {
       .map((x) => ({ w: x.w, e: x.e, s: x.s, cn: x.cn, level: '复习' }));
     const srsDueCount = srsDue().length;
     const srsTotal = Object.keys(data.srs || {}).length;
+
+    // 每日目标
+    const dailyGoal = 3;
+    const todayLessons = (data.daily && data.daily[todayStr()] && data.daily[todayStr()].lessons) || 0;
+
+    // 成就徽章（全部由现有进度派生，无需额外存储）
+    const allStars = Object.values(data.stars || {}).reduce((a, b) => a + (b || 0), 0);
+    const units = completedUnits();
+    const st = streak();
+    const achDefs = [
+      { id: 'first', emoji: '🌱', name: '初次启程', desc: '完成第 1 关', cur: units, target: 1 },
+      { id: 'unit10', emoji: '📚', name: '闯关达人', desc: '通关 10 个单元', cur: units, target: 10 },
+      { id: 'unit30', emoji: '🧭', name: '闯关大师', desc: '通关 30 个单元', cur: units, target: 30 },
+      { id: 'star10', emoji: '⭐', name: '星光初现', desc: '累计 10 颗星', cur: allStars, target: 10 },
+      { id: 'star50', emoji: '🌟', name: '星光熠熠', desc: '累计 50 颗星', cur: allStars, target: 50 },
+      { id: 'star100', emoji: '💫', name: '百星达人', desc: '累计 100 颗星', cur: allStars, target: 100 },
+      { id: 'streak3', emoji: '🔥', name: '坚持三天', desc: '连续打卡 3 天', cur: st, target: 3 },
+      { id: 'streak7', emoji: '🏅', name: '一周不断', desc: '连续打卡 7 天', cur: st, target: 7 },
+      { id: 'streak30', emoji: '👑', name: '月度学霸', desc: '连续打卡 30 天', cur: st, target: 30 },
+      { id: 'word20', emoji: '🗣️', name: '词汇新手', desc: '学习 20 个单词', cur: srsTotal, target: 20 },
+      { id: 'word60', emoji: '🎓', name: '词汇能手', desc: '学习 60 个单词', cur: srsTotal, target: 60 },
+      { id: 'word120', emoji: '📖', name: '词汇高手', desc: '学习 120 个单词', cur: srsTotal, target: 120 },
+    ];
+    const achievements = achDefs.map((d) => ({
+      ...d, got: d.cur >= d.target, pct: Math.min(100, Math.round((d.cur / d.target) * 100)),
+    }));
+    const achievedCount = achievements.filter((a) => a.got).length;
+
     return {
       getStars, setStars, levelStars, totalStars, completedUnits, streak, recentDays, checkedToday,
       mistakes, mistakeCount: mistakes.length, addMistake, removeMistake,
       profile: data.profile || {}, setProfile,
       srsReview, srsDue, srsDueCount, srsTotal,
+      dailyGoal, todayLessons, achievements, achievedCount, achievementTotal: achievements.length,
     };
   }, [data, getStars, setStars, addMistake, removeMistake, setProfile, srsReview]);
 

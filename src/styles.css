@@ -447,6 +447,27 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .trans-emoji { font-size: clamp(60px, 20vw, 92px); line-height: 1; }
 .trans-cn { font-family: var(--font-head); font-weight: 700; font-size: 28px; color: var(--accent-deep); }
 
+/* 今日目标条 */
+.dash-goal { margin-top: 14px; }
+.dash-goal-top { display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-head); font-weight: 700; font-size: 13px; color: var(--accent-deep); margin-bottom: 6px; }
+.dash-goal-top .ti { color: var(--accent); }
+
+/* 成就徽章墙 */
+.ach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (min-width: 480px) { .ach-grid { grid-template-columns: 1fr 1fr 1fr; } }
+.ach { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 18px 12px 14px;
+  text-align: center; opacity: .62; border: 2px solid transparent; transition: opacity .2s; }
+.ach.got { opacity: 1; border-color: var(--accent-soft); }
+.ach-emoji { font-size: 46px; line-height: 1; filter: grayscale(1); }
+.ach.got .ach-emoji { filter: none; animation: pop .4s ease; }
+.ach-name { font-family: var(--font-head); font-weight: 700; font-size: 16px; color: var(--accent-deep); margin-top: 8px; }
+.ach-desc { color: var(--muted); font-weight: 600; font-size: 12px; margin-top: 2px; line-height: 1.4; }
+.ach-badge { margin-top: 10px; font-family: var(--font-head); font-weight: 700; font-size: 13px; color: #2f9e6e; }
+.ach-bar { height: 7px; border-radius: 999px; background: #ececf4; margin-top: 12px; overflow: hidden; }
+.ach-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width .4s ease; }
+.ach-prog { color: var(--muted); font-weight: 700; font-size: 11px; margin-top: 5px; }
+
 /* 帮助页 */
 .help-section { margin-bottom: 6px; }
 .help-h { font-family: var(--font-head); font-weight: 700; color: var(--accent-deep); font-size: 18px; margin: 18px 4px 12px; }
