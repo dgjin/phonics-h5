@@ -156,6 +156,7 @@ export default function ReviewPage() {
   const [scope, setScope] = useState(init.scope || 'all'); // all | mistakes | <levelId> | tb:<unitId>
   const [mastered, setMastered] = useState(loadMastered);
   const autoStarted = useRef(false);
+  const cancelledRef = useRef(false);
   const [queue, setQueue] = useState(null); // null = 设置页
   const [flipped, setFlipped] = useState(false);
   const [typed, setTyped] = useState('');
@@ -171,26 +172,25 @@ export default function ReviewPage() {
     () => mistakes.map((m) => ({ w: m.w, e: m.e, s: m.s, cn: cnOf(m.w), level: m.level || '错题' })),
     [mistakes]
   );
-  const allWords = scope === 'mistakes'
-    ? mistakeWords
-    : scope === 'srs'
-      ? srsDue()
-      : scope.indexOf('tb:') === 0
-        ? (() => {
-            const parts = scope.slice(3).split(':');
-            if (parts.length >= 2) return textbookWords(parts[0], parts[1]);
-            return textbookWords(parts[0]); // 兼容旧格式 tb:unitId
-          })()
-        : buildWords(scope);
+  const allWords = useMemo(() => {
+    if (scope === 'mistakes') return mistakeWords;
+    if (scope === 'srs') return srsDue();
+    if (scope.indexOf('tb:') === 0) {
+      const parts = scope.slice(3).split(':');
+      return parts.length >= 2 ? textbookWords(parts[0], parts[1]) : textbookWords(parts[0]);
+    }
+    return buildWords(scope);
+  }, [scope, mistakeWords]); // eslint-disable-line
   const unmastered = allWords.filter((w) => !mastered.has(w.w)).length;
   const current = queue && queue[0];
 
   useEffect(() => {
     if (!current) return;
+    cancelledRef.current = false;
     setFlipped(false); setTyped(''); setCheckRes(null); setHeard(null); setListening(false);
     const t = setTimeout(() => speakReal(current.w, accent), 250);
-    return () => { clearTimeout(t); stop(); };
-  }, [round, accent, current && current.w]); // eslint-disable-line
+    return () => { cancelledRef.current = true; clearTimeout(t); stop(); };
+  }, [round, accent, current?.w]); // eslint-disable-line
 
   const chooseAccent = (a) => { setAcc(a); setAccent(a); };
 
@@ -203,13 +203,12 @@ export default function ReviewPage() {
     setRound((r) => r + 1);
   };
 
-  // 从错题库进入时自动开始
+  // 从错题库/教材进入时自动开始
   useEffect(() => {
-    if (init.auto && !autoStarted.current && queue === null && allWords.length) {
-      autoStarted.current = true;
-      start(false);
-    }
-  }); // eslint-disable-line
+    if (!init.auto || autoStarted.current || queue !== null || !allWords.length) return;
+    autoStarted.current = true;
+    start(false);
+  }, [init.auto, queue, allWords.length]); // eslint-disable-line
 
   const mark = (isKnown) => {
     if (!current) return;
@@ -241,13 +240,15 @@ export default function ReviewPage() {
     setHeard(null); setListening(true);
     recognizeOnce({ lang: accent === 'uk' ? 'en-GB' : 'en-US' })
       .then((alts) => {
+        if (cancelledRef.current) return; // 组件已卸载
         const ok = matchWord(current.w, alts);
         setHeard({ ok, text: (alts && alts[0]) || '' });
         setListening(false);
-        if (ok) setTimeout(() => mark(true), 1000);
+        if (ok) setTimeout(() => { if (!cancelledRef.current) mark(true); }, 1000);
         else srsReview(current, false);
       })
       .catch((err) => {
+        if (cancelledRef.current) return; // 组件已卸载
         setListening(false);
         const code = err && err.message;
         setHeard({ ok: false, text: '', err: code === 'no-speech' ? '没听清，再试一次' : code === 'not-allowed' ? '请允许使用麦克风' : '识别失败，重试' });

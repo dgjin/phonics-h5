@@ -15,8 +15,9 @@ export default function TextbookBoard() {
   const gotStars = unitStars.reduce((s, u) => s + u.stars, 0);
   const pct = maxStars > 0 ? Math.round((gotStars / maxStars) * 100) : 0;
 
-  let lockedThreshold = -1;
-  for (let i = 0; i < unitStars.length; i++) { if (unitStars[i].stars === 0) lockedThreshold = i; }
+  // 第一个未完成的单元开放，之后的锁定；全部完成则全部解锁（方便复习）
+  let firstUnfinished = unitStars.findIndex(u => u.stars === 0);
+  if (firstUnfinished === -1) firstUnfinished = unitStars.length; // 全部完成，全部解锁
 
   return (
     <div className="tb-board c-green">
@@ -32,7 +33,7 @@ export default function TextbookBoard() {
       <div className="board-grid">
         {book.units.map((u, i) => {
           const stars = unitStars[i].stars;
-          const locked = i >= lockedThreshold;
+          const locked = i > firstUnfinished;
           const done = stars >= 3;
           return (
             <button
