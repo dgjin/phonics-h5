@@ -212,18 +212,22 @@ export default function ReviewPage() {
 
   const mark = (isKnown) => {
     if (!current) return;
-    stop();
-    setFlipped(false);
-    const head = current;
-    if (isKnown) {
-      known.current += 1;
-      const nm = new Set(mastered); nm.add(head.w);
-      setMastered(nm); saveMastered(nm);
-      removeMistake(head.w); // 答对/认识 → 移出错题库
+    try {
+      stop();
+      setFlipped(false);
+      const head = current;
+      if (isKnown) {
+        known.current += 1;
+        const nm = new Set(mastered); nm.add(head.w);
+        setMastered(nm); saveMastered(nm);
+        removeMistake(head.w); // 答对/认识 → 移出错题库
+      }
+      srsReview(head, isKnown); // 记入间隔复习
+      setQueue((q) => (isKnown ? q.slice(1) : [...q.slice(1), head]));
+      setRound((r) => r + 1);
+    } catch (e) {
+      console.error('mark error:', e);
     }
-    srsReview(head, isKnown); // 记入间隔复习
-    setQueue((q) => (isKnown ? q.slice(1) : [...q.slice(1), head]));
-    setRound((r) => r + 1);
   };
 
   const checkSpelling = () => {
@@ -238,17 +242,22 @@ export default function ReviewPage() {
   const doEcho = () => {
     if (!current || listening) return;
     setHeard(null); setListening(true);
+    const captured = current;
     recognizeOnce({ lang: accent === 'uk' ? 'en-GB' : 'en-US' })
       .then((alts) => {
-        if (cancelledRef.current) return; // 组件已卸载
-        const ok = matchWord(current.w, alts);
+        if (cancelledRef.current) return; // 组件已卸载，跳过 UI 更新
+        const ok = matchWord(captured.w, alts);
         setHeard({ ok, text: (alts && alts[0]) || '' });
         setListening(false);
-        if (ok) setTimeout(() => { if (!cancelledRef.current) mark(true); }, 1000);
-        else srsReview(current, false);
+        if (ok) {
+          // 跟读成功：1 秒后标记为掌握（组件已卸载时 mark 内部 setState 会被 React 安全忽略）
+          setTimeout(() => mark(true), 1000);
+        } else {
+          srsReview(captured, false);
+        }
       })
       .catch((err) => {
-        if (cancelledRef.current) return; // 组件已卸载
+        if (cancelledRef.current) return; // 组件已卸载，跳过 UI 更新
         setListening(false);
         const code = err && err.message;
         setHeard({ ok: false, text: '', err: code === 'no-speech' ? '没听清，再试一次' : code === 'not-allowed' ? '请允许使用麦克风' : '识别失败，重试' });
