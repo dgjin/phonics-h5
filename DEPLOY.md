@@ -1,10 +1,27 @@
-# 部署到 Cloudflare（Pages + R2 图片自托管）
+# 部署到 Cloudflare Pages（图片同源自托管）
 
-代码侧已就绪。下面三步都需要**先完成 Cloudflare 授权**（在交互式 `claude` 终端 `/mcp` 授权，或 `npx wrangler login`）。
+## 当前方案：图片随应用打包，同源托管（默认，免费，无需 R2）
 
-## 一、把教材图片迁到自有 R2（去掉第三方热链）
+教材图片（198 张）已下载并放入 `public/word-img/`，随应用一起部署，由站点(Pages/Vercel)**同源 CDN** 提供；
+应用通过 [`src/config.js`](src/config.js) 的 `ASSETS_BASE`（默认 `/word-img`）读取，不再依赖第三方 `51jiaoxi`，也**不需要 R2**。
 
-当前教材图片热链自 `ywld-…51jiaoxi.com`（199 张），有失效/版权风险。迁移后由你自己的 R2 提供。
+部署：
+```bash
+npm run deploy:pages
+# = npm run build && npx wrangler pages deploy dist --project-name phonics-h5
+```
+线上地址：https://phonics-h5.pages.dev
+
+> 新增/更新教材图片时：`npm run migrate:images` 下载到 `r2-assets/`，再把新增文件拷进 `public/word-img/` 即可。
+
+---
+
+## 可选：改用 R2/自有 CDN（需先在控制台启用 R2 + 令牌带 R2 权限）
+
+若日后图片很多、想从仓库里挪出去，可迁到 R2 或任意 CDN：把 `ASSETS_BASE`（或构建变量 `VITE_ASSETS_BASE`）
+改成公开域名 + `/word-img`，再上传图片。下面是 R2 路径备忘。
+
+### 把教材图片迁到自有 R2
 
 ```bash
 # 1) 下载全部图片到本地 r2-assets/（无需 Cloudflare 账号，可先跑）

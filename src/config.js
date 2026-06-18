@@ -12,11 +12,11 @@ export const CONFIG = {
 };
 
 /*
- * 教材图片资源基址。把图片迁移到自有 Cloudflare R2 后，
- * 填入 R2 的公开访问域名（指向存放图片的目录），例如：
- *   'https://assets.你的域名.com/word-img'  或  R2 提供的 *.r2.dev 公共地址。
- * 留空时：仍使用词表里原始的第三方图片地址（热链，存在失效/版权风险）。
- * 也可在构建环境变量里设置 VITE_ASSETS_BASE 覆盖（无需改代码）。
+ * 教材图片资源基址。
+ * 默认 '/word-img'：图片已随应用打包在 public/word-img/，由站点(Pages/Vercel)同源托管，
+ * 免费、走同一 CDN、不依赖第三方、也无需 R2。
+ * 也可改成自有 R2/CDN 公开域名，或用构建环境变量 VITE_ASSETS_BASE 覆盖。
+ * 设为空字符串 '' 则回退使用词表里原始的第三方热链地址。
  */
 export const ASSETS_BASE =
-  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_ASSETS_BASE) || '';
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_ASSETS_BASE) || '/word-img';
