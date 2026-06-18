@@ -9,6 +9,103 @@ import { useAuth } from '../lib/auth.jsx';
 import { useProgress } from '../lib/progress.jsx';
 import { Header, Confetti } from './common.jsx';
 
+
+/* ============================================================
+ * ScopeSelector — 结构化范围选择器
+ * 三层：① 快捷入口行（全部/错题/自然拼读级别）
+ *       ② 教材同步折叠面板（可按册展开/收起）
+ * ============================================================ */
+function ScopeSelector({ scope, setScope, mistakes }) {
+  const [openBook, setOpenBook] = useState(null); // 当前展开的册 id
+
+  // 判断教材相关 scope 是否属于某册
+  const bookOf = (s) => {
+    if (!s.startsWith('tb:')) return null;
+    const parts = s.slice(3).split(':');
+    return parts.length >= 2 ? parts[0] : null;
+  };
+  const activeBook = bookOf(scope);
+
+  // 展开当前选中册（scope 从教材来时自动展开）
+  const effectiveOpen = openBook !== null ? openBook : activeBook;
+
+  const toggleBook = (id) => {
+    setOpenBook(prev => prev === id ? null : id);
+  };
+
+  // 自然拼读级别快捷行
+  const phonicsScopes = [
+    { id: 'all', label: '全部', icon: 'ti-books' },
+    ...(mistakes.length > 0 ? [{ id: 'mistakes', label: `错题 ${mistakes.length}`, icon: 'ti-alert-triangle', cls: 'mk' }] : []),
+    ...CURRICULUM.map((lv) => ({ id: lv.id, label: lv.title, icon: 'ti-abc' })),
+  ];
+
+  return (
+    <div className="scope-selector">
+      {/* ── 第一行：快捷入口 ── */}
+      <div className="scope-row">
+        <div className="scope-row-label"><i className="ti ti-sparkles"></i> 自然拼读</div>
+        <div className="scope-pills">
+          {phonicsScopes.map((s) => (
+            <button
+              key={s.id}
+              className={'scope-pill' + (scope === s.id ? ' on' : '') + (s.cls ? ' ' + s.cls : '')}
+              onClick={() => setScope(s.id)}
+            >
+              <i className={'ti ' + s.icon}></i>
+              <span>{s.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── 第二块：教材同步手风琴 ── */}
+      <div className="scope-row">
+        <div className="scope-row-label"><i className="ti ti-book-2"></i> 教材同步</div>
+        <div className="scope-books">
+          {TEXTBOOKS.map((book) => {
+            const isOpen = effectiveOpen === book.id;
+            const hasActive = activeBook === book.id;
+            return (
+              <div key={book.id} className={'scope-book' + (isOpen ? ' open' : '') + (hasActive ? ' active-book' : '')}>
+                {/* 册标题行（点击展开/收起） */}
+                <button className="scope-book-hd" onClick={() => toggleBook(book.id)}>
+                  <span className="scope-book-vol">{book.volume}</span>
+                  <span className="scope-book-info">
+                    {book.units.length} 单元
+                    {hasActive && <span className="scope-book-dot"></span>}
+                  </span>
+                  <i className={'ti ti-chevron-' + (isOpen ? 'up' : 'down') + ' scope-book-chevron'}></i>
+                </button>
+                {/* 单元列表（折叠/展开） */}
+                {isOpen && (
+                  <div className="scope-book-units">
+                    {book.units.map((u, idx) => {
+                      const tbScope = 'tb:' + book.id + ':' + u.id;
+                      const on = scope === tbScope;
+                      return (
+                        <button
+                          key={u.id}
+                          className={'scope-unit' + (on ? ' on' : '')}
+                          onClick={() => setScope(tbScope)}
+                        >
+                          <span className="scope-unit-no">{idx + 1}</span>
+                          <span className="scope-unit-title">{u.title.replace(/^Unit \d+ /, '')}</span>
+                          <span className="scope-unit-cnt">{u.words.length}词</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* 汇总全部课程单词，按词去重；可按级别筛选 */
 function buildWords(scope) {
   const out = [];
@@ -146,35 +243,7 @@ export default function ReviewPage() {
           <div className="rv-field-label">发音口音</div>
           <AccentToggle accent={accent} onChange={chooseAccent} />
           <div className="rv-field-label">选择范围</div>
-          <div className="scope-chips">
-            <button className={'scope-chip' + (scope === 'all' ? ' on' : '')} onClick={() => setScope('all')}>全部</button>
-            {mistakeWords.length > 0 && (
-              <button className={'scope-chip mk' + (scope === 'mistakes' ? ' on' : '')} onClick={() => setScope('mistakes')}>
-                <i className="ti ti-alert-triangle"></i> 错题 {mistakeWords.length}
-              </button>
-            )}
-            {CURRICULUM.map((lv) => (
-              <button key={lv.id} className={'scope-chip' + (scope === lv.id ? ' on' : '')} onClick={() => setScope(lv.id)}>
-                {lv.title}
-              </button>
-            ))}
-          </div>
-          <div className="rv-field-label">教材同步 · 外研版·新交际英语</div>
-          {TEXTBOOKS.map((book) => (
-            <div key={book.id}>
-              <div className="rv-book-label">{book.volume}</div>
-              <div className="scope-chips">
-                {book.units.map((u) => {
-                  const tbScope = 'tb:' + book.id + ':' + u.id;
-                  return (
-                    <button key={u.id} className={'scope-chip tb' + (scope === tbScope ? ' on' : '')} onClick={() => setScope(tbScope)}>
-                      <i className="ti ti-book-2"></i> {u.title.replace(/^Unit \d+ /, '')}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+          <ScopeSelector scope={scope} setScope={setScope} mistakes={mistakeWords} />
           <div className="rv-summary">
             共 <b>{allWords.length}</b> 个单词 · 已掌握 <b>{allWords.length - unmastered}</b> 个
           </div>

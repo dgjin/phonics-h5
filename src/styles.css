@@ -554,3 +554,62 @@ i.ti { line-height: 1; vertical-align: -2px; }
 
 /* ===== TabBar 4个tab窄屏适配 ===== */
 .tab span { font-size: 10px; }
+
+/* ===== 结构化范围选择器 ScopeSelector ===== */
+.scope-selector { display: flex; flex-direction: column; gap: 12px; }
+
+/* 分组行 */
+.scope-row { background: var(--card); border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); }
+.scope-row-label { display: flex; align-items: center; gap: 6px; padding: 10px 14px 8px;
+  font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .04em;
+  border-bottom: 1px solid var(--accent-soft); }
+.scope-row-label .ti { font-size: 14px; }
+
+/* 自然拼读 pill 列表 */
+.scope-pills { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 12px 14px; }
+.scope-pill { display: flex; align-items: center; gap: 5px; padding: 7px 13px;
+  border: 2px solid var(--accent-soft); background: #fff; color: var(--accent-deep);
+  border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s, transform .1s; }
+.scope-pill .ti { font-size: 14px; }
+.scope-pill:active { transform: scale(.93); }
+.scope-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.scope-pill.mk { border-color: #f0c4b4; color: #b0481f; }
+.scope-pill.mk.on { background: #e2673c; border-color: #e2673c; color: #fff; }
+@media (hover:hover) { .scope-pill:hover:not(.on) { background: var(--accent-soft); } }
+
+/* 教材同步手风琴 */
+.scope-books { display: flex; flex-direction: column; }
+
+.scope-book { border-bottom: 1px solid var(--accent-soft); }
+.scope-book:last-child { border-bottom: none; }
+.scope-book.active-book > .scope-book-hd { color: var(--accent); }
+
+.scope-book-hd { display: flex; align-items: center; width: 100%; background: none; border: none;
+  padding: 12px 14px; cursor: pointer; gap: 8px; min-height: 48px; }
+.scope-book-hd:active { background: var(--accent-soft); }
+.scope-book-vol { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; text-align: left; }
+.scope-book-info { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.scope-book-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.scope-book-chevron { font-size: 16px; color: var(--muted); flex-shrink: 0; transition: transform .2s; }
+.scope-book.open .scope-book-chevron { color: var(--accent); }
+
+/* 单元列表（展开后） */
+.scope-book-units { display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  background: #fafafe; border-top: 1px solid var(--accent-soft); }
+.scope-unit { display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+  background: none; border: none; cursor: pointer; text-align: left;
+  border-bottom: 1px solid #f0f0f8; border-right: 1px solid #f0f0f8; transition: background .1s; }
+.scope-unit:nth-child(even) { border-right: none; }
+.scope-unit:nth-last-child(-n+2) { border-bottom: none; }
+.scope-unit:active { background: var(--accent-soft); }
+.scope-unit.on { background: var(--accent-soft); }
+.scope-unit.on .scope-unit-title { color: var(--accent); font-weight: 700; }
+.scope-unit.on .scope-unit-no { background: var(--accent); color: #fff; }
+.scope-unit-no { width: 22px; height: 22px; border-radius: 50%; background: #e8e8f4;
+  font-size: 11px; font-weight: 700; color: var(--accent-deep);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.scope-unit-title { font-size: 12px; color: var(--text); flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scope-unit-cnt { font-size: 11px; color: var(--muted); flex-shrink: 0; }
