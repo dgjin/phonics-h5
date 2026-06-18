@@ -1,31 +1,48 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { TEXTBOOK, textbookUnit } from '../../data/textbook';
+import { getTextbook } from '../../data/textbook';
 import { speak } from '../../lib/tts';
 import { Header } from '../common.jsx';
 import { TB_ACTS } from './tbActivities.jsx';
 
 export default function TextbookUnit() {
   const navigate = useNavigate();
-  const { unitId } = useParams();
-  const u = textbookUnit(unitId);
-  if (!u) return <div className="c-green"><Header title="单元" color="green" backTo="/tb" /><p className="level-desc">未找到该单元</p></div>;
+  const { bookId, unitId } = useParams();
+  const book = getTextbook(bookId);
+  const u = book.units.find((x) => x.id === unitId);
+  if (!u) return (
+    <div className="c-green">
+      <Header title="单元" color="green" backTo={'/tb/' + bookId} />
+      <p className="level-desc">未找到该单元</p>
+    </div>
+  );
 
   const launch = (type) => {
     if (type === 'dictation') {
-      navigate('/review', { state: { scope: 'tb:' + unitId, mode: 'dictation', auto: true } });
+      navigate('/review', { state: { scope: 'tb:' + bookId + ':' + unitId, mode: 'dictation', auto: true } });
     } else {
-      navigate('/tb/' + unitId + '/' + type);
+      navigate('/tb/' + bookId + '/' + unitId + '/' + type);
     }
   };
 
   return (
     <div className="c-green">
-      <Header title={u.title} sub={TEXTBOOK.volume} color="green" backTo="/tb" />
+      <Header title={u.title} sub={book.volume} color="green" backTo={'/tb/' + bookId} />
       <div className="section-label">本单元单词（{u.words.length}）</div>
       <div className="unit-preview">
         {u.words.map((w) => (
           <button key={w.w} className="prev-chip" onClick={() => speak(w.w)}>
-            <span className="prev-emoji">{w.e || '🔤'}</span> {w.w}
+            {w.img ? (
+              <img
+                src={w.img}
+                alt={w.w}
+                className="prev-chip-img"
+                loading="lazy"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
+            ) : (
+              <span className="prev-emoji">{w.e || '🔤'}</span>
+            )}
+            {w.w}
           </button>
         ))}
       </div>

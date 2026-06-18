@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const TABS = [
   { to: '/', icon: 'ti-home-2', label: '首页' },
+  { to: '/tb', icon: 'ti-book-2', label: '教材' },
   { to: '/review', icon: 'ti-cards', label: '背单词' },
   { to: '/me', icon: 'ti-user', label: '我的' },
 ];

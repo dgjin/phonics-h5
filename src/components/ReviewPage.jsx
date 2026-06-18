@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CURRICULUM } from '../data/curriculum';
-import { TEXTBOOK, textbookWords } from '../data/textbook';
+import { TEXTBOOKS, getTextbook, textbookWords } from '../data/textbook';
 import { cnOf } from '../data/word-cn';
 import { speakReal, getAccent, setAccent, stop } from '../lib/tts';
 import { shuffle } from '../data/utils';
@@ -70,7 +70,11 @@ export default function ReviewPage() {
   const allWords = scope === 'mistakes'
     ? mistakeWords
     : scope.indexOf('tb:') === 0
-      ? textbookWords(scope.slice(3))
+      ? (() => {
+          const parts = scope.slice(3).split(':');
+          if (parts.length >= 2) return textbookWords(parts[0], parts[1]);
+          return textbookWords(parts[0]); // 兼容旧格式 tb:unitId
+        })()
       : buildWords(scope);
   const unmastered = allWords.filter((w) => !mastered.has(w.w)).length;
   const current = queue && queue[0];
@@ -155,14 +159,22 @@ export default function ReviewPage() {
               </button>
             ))}
           </div>
-          <div className="rv-field-label">教材同步 · {TEXTBOOK.volume}{TEXTBOOK.sample ? '（示例）' : ''}</div>
-          <div className="scope-chips">
-            {TEXTBOOK.units.map((u) => (
-              <button key={u.id} className={'scope-chip tb' + (scope === 'tb:' + u.id ? ' on' : '')} onClick={() => setScope('tb:' + u.id)}>
-                <i className="ti ti-book-2"></i> {u.title}
-              </button>
-            ))}
-          </div>
+          <div className="rv-field-label">教材同步 · 外研版·新交际英语</div>
+          {TEXTBOOKS.map((book) => (
+            <div key={book.id}>
+              <div className="rv-book-label">{book.volume}</div>
+              <div className="scope-chips">
+                {book.units.map((u) => {
+                  const tbScope = 'tb:' + book.id + ':' + u.id;
+                  return (
+                    <button key={u.id} className={'scope-chip tb' + (scope === tbScope ? ' on' : '')} onClick={() => setScope(tbScope)}>
+                      <i className="ti ti-book-2"></i> {u.title.replace(/^Unit \d+ /, '')}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
           <div className="rv-summary">
             共 <b>{allWords.length}</b> 个单词 · 已掌握 <b>{allWords.length - unmastered}</b> 个
           </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CURRICULUM } from '../data/curriculum';
-import { TEXTBOOK } from '../data/textbook';
+import { TEXTBOOKS } from '../data/textbook';
 import { useProgress } from '../lib/progress.jsx';
 import { useAuth } from '../lib/auth.jsx';
 import { useIsMobile } from '../lib/useIsMobile';
@@ -93,7 +93,7 @@ export default function HomePage() {
         <div className="re-icon"><i className="ti ti-book-2"></i></div>
         <div className="re-main">
           <div className="re-title">教材同步</div>
-          <div className="re-cn">{TEXTBOOK.name} · {TEXTBOOK.volume} · 单元闯关</div>
+          <div className="re-cn">外研版·新交际英语 · {TEXTBOOKS.length} 册 · 单元闯关</div>
         </div>
         <i className="ti ti-chevron-right re-arrow"></i>
       </button>

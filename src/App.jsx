@@ -10,18 +10,19 @@ import ProfilePage from "./components/ProfilePage.jsx";
 import MistakesPage from "./components/MistakesPage.jsx";
 import HelpPage from "./components/HelpPage.jsx";
 import TextbookHome from "./components/textbook/TextbookHome.jsx";
+import TextbookSelect from "./components/textbook/TextbookSelect.jsx";
 import TextbookUnit from "./components/textbook/TextbookUnit.jsx";
 import TextbookGame from "./components/textbook/TextbookGame.jsx";
 import TextbookBoard from "./components/textbook/TextbookBoard.jsx";
 import TabBar from "./components/TabBar.jsx";
 import { useIsMobile } from "./lib/useIsMobile";
 
-const ROOT_TABS = ["/", "/review", "/me"];
+const ROOT_TABS = ["/", "/tb", "/review", "/me"];
 
 export default function App() {
   const loc = useLocation();
   const isMobile = useIsMobile();
-  const showTabs = isMobile && ROOT_TABS.includes(loc.pathname);
+  const showTabs = isMobile && (ROOT_TABS.includes(loc.pathname) || loc.pathname.startsWith('/tb/'));
 
   useEffect(() => {
     document.body.classList.toggle("has-tabbar", showTabs);
@@ -36,10 +37,11 @@ export default function App() {
         <Route path="/me" element={<ProfilePage />} />
         <Route path="/mistakes" element={<MistakesPage />} />
         <Route path="/help" element={<HelpPage />} />
-        <Route path="/tb" element={<TextbookBoard />} />
-        <Route path="/tb/home" element={<TextbookHome />} />
-        <Route path="/tb/:unitId" element={<TextbookUnit />} />
-        <Route path="/tb/:unitId/:type" element={<TextbookGame />} />
+        <Route path="/tb" element={<TextbookSelect />} />
+        <Route path="/tb/:bookId" element={<TextbookBoard />} />
+        <Route path="/tb/:bookId/home" element={<TextbookHome />} />
+        <Route path="/tb/:bookId/:unitId" element={<TextbookUnit />} />
+        <Route path="/tb/:bookId/:unitId/:type" element={<TextbookGame />} />
         <Route path="/level/:levelId" element={<LevelPage />} />
         <Route path="/unit/:levelId/:unitId" element={<UnitPage />} />
         <Route path="/game/:levelId/:unitId/:gameType" element={<GamePage />} />
