@@ -227,7 +227,9 @@ export default function ReviewPage() {
                   <div className="rv-hint"><i className="ti ti-hand-finger"></i> 想想意思，点卡片翻面</div>
                 </div>
                 <div className="rv-face rv-back">
-                  <div className="rv-emoji">{current.e}</div>
+                  {current.e
+                    ? <div className="rv-emoji">{current.e}</div>
+                    : <div className="rv-emoji letter-fallback">{(current.w[0] || '?').toUpperCase()}</div>}
                   <div className="rv-cn">{current.cn || '—'}</div>
                   <div className="rv-word sm">{current.w}</div>
                   <button className="replay small rv-play" onClick={(e) => { e.stopPropagation(); speakReal(current.w, accent); }}>
@@ -247,7 +249,9 @@ export default function ReviewPage() {
               <i className="ti ti-volume"></i> 听发音（{accent === 'uk' ? '英式' : '美式'}）
             </button>
             <div className="dict-hint">
-              <span className="dict-emoji">{current.e}</span>
+              {current.e
+                ? <span className="dict-emoji">{current.e}</span>
+                : <span className="dict-emoji letter-fallback">{(current.w[0] || '?').toUpperCase()}</span>}
               <span className="dict-cn">{current.cn || '听音拼写'}</span>
             </div>
             <input

@@ -306,6 +306,8 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .rv-cn { font-family: var(--font-head); font-weight: 700; font-size: clamp(22px, 7vw, 30px); color: var(--accent-dark); margin-top: 12px; }
 .rv-ipa { color: var(--muted); font-weight: 700; font-size: 18px; margin-top: 10px; }
 .rv-emoji { font-size: clamp(72px, 24vw, 116px); line-height: 1; }
+.letter-fallback { display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 24px;
+  background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-head); font-weight: 700; }
 .rv-play { margin-top: 16px; margin-bottom: 0; }
 .rv-hint { color: var(--muted); font-weight: 700; font-size: 13px; margin-top: 14px; }
 .rv-actions { display: flex; gap: 12px; width: 100%; max-width: 440px; margin-top: 22px; }
