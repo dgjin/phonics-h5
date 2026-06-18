@@ -81,7 +81,7 @@ export default function HomePage() {
 
   return (
     <>
-      {!isMobile && <UserBar onLogin={() => setShowLogin(true)} />}
+      <UserBar onLogin={() => setShowLogin(true)} />
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
       <div className="hero">
         <div className="hero-emoji">🔤</div>
