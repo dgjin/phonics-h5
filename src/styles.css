@@ -338,6 +338,24 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .dict-result.no { color: #d6453f; }
 .dict-result b { letter-spacing: 1px; }
 .dictation .rv-actions { margin-top: 20px; }
+
+/* 跟读评测 */
+.echo { width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; }
+.echo-card { width: 100%; background: var(--card); border-radius: 24px; box-shadow: var(--shadow-lift);
+  border: 3px solid var(--accent-soft); padding: 22px 20px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.echo-mic { margin-top: 24px; width: 124px; height: 124px; border-radius: 50%; border: none;
+  background: var(--accent); color: #fff; box-shadow: 0 8px 0 var(--accent-dark);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer;
+  font-family: var(--font-head); font-weight: 700; font-size: 15px; transition: transform .12s, box-shadow .12s; }
+.echo-mic i { font-size: 40px; }
+.echo-mic:active { transform: translateY(3px); box-shadow: 0 5px 0 var(--accent-dark); }
+.echo-mic.on { animation: micpulse 1s ease-in-out infinite; }
+.echo-mic[disabled] { cursor: default; }
+@keyframes micpulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+.echo-note { margin-top: 22px; color: var(--muted); font-weight: 600; font-size: 14px; text-align: center; line-height: 1.7; max-width: 360px; }
+.echo .dict-result { margin-top: 18px; }
+.echo .rv-actions { margin-top: 22px; }
 .btn.know { background: #46c08a; color: #fff; box-shadow: 0 6px 0 #2f9e6e; }
 .btn.know:active { box-shadow: 0 2px 0 #2f9e6e; transform: translateY(3px); }
 .btn.dont { background: #ef9f4e; color: #fff; box-shadow: 0 6px 0 #cf7f2e; }
@@ -577,6 +595,8 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .scope-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .scope-pill.mk { border-color: #f0c4b4; color: #b0481f; }
 .scope-pill.mk.on { background: #e2673c; border-color: #e2673c; color: #fff; }
+.scope-pill.srs { border-color: #e6c3d4; color: #993556; }
+.scope-pill.srs.on { background: #d4537e; border-color: #d4537e; color: #fff; }
 @media (hover:hover) { .scope-pill:hover:not(.on) { background: var(--accent-soft); } }
 
 /* 教材同步手风琴 */

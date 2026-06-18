@@ -4,6 +4,7 @@ import { CURRICULUM } from '../data/curriculum';
 import { TEXTBOOKS, getTextbook, textbookWords } from '../data/textbook';
 import { cnOf } from '../data/word-cn';
 import { speakReal, getAccent, setAccent, stop } from '../lib/tts';
+import { speechSupported, recognizeOnce, matchWord } from '../lib/speech';
 import { shuffle } from '../data/utils';
 import { useAuth } from '../lib/auth.jsx';
 import { useProgress } from '../lib/progress.jsx';
@@ -15,7 +16,7 @@ import { Header, Confetti } from './common.jsx';
  * 三层：① 快捷入口行（全部/错题/自然拼读级别）
  *       ② 教材同步折叠面板（可按册展开/收起）
  * ============================================================ */
-function ScopeSelector({ scope, setScope, mistakes }) {
+function ScopeSelector({ scope, setScope, mistakes, srsDueCount }) {
   const [openBook, setOpenBook] = useState(null); // 当前展开的册 id
 
   // 判断教材相关 scope 是否属于某册
@@ -36,6 +37,7 @@ function ScopeSelector({ scope, setScope, mistakes }) {
   // 自然拼读级别快捷行
   const phonicsScopes = [
     { id: 'all', label: '全部', icon: 'ti-books' },
+    ...(srsDueCount > 0 ? [{ id: 'srs', label: `今日复习 ${srsDueCount}`, icon: 'ti-clock-bolt', cls: 'srs' }] : []),
     ...(mistakes.length > 0 ? [{ id: 'mistakes', label: `错题 ${mistakes.length}`, icon: 'ti-alert-triangle', cls: 'mk' }] : []),
     ...CURRICULUM.map((lv) => ({ id: lv.id, label: lv.title, icon: 'ti-abc' })),
   ];
@@ -137,7 +139,8 @@ export default function ReviewPage() {
   const location = useLocation();
   const init = location.state || {};
   const { userId } = useAuth();
-  const { mistakes, addMistake, removeMistake } = useProgress();
+  const { mistakes, addMistake, removeMistake, srsReview, srsDue, srsDueCount } = useProgress();
+  const echoOK = speechSupported();
   const mkey = 'phonics_review_v1:' + (userId || 'guest');
   const loadMastered = () => {
     try { return new Set(JSON.parse(localStorage.getItem(mkey)) || []); } catch (e) { return new Set(); }
@@ -147,7 +150,9 @@ export default function ReviewPage() {
   };
 
   const [accent, setAcc] = useState(getAccent());
-  const [mode, setMode] = useState(init.mode === 'dictation' ? 'dictation' : 'flip'); // flip | dictation
+  const [mode, setMode] = useState(
+    init.mode === 'dictation' ? 'dictation' : init.mode === 'echo' ? 'echo' : 'flip'
+  ); // flip | dictation | echo
   const [scope, setScope] = useState(init.scope || 'all'); // all | mistakes | <levelId> | tb:<unitId>
   const [mastered, setMastered] = useState(loadMastered);
   const autoStarted = useRef(false);
@@ -155,6 +160,8 @@ export default function ReviewPage() {
   const [flipped, setFlipped] = useState(false);
   const [typed, setTyped] = useState('');
   const [checkRes, setCheckRes] = useState(null); // null | 'ok' | 'no'
+  const [listening, setListening] = useState(false); // 跟读录音中
+  const [heard, setHeard] = useState(null); // { ok, text }
   const [round, setRound] = useState(0);
   const known = useRef(0);
 
@@ -166,19 +173,21 @@ export default function ReviewPage() {
   );
   const allWords = scope === 'mistakes'
     ? mistakeWords
-    : scope.indexOf('tb:') === 0
-      ? (() => {
-          const parts = scope.slice(3).split(':');
-          if (parts.length >= 2) return textbookWords(parts[0], parts[1]);
-          return textbookWords(parts[0]); // 兼容旧格式 tb:unitId
-        })()
-      : buildWords(scope);
+    : scope === 'srs'
+      ? srsDue()
+      : scope.indexOf('tb:') === 0
+        ? (() => {
+            const parts = scope.slice(3).split(':');
+            if (parts.length >= 2) return textbookWords(parts[0], parts[1]);
+            return textbookWords(parts[0]); // 兼容旧格式 tb:unitId
+          })()
+        : buildWords(scope);
   const unmastered = allWords.filter((w) => !mastered.has(w.w)).length;
   const current = queue && queue[0];
 
   useEffect(() => {
     if (!current) return;
-    setFlipped(false); setTyped(''); setCheckRes(null);
+    setFlipped(false); setTyped(''); setCheckRes(null); setHeard(null); setListening(false);
     const t = setTimeout(() => speakReal(current.w, accent), 250);
     return () => { clearTimeout(t); stop(); };
   }, [round, accent, current && current.w]); // eslint-disable-line
@@ -213,6 +222,7 @@ export default function ReviewPage() {
       setMastered(nm); saveMastered(nm);
       removeMistake(head.w); // 答对/认识 → 移出错题库
     }
+    srsReview(head, isKnown); // 记入间隔复习
     setQueue((q) => (isKnown ? q.slice(1) : [...q.slice(1), head]));
     setRound((r) => r + 1);
   };
@@ -222,7 +232,26 @@ export default function ReviewPage() {
     const ok = typed.trim().toLowerCase() === current.w.toLowerCase();
     setCheckRes(ok ? 'ok' : 'no');
     if (ok) setTimeout(() => mark(true), 950);
-    else addMistake(current); // 听写写错 → 入错题库
+    else { addMistake(current); srsReview(current, false); } // 听写写错 → 入错题库 + 间隔复习
+  };
+
+  /* 跟读：录一次音，与目标词比对 */
+  const doEcho = () => {
+    if (!current || listening) return;
+    setHeard(null); setListening(true);
+    recognizeOnce({ lang: accent === 'uk' ? 'en-GB' : 'en-US' })
+      .then((alts) => {
+        const ok = matchWord(current.w, alts);
+        setHeard({ ok, text: (alts && alts[0]) || '' });
+        setListening(false);
+        if (ok) setTimeout(() => mark(true), 1000);
+        else srsReview(current, false);
+      })
+      .catch((err) => {
+        setListening(false);
+        const code = err && err.message;
+        setHeard({ ok: false, text: '', err: code === 'no-speech' ? '没听清，再试一次' : code === 'not-allowed' ? '请允许使用麦克风' : '识别失败，重试' });
+      });
   };
 
   /* ---------- 设置页 ---------- */
@@ -234,29 +263,36 @@ export default function ReviewPage() {
           <div className="rv-field-label">练习方式</div>
           <div className="mode-tabs">
             <button className={'mode-tab' + (mode === 'flip' ? ' on' : '')} onClick={() => setMode('flip')}>
-              <i className="ti ti-cards"></i> 翻卡复习
+              <i className="ti ti-cards"></i> 翻卡
             </button>
             <button className={'mode-tab' + (mode === 'dictation' ? ' on' : '')} onClick={() => setMode('dictation')}>
-              <i className="ti ti-keyboard"></i> 听写练习
+              <i className="ti ti-keyboard"></i> 听写
             </button>
+            {echoOK && (
+              <button className={'mode-tab' + (mode === 'echo' ? ' on' : '')} onClick={() => setMode('echo')}>
+                <i className="ti ti-microphone"></i> 跟读
+              </button>
+            )}
           </div>
           <div className="rv-field-label">发音口音</div>
           <AccentToggle accent={accent} onChange={chooseAccent} />
           <div className="rv-field-label">选择范围</div>
-          <ScopeSelector scope={scope} setScope={setScope} mistakes={mistakeWords} />
+          <ScopeSelector scope={scope} setScope={setScope} mistakes={mistakeWords} srsDueCount={srsDueCount} />
           <div className="rv-summary">
             共 <b>{allWords.length}</b> 个单词 · 已掌握 <b>{allWords.length - unmastered}</b> 个
           </div>
           <div className="rv-start">
             <button className="btn primary block" onClick={() => start(false)}>
-              {mode === 'dictation' ? '开始听写' : '开始背单词'}（{allWords.length}）
+              {mode === 'echo' ? '开始跟读' : mode === 'dictation' ? '开始听写' : '开始背单词'}（{allWords.length}）
             </button>
             <button className="btn ghost block" disabled={!unmastered} onClick={() => start(true)}>只练未掌握（{unmastered}）</button>
           </div>
           <p className="rv-note">
-            {mode === 'dictation'
-              ? '听真人发音，写出英文单词，自动判分。'
-              : '翻面看中文意思与图片。点「认识」记为已掌握，「不认识」会稍后再次出现。'}
+            {mode === 'echo'
+              ? '听范读后点麦克风跟读，自动评测发音是否正确（需允许麦克风）。'
+              : mode === 'dictation'
+                ? '听真人发音，写出英文单词，自动判分。'
+                : '翻面看中文意思与图片。点「认识」记为已掌握，「不认识」会稍后再次出现。'}
             发音来自有道词典真人录音（需联网）。
           </p>
         </div>
@@ -287,7 +323,7 @@ export default function ReviewPage() {
   /* ---------- 练习页 ---------- */
   return (
     <div className="c-amber">
-      <Header title={mode === 'dictation' ? '听写练习' : '背单词'} sub={current.level} color="amber" backTo="/" />
+      <Header title={mode === 'echo' ? '跟读练习' : mode === 'dictation' ? '听写练习' : '背单词'} sub={current.level} color="amber" backTo="/" />
       <div className="rv-top">
         <span className="rv-count"><i className="ti ti-cards"></i> 剩余 {queue.length}</span>
         <AccentToggle accent={accent} onChange={chooseAccent} small />
@@ -295,7 +331,37 @@ export default function ReviewPage() {
       </div>
 
       <div className="stage">
-        {mode === 'flip' ? (
+        {mode === 'echo' ? (
+          <div className="echo">
+            <div className="echo-card">
+              {current.e
+                ? <div className="rv-emoji">{current.e}</div>
+                : <div className="rv-emoji letter-fallback">{(current.w[0] || '?').toUpperCase()}</div>}
+              <div className="rv-word sm">{current.w}</div>
+              <div className="rv-cn">{current.cn || ''}</div>
+              <button className="replay small rv-play" onClick={() => speakReal(current.w, accent)}>
+                <i className="ti ti-volume"></i> 听范读
+              </button>
+            </div>
+            {!echoOK ? (
+              <div className="echo-note">当前浏览器不支持跟读评测，请用 Chrome 或较新 Safari，并允许使用麦克风。</div>
+            ) : (
+              <>
+                <button className={'echo-mic' + (listening ? ' on' : '')} onClick={doEcho} disabled={listening}>
+                  <i className="ti ti-microphone"></i>
+                  <span>{listening ? '正在听…' : '点我跟读'}</span>
+                </button>
+                {heard && (heard.ok
+                  ? <div className="dict-result ok"><i className="ti ti-circle-check"></i> 读得很棒！</div>
+                  : <div className="dict-result no">{heard.err || ('听到：' + (heard.text || '（没听清）'))}</div>)}
+                <div className="rv-actions">
+                  <button className="btn dont" onClick={() => mark(false)}><i className="ti ti-rotate"></i> 跳过</button>
+                  <button className="btn know" onClick={() => mark(true)}><i className="ti ti-check"></i> 我会了</button>
+                </div>
+              </>
+            )}
+          </div>
+        ) : mode === 'flip' ? (
           <>
             <div className={'rv-card' + (flipped ? ' flip' : '')} onClick={() => setFlipped((f) => !f)}>
               <div className="rv-inner">

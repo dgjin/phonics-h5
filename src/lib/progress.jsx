@@ -14,11 +14,16 @@ function load(uid) {
       checkins: d.checkins || [],
       mistakes: d.mistakes || {},
       profile: d.profile || {},
+      srs: d.srs || {},
     };
   } catch {
-    return { stars: {}, checkins: [], mistakes: {}, profile: {} };
+    return { stars: {}, checkins: [], mistakes: {}, profile: {}, srs: {} };
   }
 }
+
+/* 间隔复习（Leitner 盒子）：每盒对应一个再次出现的间隔 */
+const DAY = 86400000;
+const SRS_INTERVALS = [10 * 60 * 1000, 1 * DAY, 2 * DAY, 4 * DAY, 8 * DAY, 16 * DAY];
 function save(uid, data) {
   try { localStorage.setItem(lsKey(uid), JSON.stringify(data)); } catch {}
 }
@@ -42,7 +47,14 @@ function mergeData(local, remote) {
   // 个人资料：取较新的
   const lp = local.profile || {}, rp = remote.profile || {};
   const profile = (rp.updatedAt || 0) > (lp.updatedAt || 0) ? rp : lp;
-  return { stars, checkins, mistakes, profile };
+  // 间隔复习：按词合并，取最近一次复习记录
+  const srs = {};
+  const ls = local.srs || {}, rsrs = remote.srs || {};
+  new Set([...Object.keys(ls), ...Object.keys(rsrs)]).forEach((k) => {
+    const a = ls[k], b = rsrs[k];
+    srs[k] = (!b || (a && (a.ts || 0) >= (b.ts || 0))) ? a : b;
+  });
+  return { stars, checkins, mistakes, profile, srs };
 }
 
 export function ProgressProvider({ children }) {
@@ -138,6 +150,25 @@ export function ProgressProvider({ children }) {
     });
   }, [pushRemote]);
 
+  /* 记录一次复习结果：答对升盒、答错回到第 0 盒，并安排下次到期时间 */
+  const srsReview = useCallback((item, correct) => {
+    if (!item || !item.w) return;
+    setData((prev) => {
+      const srs = { ...(prev.srs || {}) };
+      const k = item.w.toLowerCase();
+      const cur = srs[k] || { box: 0, reps: 0 };
+      const box = correct ? Math.min((cur.box || 0) + 1, SRS_INTERVALS.length - 1) : 0;
+      srs[k] = {
+        w: item.w, e: item.e || cur.e || '', s: item.s || cur.s || '', cn: item.cn || cur.cn || '',
+        box, reps: (cur.reps || 0) + 1, due: Date.now() + SRS_INTERVALS[box], ts: Date.now(),
+      };
+      const next = { ...prev, srs };
+      save(ctxRef.current.userId, next);
+      pushRemote(next);
+      return next;
+    });
+  }, [pushRemote]);
+
   const value = useMemo(() => {
     const levelStars = (level) => {
       let got = 0;
@@ -172,12 +203,20 @@ export function ProgressProvider({ children }) {
     };
     const checkedToday = () => data.checkins.indexOf(todayStr()) >= 0;
     const mistakes = Object.values(data.mistakes || {}).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+    const now = Date.now();
+    const srsDue = () => Object.values(data.srs || {})
+      .filter((x) => (x.due || 0) <= now)
+      .sort((a, b) => (a.due || 0) - (b.due || 0))
+      .map((x) => ({ w: x.w, e: x.e, s: x.s, cn: x.cn, level: '复习' }));
+    const srsDueCount = srsDue().length;
+    const srsTotal = Object.keys(data.srs || {}).length;
     return {
       getStars, setStars, levelStars, totalStars, completedUnits, streak, recentDays, checkedToday,
       mistakes, mistakeCount: mistakes.length, addMistake, removeMistake,
       profile: data.profile || {}, setProfile,
+      srsReview, srsDue, srsDueCount, srsTotal,
     };
-  }, [data, getStars, setStars, addMistake, removeMistake, setProfile]);
+  }, [data, getStars, setStars, addMistake, removeMistake, setProfile, srsReview]);
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
 }

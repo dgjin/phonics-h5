@@ -64,7 +64,7 @@ export function TransChoice({ words, onFinish }) {
   const [picked, setPicked] = useState(null);
   const [locked, setLocked] = useState(false);
   const correct = useRef(0);
-  const { addMistake } = useProgress();
+  const { addMistake, srsReview } = useProgress();
   const [fbNode, fire] = useFeedback();
   const ans = qs[idx];
   const opts = useMemo(
@@ -79,6 +79,7 @@ export function TransChoice({ words, onFinish }) {
     setLocked(true); setPicked(o);
     const ok = o === ans;
     if (ok) { correct.current += 1; speak(ans.w); } else addMistake(ans);
+    srsReview(ans, ok);
     fire(ok);
     setTimeout(() => {
       if (idx < qs.length - 1) setIdx(idx + 1);
@@ -119,7 +120,7 @@ export function ListenPick({ words, onFinish }) {
   const [picked, setPicked] = useState(null);
   const [locked, setLocked] = useState(false);
   const correct = useRef(0);
-  const { addMistake } = useProgress();
+  const { addMistake, srsReview } = useProgress();
   const [fbNode, fire] = useFeedback();
   const ans = qs[idx];
   const opts = useMemo(
@@ -138,6 +139,7 @@ export function ListenPick({ words, onFinish }) {
     setLocked(true); setPicked(o);
     const ok = o === ans;
     if (ok) correct.current += 1; else addMistake(ans);
+    srsReview(ans, ok);
     fire(ok);
     setTimeout(() => {
       if (idx < qs.length - 1) setIdx(idx + 1);

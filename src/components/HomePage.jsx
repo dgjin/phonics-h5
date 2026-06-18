@@ -130,7 +130,7 @@ function Dashboard() {
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { levelStars } = useProgress();
+  const { levelStars, srsDueCount } = useProgress();
   const [showLogin, setShowLogin] = useState(false);
   const isMobile = useIsMobile();
 
@@ -144,6 +144,16 @@ export default function HomePage() {
         <p className="hero-sub">自然拼读 · 听音 · 拼词 · 闯关学习</p>
       </div>
       <Dashboard />
+      {srsDueCount > 0 && (
+        <button className="review-entry c-pink" onClick={() => navigate('/review', { state: { scope: 'srs', mode: 'flip', auto: true } })}>
+          <div className="re-icon"><i className="ti ti-clock-bolt"></i></div>
+          <div className="re-main">
+            <div className="re-title">今日复习</div>
+            <div className="re-cn">{srsDueCount} 个单词到复习时间 · 趁热打铁</div>
+          </div>
+          <i className="ti ti-chevron-right re-arrow"></i>
+        </button>
+      )}
       <button className="review-entry c-green" onClick={() => navigate('/tb')}>
         <div className="re-icon"><i className="ti ti-book-2"></i></div>
         <div className="re-main">
