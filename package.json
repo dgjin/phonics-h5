@@ -7,7 +7,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate:images": "node scripts/migrate-images.mjs",
+    "upload:r2": "bash scripts/upload-r2.sh",
+    "deploy:pages": "npm run build && npx wrangler pages deploy dist --project-name phonics-h5"
   },
   "dependencies": {
     "@fontsource/fredoka": "^5.2.10",

@@ -1,0 +1,53 @@
+# 部署到 Cloudflare（Pages + R2 图片自托管）
+
+代码侧已就绪。下面三步都需要**先完成 Cloudflare 授权**（在交互式 `claude` 终端 `/mcp` 授权，或 `npx wrangler login`）。
+
+## 一、把教材图片迁到自有 R2（去掉第三方热链）
+
+当前教材图片热链自 `ywld-…51jiaoxi.com`（199 张），有失效/版权风险。迁移后由你自己的 R2 提供。
+
+```bash
+# 1) 下载全部图片到本地 r2-assets/（无需 Cloudflare 账号，可先跑）
+npm run migrate:images
+
+# 2) 建 bucket（授权后）
+npx wrangler r2 bucket create phonics-assets
+
+# 3) 上传（key 前缀 word-img/，与词表文件名一致）
+R2_BUCKET=phonics-assets npm run upload:r2
+
+# 4) 开启该 bucket 的公开访问：
+#    Cloudflare 控制台 → R2 → phonics-assets → Settings → Public access
+#    记下公开域名（形如 https://pub-xxxx.r2.dev 或你绑定的自定义域）
+```
+
+把公开域名 + `/word-img` 填入图片基址，二选一：
+- 改 [`src/config.js`](src/config.js) 的 `ASSETS_BASE`，例如
+  `export const ASSETS_BASE = 'https://pub-xxxx.r2.dev/word-img';`
+- 或在构建环境变量里设 `VITE_ASSETS_BASE=https://pub-xxxx.r2.dev/word-img`（推荐，免改码）。
+
+> 应用读图走 [`src/lib/assets.js`](src/lib/assets.js) 的 `assetUrl()`：未配置时用原始地址，配置后自动改用 R2 同名文件。无需改词表。
+
+## 二、部署到 Cloudflare Pages
+
+```bash
+npm run deploy:pages
+# = npm run build && npx wrangler pages deploy dist --project-name phonics-h5
+```
+
+首次会创建 Pages 项目并提示选择生产分支。完成后给出 `*.pages.dev` 地址。
+配置见 [`wrangler.jsonc`](wrangler.jsonc)（`pages_build_output_dir: dist`）。
+
+也可走控制台：Pages → 连接 GitHub 仓库 `dgjin/phonics-h5` → Framework 选 Vite、输出目录 `dist`，并在环境变量加 `VITE_ASSETS_BASE`。
+
+## 三、CSP / 跨域提醒
+
+- 发音仍依赖 `dict.youdao.com`；若加 CSP 需放行 `media-src https://dict.youdao.com`。
+- 图片迁到 R2 后，`img-src` 放行你的 R2 公开域名即可，不再依赖第三方。
+
+## 检查清单
+
+- [ ] `npm run migrate:images` 全部成功（失败清单见 `r2-assets/_failed.json`）
+- [ ] R2 bucket 已建、已上传、已开公开访问
+- [ ] `ASSETS_BASE` / `VITE_ASSETS_BASE` 已填，本地 `npm run build && npm run preview` 验证图片走 R2
+- [ ] `npm run deploy:pages` 成功，线上图片/发音正常

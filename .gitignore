@@ -3,3 +3,5 @@ dist/
 *.log
 .DS_Store
 phonics-h5-dist.zip
+r2-assets/
+.wrangler/

@@ -1,0 +1,7 @@
+{
+  // Cloudflare Pages 部署配置（静态 Vite 站点）。
+  // 部署：npm run deploy:pages  （需先完成 Cloudflare 授权 / npx wrangler login）
+  "name": "phonics-h5",
+  "compatibility_date": "2025-06-01",
+  "pages_build_output_dir": "dist"
+}
