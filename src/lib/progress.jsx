@@ -44,9 +44,17 @@ function mergeData(local, remote) {
   checkins.sort();
   // 错题：按词并集
   const mistakes = { ...(remote.mistakes || {}), ...(local.mistakes || {}) };
-  // 个人资料：取较新的
+  // 个人资料：优先保留有头像的一方；都有头像则取较新的；
+  // 防止被无 profile 的旧数据覆盖掉本地头像
   const lp = local.profile || {}, rp = remote.profile || {};
-  const profile = (rp.updatedAt || 0) > (lp.updatedAt || 0) ? rp : lp;
+  let profile;
+  if (lp.avatar && !rp.avatar) {
+    profile = lp;
+  } else if (rp.avatar && !lp.avatar) {
+    profile = rp;
+  } else {
+    profile = (rp.updatedAt || 0) > (lp.updatedAt || 0) ? rp : lp;
+  }
   // 间隔复习：按词合并，取最近一次复习记录
   const srs = {};
   const ls = local.srs || {}, rsrs = remote.srs || {};
@@ -99,7 +107,7 @@ export function ProgressProvider({ children }) {
   const setStars = useCallback((levelId, unitId, stars) => {
     setData((prev) => {
       const k = keyOf(levelId, unitId);
-      const next = { stars: { ...prev.stars }, checkins: prev.checkins.slice() };
+      const next = { ...prev, stars: { ...prev.stars }, checkins: prev.checkins.slice() };
       if (stars > (next.stars[k] || 0)) next.stars[k] = stars;
       const t = todayStr();
       if (next.checkins.indexOf(t) < 0) next.checkins.push(t);
