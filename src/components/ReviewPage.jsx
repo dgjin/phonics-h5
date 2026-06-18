@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { CURRICULUM } from '../data/curriculum';
 import { cnOf } from '../data/word-cn';
 import { speakReal, getAccent, setAccent, stop } from '../lib/tts';
 import { shuffle } from '../data/utils';
 import { useAuth } from '../lib/auth.jsx';
+import { useProgress } from '../lib/progress.jsx';
 import { Header, Confetti } from './common.jsx';
 
 /* 汇总全部课程单词，按词去重；可按级别筛选 */
@@ -35,7 +36,10 @@ function AccentToggle({ accent, onChange, small }) {
 
 export default function ReviewPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const init = location.state || {};
   const { userId } = useAuth();
+  const { mistakes, addMistake, removeMistake } = useProgress();
   const mkey = 'phonics_review_v1:' + (userId || 'guest');
   const loadMastered = () => {
     try { return new Set(JSON.parse(localStorage.getItem(mkey)) || []); } catch (e) { return new Set(); }
@@ -45,9 +49,10 @@ export default function ReviewPage() {
   };
 
   const [accent, setAcc] = useState(getAccent());
-  const [mode, setMode] = useState('flip'); // flip | dictation
-  const [scope, setScope] = useState('all');
+  const [mode, setMode] = useState(init.mode === 'dictation' ? 'dictation' : 'flip'); // flip | dictation
+  const [scope, setScope] = useState(init.scope === 'mistakes' ? 'mistakes' : 'all');
   const [mastered, setMastered] = useState(loadMastered);
+  const autoStarted = useRef(false);
   const [queue, setQueue] = useState(null); // null = 设置页
   const [flipped, setFlipped] = useState(false);
   const [typed, setTyped] = useState('');
@@ -57,7 +62,11 @@ export default function ReviewPage() {
 
   useEffect(() => { setMastered(loadMastered()); }, [userId]); // eslint-disable-line
 
-  const allWords = useMemo(() => buildWords(scope), [scope]);
+  const mistakeWords = useMemo(
+    () => mistakes.map((m) => ({ w: m.w, e: m.e, s: m.s, cn: cnOf(m.w), level: m.level || '错题' })),
+    [mistakes]
+  );
+  const allWords = scope === 'mistakes' ? mistakeWords : buildWords(scope);
   const unmastered = allWords.filter((w) => !mastered.has(w.w)).length;
   const current = queue && queue[0];
 
@@ -79,6 +88,14 @@ export default function ReviewPage() {
     setRound((r) => r + 1);
   };
 
+  // 从错题库进入时自动开始
+  useEffect(() => {
+    if (init.auto && !autoStarted.current && queue === null && allWords.length) {
+      autoStarted.current = true;
+      start(false);
+    }
+  }); // eslint-disable-line
+
   const mark = (isKnown) => {
     if (!current) return;
     stop();
@@ -88,6 +105,7 @@ export default function ReviewPage() {
       known.current += 1;
       const nm = new Set(mastered); nm.add(head.w);
       setMastered(nm); saveMastered(nm);
+      removeMistake(head.w); // 答对/认识 → 移出错题库
     }
     setQueue((q) => (isKnown ? q.slice(1) : [...q.slice(1), head]));
     setRound((r) => r + 1);
@@ -98,6 +116,7 @@ export default function ReviewPage() {
     const ok = typed.trim().toLowerCase() === current.w.toLowerCase();
     setCheckRes(ok ? 'ok' : 'no');
     if (ok) setTimeout(() => mark(true), 950);
+    else addMistake(current); // 听写写错 → 入错题库
   };
 
   /* ---------- 设置页 ---------- */
@@ -120,6 +139,11 @@ export default function ReviewPage() {
           <div className="rv-field-label">选择范围</div>
           <div className="scope-chips">
             <button className={'scope-chip' + (scope === 'all' ? ' on' : '')} onClick={() => setScope('all')}>全部</button>
+            {mistakeWords.length > 0 && (
+              <button className={'scope-chip mk' + (scope === 'mistakes' ? ' on' : '')} onClick={() => setScope('mistakes')}>
+                <i className="ti ti-alert-triangle"></i> 错题 {mistakeWords.length}
+              </button>
+            )}
             {CURRICULUM.map((lv) => (
               <button key={lv.id} className={'scope-chip' + (scope === lv.id ? ' on' : '')} onClick={() => setScope(lv.id)}>
                 {lv.title}

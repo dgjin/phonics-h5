@@ -7,21 +7,26 @@ import { useIsMobile } from '../lib/useIsMobile';
 import LoginModal from './LoginModal.jsx';
 
 function UserBar({ onLogin }) {
+  const navigate = useNavigate();
   const { configured, user, displayName, signOut } = useAuth();
+  const { profile } = useProgress();
   const loggedIn = !!user;
-  const name = displayName();
+  const name = profile.name || displayName();
   const initial = (name || '?').slice(0, 1).toUpperCase();
   const tag = loggedIn ? '已登录 · 云端同步' : configured ? '未登录' : '本地学习';
 
   return (
     <div className="userbar">
-      <div className="user-chip">
-        <div className="user-avatar">{loggedIn ? initial : '👤'}</div>
+      <button className="user-chip" onClick={() => navigate('/me')} title="查看个人信息">
+        <div className="user-avatar">
+          {profile.avatar ? <img src={profile.avatar} alt="头像" /> : (loggedIn ? initial : '👤')}
+        </div>
         <div className="user-meta">
           <div className="user-name">{name}</div>
           <div className="user-tag">{tag}</div>
         </div>
-      </div>
+        <i className="ti ti-chevron-right user-go"></i>
+      </button>
       {loggedIn ? (
         <button className="user-btn" onClick={() => signOut()}><i className="ti ti-logout"></i> 退出</button>
       ) : configured ? (

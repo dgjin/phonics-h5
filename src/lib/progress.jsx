@@ -9,9 +9,14 @@ const lsKey = (uid) => 'phonics_data_v2:' + (uid || 'guest');
 function load(uid) {
   try {
     const d = JSON.parse(localStorage.getItem(lsKey(uid))) || {};
-    return { stars: d.stars || {}, checkins: d.checkins || [] };
+    return {
+      stars: d.stars || {},
+      checkins: d.checkins || [],
+      mistakes: d.mistakes || {},
+      profile: d.profile || {},
+    };
   } catch {
-    return { stars: {}, checkins: [] };
+    return { stars: {}, checkins: [], mistakes: {}, profile: {} };
   }
 }
 function save(uid, data) {
@@ -32,7 +37,12 @@ function mergeData(local, remote) {
   checkins.forEach((d) => { set[d] = 1; });
   (remote.checkins || []).forEach((d) => { if (!set[d]) { checkins.push(d); set[d] = 1; } });
   checkins.sort();
-  return { stars, checkins };
+  // 错题：按词并集
+  const mistakes = { ...(remote.mistakes || {}), ...(local.mistakes || {}) };
+  // 个人资料：取较新的
+  const lp = local.profile || {}, rp = remote.profile || {};
+  const profile = (rp.updatedAt || 0) > (lp.updatedAt || 0) ? rp : lp;
+  return { stars, checkins, mistakes, profile };
 }
 
 export function ProgressProvider({ children }) {
@@ -89,6 +99,45 @@ export function ProgressProvider({ children }) {
 
   const getStars = useCallback((levelId, unitId) => data.stars[keyOf(levelId, unitId)] || 0, [data]);
 
+  const addMistake = useCallback((item) => {
+    if (!item || !item.w) return;
+    setData((prev) => {
+      const next = { ...prev, mistakes: { ...prev.mistakes } };
+      const k = item.w.toLowerCase();
+      const cur = next.mistakes[k] || {};
+      next.mistakes[k] = {
+        w: item.w, e: item.e || cur.e || '', s: item.s || cur.s || '', level: item.level || cur.level || '',
+        count: (cur.count || 0) + 1, ts: Date.now(),
+      };
+      save(ctxRef.current.userId, next);
+      pushRemote(next);
+      return next;
+    });
+  }, [pushRemote]);
+
+  const removeMistake = useCallback((word) => {
+    if (!word) return;
+    setData((prev) => {
+      const k = String(word).toLowerCase();
+      if (!prev.mistakes[k]) return prev;
+      const mistakes = { ...prev.mistakes };
+      delete mistakes[k];
+      const next = { ...prev, mistakes };
+      save(ctxRef.current.userId, next);
+      pushRemote(next);
+      return next;
+    });
+  }, [pushRemote]);
+
+  const setProfile = useCallback((patch) => {
+    setData((prev) => {
+      const next = { ...prev, profile: { ...prev.profile, ...patch, updatedAt: Date.now() } };
+      save(ctxRef.current.userId, next);
+      pushRemote(next);
+      return next;
+    });
+  }, [pushRemote]);
+
   const value = useMemo(() => {
     const levelStars = (level) => {
       let got = 0;
@@ -122,8 +171,13 @@ export function ProgressProvider({ children }) {
       return out;
     };
     const checkedToday = () => data.checkins.indexOf(todayStr()) >= 0;
-    return { getStars, setStars, levelStars, totalStars, completedUnits, streak, recentDays, checkedToday };
-  }, [data, getStars, setStars]);
+    const mistakes = Object.values(data.mistakes || {}).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+    return {
+      getStars, setStars, levelStars, totalStars, completedUnits, streak, recentDays, checkedToday,
+      mistakes, mistakeCount: mistakes.length, addMistake, removeMistake,
+      profile: data.profile || {}, setProfile,
+    };
+  }, [data, getStars, setStars, addMistake, removeMistake, setProfile]);
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
 }

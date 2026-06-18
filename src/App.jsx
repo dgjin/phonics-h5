@@ -7,6 +7,7 @@ import GamePage from "./components/GamePage.jsx";
 import ResultPage from "./components/ResultPage.jsx";
 import ReviewPage from "./components/ReviewPage.jsx";
 import ProfilePage from "./components/ProfilePage.jsx";
+import MistakesPage from "./components/MistakesPage.jsx";
 import TabBar from "./components/TabBar.jsx";
 import { useIsMobile } from "./lib/useIsMobile";
 
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/review" element={<ReviewPage />} />
         <Route path="/me" element={<ProfilePage />} />
+        <Route path="/mistakes" element={<MistakesPage />} />
         <Route path="/level/:levelId" element={<LevelPage />} />
         <Route path="/unit/:levelId/:unitId" element={<UnitPage />} />
         <Route path="/game/:levelId/:unitId/:gameType" element={<GamePage />} />

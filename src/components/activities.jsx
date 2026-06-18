@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { ProgressDots, Feedback } from './common.jsx';
 import { speak, speakItem, speakLetter, stop } from '../lib/tts';
 import { shuffle, sample, tilesOf, starsFor, highlight } from '../data/utils';
+import { useProgress } from '../lib/progress.jsx';
 
 /* 即时反馈：返回 [node, fire(ok)] */
 function useFeedback() {
@@ -62,6 +63,7 @@ export function Listen({ unit, onFinish }) {
   const [picked, setPicked] = useState(null);
   const correct = useRef(0);
   const [fbNode, fire] = useFeedback();
+  const { addMistake } = useProgress();
   const ans = qs[idx];
   const opts = useMemo(() => {
     const distract = sample(items.filter((x) => x !== ans), Math.min(2, items.length - 1));
@@ -79,6 +81,7 @@ export function Listen({ unit, onFinish }) {
     setLocked(true); setPicked(o);
     const ok = o === ans;
     if (ok) correct.current += 1;
+    else addMistake(ans);
     fire(ok);
     setTimeout(() => {
       if (idx < qs.length - 1) setIdx(idx + 1);
@@ -125,6 +128,7 @@ export function Match({ unit, onFinish }) {
   const [shake, setShake] = useState(false);
   const mistakes = useRef(0);
   const [fbNode, fire] = useFeedback();
+  const { addMistake } = useProgress();
   const finishedRef = useRef(false);
 
   useEffect(() => () => stop(), []);
@@ -143,11 +147,12 @@ export function Match({ unit, onFinish }) {
       }
     } else {
       mistakes.current += 1;
+      if (selWord) addMistake(selWord);
       setShake(true);
       const t = setTimeout(() => { setShake(false); setSelWord(null); setSelEmoji(null); }, 500);
       return () => clearTimeout(t);
     }
-  }, [selWord, selEmoji, matched, pool, onFinish, fire]);
+  }, [selWord, selEmoji, matched, pool, onFinish, fire, addMistake]);
 
   const idOf = (it) => it.w;
 
@@ -198,6 +203,7 @@ export function Spell({ unit, onFinish }) {
   const [idx, setIdx] = useState(0);
   const correct = useRef(0);
   const [fbNode, fire] = useFeedback();
+  const { addMistake } = useProgress();
   const it = qs[idx];
   const answer = useMemo(() => tilesOf(it), [it]);
   const trayTiles = useMemo(
@@ -229,6 +235,7 @@ export function Spell({ unit, onFinish }) {
           else onFinish(starsFor(correct.current, qs.length));
         }, 1100);
       } else {
+        addMistake(it);
         setShake(true);
         setTimeout(() => { setShake(false); setPlaced([]); }, 600);
       }

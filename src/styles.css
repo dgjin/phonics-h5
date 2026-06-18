@@ -374,6 +374,56 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .pcard-title .ti { color: var(--accent); }
 .pcard-sub { color: var(--muted); font-weight: 600; font-size: 13px; margin: 4px 0 14px; }
 
+/* 头像（可上传） */
+.profile-avatar { position: relative; border: none; padding: 0; cursor: pointer; overflow: visible; }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.avatar-cam { position: absolute; right: -2px; bottom: -2px; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 15px; border: 3px solid var(--bg); }
+.name-row { display: flex; gap: 10px; align-items: stretch; }
+.name-field { flex: 1; margin-bottom: 0; }
+.avatar-btn { margin-top: 12px; }
+
+/* 通用入口卡（错题库等） */
+.entry-card { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; margin: 4px 0 16px;
+  background: linear-gradient(100deg, var(--accent), var(--accent-dark)); color: #fff; border: none; border-radius: 20px;
+  padding: 15px 18px; box-shadow: 0 7px 0 var(--accent-dark); cursor: pointer; transition: transform .12s, box-shadow .12s; }
+.entry-card:active { transform: translateY(3px); box-shadow: 0 4px 0 var(--accent-dark); }
+.entry-icon { width: 50px; height: 50px; flex: none; border-radius: 14px; background: rgba(255,255,255,.22);
+  display: grid; place-items: center; font-size: 26px; }
+.entry-main { flex: 1; min-width: 0; }
+.entry-title { font-family: var(--font-head); font-weight: 700; font-size: 21px; }
+.entry-sub { font-weight: 600; font-size: 13px; opacity: .92; }
+.entry-arrow { font-size: 24px; opacity: .85; }
+
+/* 错题 chip */
+.scope-chip.mk { border-color: #f0c4b4; color: #b0481f; }
+.scope-chip.mk.on { background: #e2673c; border-color: #e2673c; color: #fff; }
+
+/* 错题库页 */
+.mk-actions { display: flex; gap: 12px; margin-bottom: 16px; }
+.mk-actions .btn { flex: 1; }
+.mk-list { display: flex; flex-direction: column; gap: 10px; }
+.mk-row { display: flex; align-items: center; gap: 12px; background: var(--card); border-radius: 16px;
+  box-shadow: var(--shadow); padding: 11px 14px; }
+.mk-emoji { font-size: 32px; flex: none; }
+.mk-main { flex: 1; min-width: 0; }
+.mk-word { font-family: var(--font-head); font-weight: 700; font-size: 20px; color: var(--accent-deep); }
+.mk-cn { color: var(--muted); font-weight: 600; font-size: 13px; }
+.mk-icon { width: 40px; height: 40px; flex: none; border: none; border-radius: 12px; background: var(--accent-soft);
+  color: var(--accent-dark); font-size: 19px; cursor: pointer; transition: transform .1s; }
+.mk-icon:active { transform: scale(.9); }
+.mk-icon.del { background: #f3f3f8; color: var(--muted); }
+.mk-empty { text-align: center; padding: 48px 20px; }
+.mk-empty-emoji { font-size: 60px; }
+.mk-empty-title { font-family: var(--font-head); font-weight: 700; font-size: 24px; color: var(--accent-deep); margin: 10px 0 6px; }
+.mk-empty-sub { color: var(--muted); font-weight: 600; font-size: 14px; line-height: 1.6; max-width: 320px; margin: 0 auto 22px; }
+
+/* 用户条可点击 + 头像图片 */
+.user-chip { border: none; background: none; padding: 0; cursor: pointer; text-align: left; }
+.user-avatar { overflow: hidden; }
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.user-go { color: var(--muted); font-size: 18px; margin-left: 2px; }
+
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 @keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
