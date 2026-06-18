@@ -119,6 +119,15 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      <button className="entry-card c-teal" onClick={() => navigate('/help')}>
+        <div className="entry-icon"><i className="ti ti-help-circle"></i></div>
+        <div className="entry-main">
+          <div className="entry-title">帮助</div>
+          <div className="entry-sub">使用指南 · 常见问题</div>
+        </div>
+        <i className="ti ti-chevron-right entry-arrow"></i>
+      </button>
+
       <p className="foot">Phonics Fun · 自然拼读 H5 · 内容改编自 KizPhonics 分级教材</p>
     </div>
   );

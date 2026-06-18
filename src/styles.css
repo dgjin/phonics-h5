@@ -418,6 +418,23 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .mk-empty-title { font-family: var(--font-head); font-weight: 700; font-size: 24px; color: var(--accent-deep); margin: 10px 0 6px; }
 .mk-empty-sub { color: var(--muted); font-weight: 600; font-size: 14px; line-height: 1.6; max-width: 320px; margin: 0 auto 22px; }
 
+/* 帮助页 */
+.help-section { margin-bottom: 6px; }
+.help-h { font-family: var(--font-head); font-weight: 700; color: var(--accent-deep); font-size: 18px; margin: 18px 4px 12px; }
+.help-card { display: flex; gap: 14px; background: var(--card); border-radius: 16px; box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 10px; }
+.help-ic { width: 44px; height: 44px; flex: none; border-radius: 12px; background: var(--accent-soft); color: var(--accent-dark);
+  display: grid; place-items: center; font-size: 24px; }
+.help-ct { flex: 1; min-width: 0; }
+.help-ct-title { font-family: var(--font-head); font-weight: 700; font-size: 17px; color: var(--accent-deep); }
+.help-ct-desc { color: var(--muted); font-weight: 600; font-size: 13px; line-height: 1.6; margin-top: 3px; }
+.faq { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
+.faq summary { list-style: none; cursor: pointer; padding: 15px 16px; font-family: var(--font-head); font-weight: 700;
+  font-size: 16px; color: var(--accent-deep); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq-chev { color: var(--muted); transition: transform .2s; flex: none; }
+.faq[open] .faq-chev { transform: rotate(180deg); }
+.faq-a { padding: 0 16px 15px; color: var(--ink); font-weight: 600; font-size: 14px; line-height: 1.7; }
+
 /* 用户条可点击 + 头像图片 */
 .user-chip { border: none; background: none; padding: 0; cursor: pointer; text-align: left; }
 .user-avatar { overflow: hidden; }
