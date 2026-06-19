@@ -4,6 +4,7 @@ import { useAuth } from '../lib/auth.jsx';
 import { useProgress } from '../lib/progress.jsx';
 import { useIsMobile } from '../lib/useIsMobile';
 import { getAccent, setAccent } from '../lib/tts';
+import { sfxOn, setSfxOn, sfxCorrect } from '../lib/sfx';
 import { TEXTBOOK } from '../data/textbook';
 import { Header } from './common.jsx';
 import LoginModal from './LoginModal.jsx';
@@ -34,6 +35,8 @@ export default function ProfilePage() {
   const { totalStars, completedUnits, streak, profile, setProfile, mistakeCount, achievedCount, achievementTotal } = useProgress();
   const [showLogin, setShowLogin] = useState(false);
   const [accent, setAcc] = useState(getAccent());
+  const [sfx, setSfx] = useState(sfxOn());
+  const toggleSfx = (v) => { setSfx(v); setSfxOn(v); if (v) sfxCorrect(); };
   const [name, setName] = useState(profile.name || '');
   const fileRef = useRef(null);
 
@@ -144,6 +147,15 @@ export default function ProfilePage() {
         <div className="accent-toggle">
           <button className={accent === 'us' ? 'on' : ''} onClick={() => chooseAccent('us')}>美式</button>
           <button className={accent === 'uk' ? 'on' : ''} onClick={() => chooseAccent('uk')}>英式</button>
+        </div>
+      </div>
+
+      <div className="profile-card">
+        <div className="pcard-title"><i className="ti ti-music"></i> 答题音效</div>
+        <div className="pcard-sub">答对 / 答错 / 过关的提示音</div>
+        <div className="accent-toggle">
+          <button className={sfx ? 'on' : ''} onClick={() => toggleSfx(true)}>开</button>
+          <button className={!sfx ? 'on' : ''} onClick={() => toggleSfx(false)}>关</button>
         </div>
       </div>
 

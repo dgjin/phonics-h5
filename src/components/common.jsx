@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { sfxCorrect, sfxWrong, sfxFinish } from '../lib/sfx';
 
 export function Header({ title, sub, color, backTo }) {
   const navigate = useNavigate();
@@ -46,6 +48,7 @@ export function ProgressDots({ idx, total }) {
 }
 
 export function Feedback({ ok }) {
+  useEffect(() => { if (ok) sfxCorrect(); else sfxWrong(); }, []); // 浮层出现即播放音效
   return (
     <div className={'feedback in ' + (ok ? 'ok' : 'no')}>
       {ok ? (
@@ -58,6 +61,7 @@ export function Feedback({ ok }) {
 }
 
 export function Confetti() {
+  useEffect(() => { sfxFinish(); }, []); // 过关彩纸出现即播放过关音
   const colors = ['#7F77DD', '#1D9E75', '#D85A30', '#D4537E', '#639922', '#EF9F27'];
   return (
     <>
