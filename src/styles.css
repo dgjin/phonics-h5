@@ -453,6 +453,12 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .trans-prompt { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 22px; }
 .trans-emoji { font-size: clamp(60px, 20vw, 92px); line-height: 1; }
 .trans-cn { font-family: var(--font-head); font-weight: 700; font-size: 28px; color: var(--accent-deep); }
+.spell-cn { font-family: var(--font-head); font-weight: 700; font-size: 20px; color: var(--accent-deep); margin-top: 6px; }
+.challenge-bar { width: 100%; max-width: 440px; height: 10px; border-radius: 999px; background: var(--accent-soft); overflow: hidden; margin-bottom: 8px; }
+.challenge-time { height: 100%; background: var(--accent); border-radius: 999px; transition: width 1s linear; }
+.challenge-top { width: 100%; max-width: 440px; display: flex; justify-content: space-between;
+  font-family: var(--font-head); font-weight: 700; font-size: 15px; color: var(--accent-deep); margin-bottom: 16px; }
+.challenge-top .ti { color: var(--accent); }
 
 /* 今日目标条 */
 .dash-goal { margin-top: 14px; }
