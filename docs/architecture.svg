@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 820" font-family="PingFang SC, Microsoft YaHei, Segoe UI, sans-serif">
+<defs>
+<marker id="ar" markerWidth="11" markerHeight="9" refX="8.5" refY="4.5" orient="auto"><path d="M0,0 L10,4.5 L0,9 Z" fill="#2563eb"/></marker>
+<marker id="arp" markerWidth="11" markerHeight="9" refX="8.5" refY="4.5" orient="auto"><path d="M0,0 L10,4.5 L0,9 Z" fill="#db2777"/></marker>
+<marker id="arg" markerWidth="11" markerHeight="9" refX="8.5" refY="4.5" orient="auto"><path d="M0,0 L10,4.5 L0,9 Z" fill="#94a3b8"/></marker>
+</defs>
+<rect x="0" y="0" width="1180" height="820" fill="#ffffff"/>
+<text x="40" y="42" font-size="24" font-weight="800" fill="#0f172a">Phonics Fun · 自然拼读 H5 系统架构</text>
+<text x="40" y="64" font-size="13" fill="#64748b">React 19 + Vite · 本地数据 + 浏览器能力 · Supabase 云同步 · Cloudflare Pages 托管</text>
+<rect x="40" y="92" width="820" height="70" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="54" y="80" width="106" height="24" rx="12" fill="#2563eb"/>
+<text x="107.0" y="97" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">客户端 Client</text>
+<rect x="60" y="104" width="380" height="46" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="1.4"/>
+<rect x="60" y="104" width="5" height="46" rx="2.5" fill="#2563eb"/>
+<text x="76" y="124.0" font-size="13.5" font-weight="700" fill="#1e293b">浏览器 / PWA</text>
+<text x="76" y="141.0" font-size="11" fill="#64748b">手机 · 平板 · 电脑 · 可安装离线</text>
+<rect x="460" y="104" width="380" height="46" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="1.4"/>
+<rect x="460" y="104" width="5" height="46" rx="2.5" fill="#2563eb"/>
+<text x="476" y="124.0" font-size="13.5" font-weight="700" fill="#1e293b">Service Worker</text>
+<text x="476" y="141.0" font-size="11" fill="#64748b">离线缓存应用与音频（生产）</text>
+<rect x="40" y="196" width="820" height="196" rx="14" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="54" y="184" width="298" height="24" rx="12" fill="#7c3aed"/>
+<text x="203.0" y="201" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">应用层 · React 19 + Vite + HashRouter</text>
+<rect x="60" y="212" width="380" height="46" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="1.4"/>
+<rect x="60" y="212" width="5" height="46" rx="2.5" fill="#7c3aed"/>
+<text x="76" y="232.0" font-size="13.5" font-weight="700" fill="#1e293b">AuthProvider</text>
+<text x="76" y="249.0" font-size="11" fill="#64748b">Supabase 登录 / 访客降级</text>
+<rect x="460" y="212" width="380" height="46" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="1.4"/>
+<rect x="460" y="212" width="5" height="46" rx="2.5" fill="#7c3aed"/>
+<text x="476" y="232.0" font-size="13.5" font-weight="700" fill="#1e293b">ProgressProvider</text>
+<text x="476" y="249.0" font-size="11" fill="#64748b">进度 · 错题 · SRS · 成就 · 云同步</text>
+<rect x="60" y="280" width="56" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="88.0" y="299.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">首页</text>
+<rect x="128" y="280" width="86" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="171.0" y="299.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">教材闯关</text>
+<rect x="226" y="280" width="71" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="261.5" y="299.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">背单词</text>
+<rect x="309" y="280" width="71" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="344.5" y="299.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">错题库</text>
+<rect x="60" y="326" width="56" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="88.0" y="345.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">成就</text>
+<rect x="128" y="326" width="86" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="171.0" y="345.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">家长周报</text>
+<rect x="226" y="326" width="86" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="269.0" y="345.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">绘本故事</text>
+<rect x="324" y="326" width="56" height="30" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1"/>
+<text x="352.0" y="345.5" font-size="12.5" font-weight="600" fill="#6d28d9" text-anchor="middle">我的</text>
+<rect x="40" y="412" width="820" height="96" rx="14" fill="#ecfeff" stroke="#0891b2" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="54" y="400" width="130" height="24" rx="12" fill="#0891b2"/>
+<text x="119.0" y="417" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">能力库 · src/lib</text>
+<rect x="60" y="428" width="185" height="64" rx="10" fill="#ffffff" stroke="#0891b2" stroke-width="1.4"/>
+<rect x="60" y="428" width="5" height="64" rx="2.5" fill="#0891b2"/>
+<text x="76" y="457.0" font-size="13.5" font-weight="700" fill="#1e293b">tts.js 发音</text>
+<text x="76" y="474.0" font-size="11" fill="#64748b">有道真人·美/英 + 回退</text>
+<rect x="258" y="428" width="185" height="64" rx="10" fill="#ffffff" stroke="#0891b2" stroke-width="1.4"/>
+<rect x="258" y="428" width="5" height="64" rx="2.5" fill="#0891b2"/>
+<text x="274" y="457.0" font-size="13.5" font-weight="700" fill="#1e293b">speech.js 跟读</text>
+<text x="274" y="474.0" font-size="11" fill="#64748b">Web Speech 语音识别</text>
+<rect x="456" y="428" width="185" height="64" rx="10" fill="#ffffff" stroke="#0891b2" stroke-width="1.4"/>
+<rect x="456" y="428" width="5" height="64" rx="2.5" fill="#0891b2"/>
+<text x="472" y="457.0" font-size="13.5" font-weight="700" fill="#1e293b">SRS 引擎</text>
+<text x="472" y="474.0" font-size="11" fill="#64748b">间隔复习调度</text>
+<rect x="654" y="428" width="186" height="64" rx="10" fill="#ffffff" stroke="#0891b2" stroke-width="1.4"/>
+<rect x="654" y="428" width="5" height="64" rx="2.5" fill="#0891b2"/>
+<text x="670" y="457.0" font-size="13.5" font-weight="700" fill="#1e293b">assets 图片</text>
+<text x="670" y="474.0" font-size="11" fill="#64748b">图片地址解析</text>
+<rect x="40" y="528" width="820" height="84" rx="14" fill="#ecfdf5" stroke="#059669" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="54" y="516" width="98" height="24" rx="12" fill="#059669"/>
+<text x="103.0" y="533" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">数据 · 本地静态</text>
+<rect x="60" y="544" width="185" height="50" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+<rect x="60" y="544" width="5" height="50" rx="2.5" fill="#059669"/>
+<text x="76" y="566.0" font-size="13.5" font-weight="700" fill="#1e293b">curriculum</text>
+<text x="76" y="583.0" font-size="11" fill="#64748b">自然拼读课程</text>
+<rect x="258" y="544" width="185" height="50" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+<rect x="258" y="544" width="5" height="50" rx="2.5" fill="#059669"/>
+<text x="274" y="566.0" font-size="13.5" font-weight="700" fill="#1e293b">textbook</text>
+<text x="274" y="583.0" font-size="11" fill="#64748b">教材 4 册</text>
+<rect x="456" y="544" width="185" height="50" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+<rect x="456" y="544" width="5" height="50" rx="2.5" fill="#059669"/>
+<text x="472" y="566.0" font-size="13.5" font-weight="700" fill="#1e293b">stories</text>
+<text x="472" y="583.0" font-size="11" fill="#64748b">绘本故事</text>
+<rect x="654" y="544" width="186" height="50" rx="10" fill="#ffffff" stroke="#059669" stroke-width="1.4"/>
+<rect x="654" y="544" width="5" height="50" rx="2.5" fill="#059669"/>
+<text x="670" y="566.0" font-size="13.5" font-weight="700" fill="#1e293b">word-cn</text>
+<text x="670" y="583.0" font-size="11" fill="#64748b">中文词典</text>
+<rect x="40" y="632" width="820" height="88" rx="14" fill="#fff7ed" stroke="#d97706" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="54" y="620" width="106" height="24" rx="12" fill="#d97706"/>
+<text x="107.0" y="637" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">持久化 · 云端同步</text>
+<rect x="60" y="648" width="380" height="56" rx="10" fill="#ffffff" stroke="#d97706" stroke-width="1.4"/>
+<rect x="60" y="648" width="5" height="56" rx="2.5" fill="#d97706"/>
+<text x="76" y="673.0" font-size="13.5" font-weight="700" fill="#1e293b">localStorage（按用户）</text>
+<text x="76" y="690.0" font-size="11" fill="#64748b">星星 · 打卡 · 错题 · SRS · 头像 · 每日</text>
+<rect x="460" y="648" width="380" height="56" rx="10" fill="#ffffff" stroke="#d97706" stroke-width="1.4"/>
+<rect x="460" y="648" width="5" height="56" rx="2.5" fill="#d97706"/>
+<text x="476" y="673.0" font-size="13.5" font-weight="700" fill="#1e293b">Supabase user_progress</text>
+<text x="476" y="690.0" font-size="11" fill="#64748b">登录后双向合并同步（RLS）</text>
+<rect x="900" y="92" width="240" height="628" rx="14" fill="#fdf2f8" stroke="#db2777" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="914" y="80" width="98" height="24" rx="12" fill="#db2777"/>
+<text x="963.0" y="97" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">外部服务 / 托管</text>
+<rect x="916" y="120" width="208" height="54" rx="10" fill="#ffffff" stroke="#db2777" stroke-width="1.4"/>
+<rect x="916" y="120" width="5" height="54" rx="2.5" fill="#db2777"/>
+<text x="932" y="144.0" font-size="13.5" font-weight="700" fill="#1e293b">Cloudflare Pages</text>
+<text x="932" y="161.0" font-size="11" fill="#64748b">同源 CDN（dist + 图片）</text>
+<rect x="916" y="186" width="208" height="54" rx="10" fill="#ffffff" stroke="#db2777" stroke-width="1.4"/>
+<rect x="916" y="186" width="5" height="54" rx="2.5" fill="#db2777"/>
+<text x="932" y="210.0" font-size="13.5" font-weight="700" fill="#1e293b">GitHub 仓库</text>
+<text x="932" y="227.0" font-size="11" fill="#64748b">dgjin/phonics-h5</text>
+<rect x="916" y="424" width="208" height="54" rx="10" fill="#ffffff" stroke="#db2777" stroke-width="1.4"/>
+<rect x="916" y="424" width="5" height="54" rx="2.5" fill="#db2777"/>
+<text x="932" y="448.0" font-size="13.5" font-weight="700" fill="#1e293b">有道 dictvoice</text>
+<text x="932" y="465.0" font-size="11" fill="#64748b">真人发音 美 / 英</text>
+<rect x="916" y="488" width="208" height="54" rx="10" fill="#ffffff" stroke="#db2777" stroke-width="1.4"/>
+<rect x="916" y="488" width="5" height="54" rx="2.5" fill="#db2777"/>
+<text x="932" y="512.0" font-size="13.5" font-weight="700" fill="#1e293b">Web Speech API</text>
+<text x="932" y="529.0" font-size="11" fill="#64748b">识别 + TTS 回退</text>
+<rect x="916" y="648" width="208" height="54" rx="10" fill="#ffffff" stroke="#db2777" stroke-width="1.4"/>
+<rect x="916" y="648" width="5" height="54" rx="2.5" fill="#db2777"/>
+<text x="932" y="672.0" font-size="13.5" font-weight="700" fill="#1e293b">Supabase</text>
+<text x="932" y="689.0" font-size="11" fill="#64748b">Auth + Postgres</text>
+<line x1="450" y1="162" x2="450" y2="194" stroke="#2563eb" stroke-width="1.8" marker-end="url(#ar)"/>
+<line x1="450" y1="392" x2="450" y2="410" stroke="#2563eb" stroke-width="1.8" marker-end="url(#ar)"/>
+<line x1="450" y1="508" x2="450" y2="526" stroke="#2563eb" stroke-width="1.8" marker-end="url(#ar)"/>
+<line x1="450" y1="612" x2="450" y2="630" stroke="#2563eb" stroke-width="1.8" marker-end="url(#ar)"/>
+<line x1="245" y1="452" x2="914" y2="446" stroke="#db2777" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arp)"/>
+<text x="560" y="440" font-size="11" font-weight="600" fill="#db2777" text-anchor="middle">发音</text>
+<line x1="443" y1="458" x2="914" y2="512" stroke="#db2777" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arp)"/>
+<text x="600" y="480" font-size="11" font-weight="600" fill="#db2777" text-anchor="middle">识别</text>
+<line x1="840" y1="676" x2="914" y2="676" stroke="#db2777" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arp)"/>
+<text x="877" y="668" font-size="11" font-weight="600" fill="#db2777" text-anchor="middle">同步</text>
+<line x1="840" y1="128" x2="914" y2="144" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arg)"/>
+<text x="877" y="120" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">部署 dist</text>
+<line x1="1020" y1="240" x2="1020" y2="120" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arg)"/>
+<text x="1052" y="184" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="middle">构建</text>
+<text x="40" y="762" font-size="12" font-weight="700" fill="#475569">图例：</text>
+<line x1="92" y1="758" x2="132" y2="758" stroke="#2563eb" stroke-width="2" marker-end="url(#ar)"/>
+<text x="140" y="762" font-size="12" fill="#475569">数据 / 请求流</text>
+<line x1="262" y1="758" x2="302" y2="758" stroke="#db2777" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arp)"/>
+<text x="310" y="762" font-size="12" fill="#475569">外部服务调用</text>
+<line x1="432" y1="758" x2="472" y2="758" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arg)"/>
+<text x="480" y="762" font-size="12" fill="#475569">部署 / 源码</text>
+</svg>

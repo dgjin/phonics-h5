@@ -4,7 +4,7 @@ import { CURRICULUM } from '../data/curriculum';
 import { TEXTBOOKS, getTextbook, textbookWords } from '../data/textbook';
 import { cnOf } from '../data/word-cn';
 import { speakReal, getAccent, setAccent, stop } from '../lib/tts';
-import { speechSupported, recognizeOnce, matchWord } from '../lib/speech';
+import { recorderSupported, startRecorder } from '../lib/recorder';
 import { shuffle } from '../data/utils';
 import { useAuth } from '../lib/auth.jsx';
 import { useProgress } from '../lib/progress.jsx';
@@ -140,7 +140,7 @@ export default function ReviewPage() {
   const init = location.state || {};
   const { userId } = useAuth();
   const { mistakes, addMistake, removeMistake, srsReview, srsDue, srsDueCount } = useProgress();
-  const echoOK = speechSupported();
+  const echoOK = recorderSupported();
   const mkey = 'phonics_review_v1:' + (userId || 'guest');
   const loadMastered = () => {
     try { return new Set(JSON.parse(localStorage.getItem(mkey)) || []); } catch (e) { return new Set(); }
@@ -161,10 +161,15 @@ export default function ReviewPage() {
   const [flipped, setFlipped] = useState(false);
   const [typed, setTyped] = useState('');
   const [checkRes, setCheckRes] = useState(null); // null | 'ok' | 'no'
-  const [listening, setListening] = useState(false); // 跟读录音中
-  const [heard, setHeard] = useState(null); // { ok, text }
+  const [recording, setRecording] = useState(false); // 跟读录音中
+  const [myUrl, setMyUrl] = useState(null);           // 我的录音回放地址
+  const [recErr, setRecErr] = useState(null);
   const [round, setRound] = useState(0);
   const known = useRef(0);
+  const recRef = useRef(null);    // 当前录音控制器
+  const recTimer = useRef(null);  // 录音时长上限计时
+  const urlRef = useRef(null);    // 当前录音 objectURL
+  const myAudioRef = useRef(null);
 
   useEffect(() => { setMastered(loadMastered()); }, [userId]); // eslint-disable-line
 
@@ -184,12 +189,19 @@ export default function ReviewPage() {
   const unmastered = allWords.filter((w) => !mastered.has(w.w)).length;
   const current = queue && queue[0];
 
+  const clearEcho = () => {
+    clearTimeout(recTimer.current);
+    if (recRef.current) { recRef.current.cancel(); recRef.current = null; }
+    if (urlRef.current) { URL.revokeObjectURL(urlRef.current); urlRef.current = null; }
+  };
+
   useEffect(() => {
     if (!current) return;
     cancelledRef.current = false;
-    setFlipped(false); setTyped(''); setCheckRes(null); setHeard(null); setListening(false);
+    setFlipped(false); setTyped(''); setCheckRes(null);
+    clearEcho(); setRecording(false); setRecErr(null); setMyUrl(null);
     const t = setTimeout(() => speakReal(current.w, accent), 250);
-    return () => { cancelledRef.current = true; clearTimeout(t); stop(); };
+    return () => { cancelledRef.current = true; clearTimeout(t); stop(); clearEcho(); };
   }, [round, accent, current?.w]); // eslint-disable-line
 
   const chooseAccent = (a) => { setAcc(a); setAccent(a); };
@@ -238,30 +250,43 @@ export default function ReviewPage() {
     else { addMistake(current); srsReview(current, false); } // 听写写错 → 入错题库 + 间隔复习
   };
 
-  /* 跟读：录一次音，与目标词比对 */
-  const doEcho = () => {
-    if (!current || listening) return;
-    setHeard(null); setListening(true);
-    const captured = current;
-    recognizeOnce({ lang: accent === 'uk' ? 'en-GB' : 'en-US' })
-      .then((alts) => {
-        if (cancelledRef.current) return; // 组件已卸载，跳过 UI 更新
-        const ok = matchWord(captured.w, alts);
-        setHeard({ ok, text: (alts && alts[0]) || '' });
-        setListening(false);
-        if (ok) {
-          // 跟读成功：1 秒后标记为掌握（组件已卸载时 mark 内部 setState 会被 React 安全忽略）
-          setTimeout(() => mark(true), 1000);
-        } else {
-          srsReview(captured, false);
-        }
-      })
-      .catch((err) => {
-        if (cancelledRef.current) return; // 组件已卸载，跳过 UI 更新
-        setListening(false);
-        const code = err && err.message;
-        setHeard({ ok: false, text: '', err: code === 'no-speech' ? '没听清，再试一次' : code === 'not-allowed' ? '请允许使用麦克风' : '识别失败，重试' });
-      });
+  /* 跟读：录音 + 回放对比（确定性，不依赖语音识别） */
+  const startRec = () => {
+    setRecErr(null);
+    if (urlRef.current) { URL.revokeObjectURL(urlRef.current); urlRef.current = null; setMyUrl(null); }
+    startRecorder().then((ctrl) => {
+      if (cancelledRef.current) { ctrl.cancel(); return; }
+      recRef.current = ctrl;
+      setRecording(true);
+      clearTimeout(recTimer.current);
+      recTimer.current = setTimeout(() => stopRec(), 5000); // 最长 5 秒自动停
+    }).catch((err) => {
+      const n = err && (err.name || err.message);
+      setRecErr(n === 'NotAllowedError' ? '请允许使用麦克风后再试' : '无法录音，请检查麦克风权限');
+    });
+  };
+  const stopRec = () => {
+    clearTimeout(recTimer.current);
+    const ctrl = recRef.current;
+    if (!ctrl) return;
+    recRef.current = null;
+    setRecording(false);
+    ctrl.stop().then((url) => {
+      if (cancelledRef.current) { if (url) URL.revokeObjectURL(url); return; }
+      if (!url) return;
+      urlRef.current = url;
+      setMyUrl(url);
+      const a = new Audio(url); myAudioRef.current = a;
+      a.play().catch(() => {}); // 录完自动回放
+    });
+  };
+  const toggleRec = () => { if (recording) stopRec(); else startRec(); };
+  const playMine = () => {
+    if (!urlRef.current) return;
+    const a = myAudioRef.current || new Audio(urlRef.current);
+    myAudioRef.current = a;
+    try { a.currentTime = 0; } catch (e) {}
+    a.play().catch(() => {});
   };
 
   /* ---------- 设置页 ---------- */
@@ -299,7 +324,7 @@ export default function ReviewPage() {
           </div>
           <p className="rv-note">
             {mode === 'echo'
-              ? '听范读后点麦克风跟读，自动评测发音是否正确（需允许麦克风）。'
+              ? '听范读，点录音说一遍，再回放和范读对比～（点一下开始，再点停止；最长 5 秒，需允许麦克风）。'
               : mode === 'dictation'
                 ? '听真人发音，写出英文单词，自动判分。'
                 : '翻面看中文意思与图片。点「认识」记为已掌握，「不认识」会稍后再次出现。'}
@@ -354,16 +379,20 @@ export default function ReviewPage() {
               </button>
             </div>
             {!echoOK ? (
-              <div className="echo-note">当前浏览器不支持跟读评测，请用 Chrome 或较新 Safari，并允许使用麦克风。</div>
+              <div className="echo-note">当前浏览器不支持录音，请换 Chrome / 较新 Safari，并允许使用麦克风。</div>
             ) : (
               <>
-                <button className={'echo-mic' + (listening ? ' on' : '')} onClick={doEcho} disabled={listening}>
-                  <i className="ti ti-microphone"></i>
-                  <span>{listening ? '正在听…' : '点我跟读'}</span>
+                <button className={'echo-mic' + (recording ? ' rec' : '')} onClick={toggleRec}>
+                  <i className={'ti ' + (recording ? 'ti-player-stop-filled' : 'ti-microphone')}></i>
+                  <span>{recording ? '录音中…点击停止' : myUrl ? '再录一次' : '点我说一遍'}</span>
                 </button>
-                {heard && (heard.ok
-                  ? <div className="dict-result ok"><i className="ti ti-circle-check"></i> 读得很棒！</div>
-                  : <div className="dict-result no">{heard.err || ('听到：' + (heard.text || '（没听清）'))}</div>)}
+                {recErr && <div className="echo-note">{recErr}</div>}
+                {myUrl && !recording && (
+                  <div className="echo-pbs">
+                    <button className="echo-pb" onClick={() => speakReal(current.w, accent)}><i className="ti ti-volume"></i> 范读</button>
+                    <button className="echo-pb me" onClick={playMine}><i className="ti ti-player-play-filled"></i> 我的录音</button>
+                  </div>
+                )}
                 <div className="rv-actions">
                   <button className="btn dont" onClick={() => mark(false)}><i className="ti ti-rotate"></i> 跳过</button>
                   <button className="btn know" onClick={() => mark(true)}><i className="ti ti-check"></i> 我会了</button>
