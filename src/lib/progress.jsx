@@ -256,6 +256,8 @@ export function ProgressProvider({ children }) {
 
     // 家长周报派生（近 7 天）
     const srsMastered = Object.values(data.srs || {}).filter((x) => (x.box || 0) >= 4).length;
+    // 单词熟练度盒子：0(最弱)..5(最熟)，-1 表示没学过
+    const srsBox = (w) => { const x = (data.srs || {})[String(w).toLowerCase()]; return x ? (x.box || 0) : -1; };
     const weekReport = () => {
       const days = recentDays(7).map((d) => ({
         ...d, lessons: (data.daily && data.daily[d.date] && data.daily[d.date].lessons) || 0,
@@ -267,7 +269,7 @@ export function ProgressProvider({ children }) {
       getStars, setStars, levelStars, totalStars, completedUnits, streak, recentDays, checkedToday,
       mistakes, mistakeCount: mistakes.length, addMistake, removeMistake,
       profile: data.profile || {}, setProfile,
-      srsReview, srsDue, srsDueCount, srsTotal, srsMastered,
+      srsReview, srsDue, srsDueCount, srsTotal, srsMastered, srsBox,
       dailyGoal, todayLessons, achievements, achievedCount, achievementTotal: achievements.length,
       weekReport,
     };

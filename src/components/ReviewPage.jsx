@@ -139,7 +139,7 @@ export default function ReviewPage() {
   const location = useLocation();
   const init = location.state || {};
   const { userId } = useAuth();
-  const { mistakes, addMistake, removeMistake, srsReview, srsDue, srsDueCount } = useProgress();
+  const { mistakes, addMistake, removeMistake, srsReview, srsDue, srsDueCount, srsBox } = useProgress();
   const echoOK = recorderSupported();
   const mkey = 'phonics_review_v1:' + (userId || 'guest');
   const loadMastered = () => {
@@ -207,11 +207,20 @@ export default function ReviewPage() {
   const chooseAccent = (a) => { setAcc(a); setAccent(a); };
 
   const start = (onlyNew) => {
-    const deck = onlyNew ? allWords.filter((w) => !mastered.has(w.w)) : allWords;
+    let deck = onlyNew ? allWords.filter((w) => !mastered.has(w.w)) : allWords;
     if (!deck.length) return;
+    // 自适应：薄弱词(熟练盒子低)优先，新词其次，已熟练靠后；同档内随机。错题/复习集合保持原序。
+    if (scope !== 'mistakes' && scope !== 'srs') {
+      deck = deck
+        .map((w) => ({ w, k: srsBox(w.w), r: Math.random() }))
+        .sort((a, b) => ((a.k < 0 ? 2.5 : a.k) - (b.k < 0 ? 2.5 : b.k)) || (a.r - b.r))
+        .map((x) => x.w);
+    } else {
+      deck = shuffle(deck);
+    }
     known.current = 0;
     setFlipped(false); setTyped(''); setCheckRes(null);
-    setQueue(shuffle(deck));
+    setQueue(deck);
     setRound((r) => r + 1);
   };
 
@@ -328,7 +337,7 @@ export default function ReviewPage() {
               : mode === 'dictation'
                 ? '听真人发音，写出英文单词，自动判分。'
                 : '翻面看中文意思与图片。点「认识」记为已掌握，「不认识」会稍后再次出现。'}
-            发音来自有道词典真人录音（需联网）。
+            发音来自有道词典真人录音（需联网）。已按熟练度智能排序，薄弱词优先出现。
           </p>
         </div>
       </div>
