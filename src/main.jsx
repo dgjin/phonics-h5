@@ -17,6 +17,9 @@ import "@fontsource/nunito/800.css";
 import "@tabler/icons-webfont/dist/tabler-icons.min.css";
 import "./styles.css";
 
+import { initTheme } from "./lib/theme";
+initTheme();
+
 createRoot(document.getElementById("app")).render(
   <StrictMode>
     <AuthProvider>

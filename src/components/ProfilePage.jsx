@@ -5,6 +5,7 @@ import { useProgress } from '../lib/progress.jsx';
 import { useIsMobile } from '../lib/useIsMobile';
 import { getAccent, setAccent } from '../lib/tts';
 import { sfxOn, setSfxOn, sfxCorrect } from '../lib/sfx';
+import { getTheme, setTheme } from '../lib/theme';
 import { TEXTBOOK } from '../data/textbook';
 import { Header } from './common.jsx';
 import LoginModal from './LoginModal.jsx';
@@ -37,6 +38,8 @@ export default function ProfilePage() {
   const [accent, setAcc] = useState(getAccent());
   const [sfx, setSfx] = useState(sfxOn());
   const toggleSfx = (v) => { setSfx(v); setSfxOn(v); if (v) sfxCorrect(); };
+  const [theme, setThemeState] = useState(getTheme());
+  const chooseTheme = (t) => { setThemeState(t); setTheme(t); };
   const [name, setName] = useState(profile.name || '');
   const fileRef = useRef(null);
 
@@ -156,6 +159,16 @@ export default function ProfilePage() {
         <div className="accent-toggle">
           <button className={sfx ? 'on' : ''} onClick={() => toggleSfx(true)}>开</button>
           <button className={!sfx ? 'on' : ''} onClick={() => toggleSfx(false)}>关</button>
+        </div>
+      </div>
+
+      <div className="profile-card">
+        <div className="pcard-title"><i className="ti ti-palette"></i> 主题外观</div>
+        <div className="pcard-sub">浅色 / 深色 / 跟随系统</div>
+        <div className="theme-seg">
+          <button className={theme === 'auto' ? 'on' : ''} onClick={() => chooseTheme('auto')}>跟随系统</button>
+          <button className={theme === 'light' ? 'on' : ''} onClick={() => chooseTheme('light')}>浅色</button>
+          <button className={theme === 'dark' ? 'on' : ''} onClick={() => chooseTheme('dark')}>深色</button>
         </div>
       </div>
 

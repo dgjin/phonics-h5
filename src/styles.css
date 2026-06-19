@@ -760,3 +760,61 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .home-faq.open .home-faq-q .ti { color: var(--accent); }
 .home-faq-a { padding: 0 12px 12px; font-size: 12px; color: var(--ink); line-height: 1.7;
   border-top: 1px solid var(--accent-soft); padding-top: 10px; }
+
+/* ===== 深色模式 ===== */
+:root[data-theme="dark"] {
+  --bg: #0f1320; --card: #1b2030; --ink: #e8e9f0; --muted: #9aa1b8;
+  --shadow: 0 8px 22px rgba(0,0,0,.45); --shadow-lift: 0 12px 28px rgba(0,0,0,.5);
+  --accent-soft: #2b2950; --accent-deep: #d7d3ff;
+}
+[data-theme="dark"] body { background: radial-gradient(1200px 600px at 50% -10%, #1a2238 0%, var(--bg) 55%); }
+/* 主题色：背景 soft 调深、标题 deep 调浅 */
+[data-theme="dark"] .c-purple { --accent-soft: #2b2950; --accent-deep: #d8d4ff; }
+[data-theme="dark"] .c-teal   { --accent-soft: #10362c; --accent-deep: #b8f0dd; }
+[data-theme="dark"] .c-coral  { --accent-soft: #3a2218; --accent-deep: #ffcdb8; }
+[data-theme="dark"] .c-pink   { --accent-soft: #3a1f2b; --accent-deep: #ffc9de; }
+[data-theme="dark"] .c-green  { --accent-soft: #1e3110; --accent-deep: #d6f5b0; }
+[data-theme="dark"] .c-amber  { --accent-soft: #3a2a0a; --accent-deep: #ffe2ad; }
+/* 硬编码白底元素 → 卡色 */
+[data-theme="dark"] .btn.ghost,
+[data-theme="dark"] .head-back,
+[data-theme="dark"] .user-btn,
+[data-theme="dark"] .login-card,
+[data-theme="dark"] .trace-box,
+[data-theme="dark"] .scope-chip,
+[data-theme="dark"] .scope-pill,
+[data-theme="dark"] .mode-tab,
+[data-theme="dark"] .field,
+[data-theme="dark"] .dict-input,
+[data-theme="dark"] .echo-pb,
+[data-theme="dark"] .opt,
+[data-theme="dark"] .mtile,
+[data-theme="dark"] .story-opt { background: var(--card); }
+/* ghost 类按钮文字在深色提亮 */
+[data-theme="dark"] .btn.ghost,
+[data-theme="dark"] .head-back,
+[data-theme="dark"] .user-btn,
+[data-theme="dark"] .echo-pb { color: var(--accent-deep); }
+/* 浅边框 → 深 */
+[data-theme="dark"] .opt,
+[data-theme="dark"] .mtile,
+[data-theme="dark"] .story-opt { border-color: #2c3346; }
+/* 浅色轨道 / 进度条底 → 深 */
+[data-theme="dark"] .dash-bar,
+[data-theme="dark"] .ach-bar,
+[data-theme="dark"] .qbar .dot,
+[data-theme="dark"] .rep-bar-track,
+[data-theme="dark"] .wday-dot,
+[data-theme="dark"] .accent-toggle,
+[data-theme="dark"] .slot { background: #2a3146; }
+[data-theme="dark"] .slot { border-color: #3a4258; }
+/* 小灰底图标 */
+[data-theme="dark"] .login-x,
+[data-theme="dark"] .mk-icon.del { background: #2a3146; color: var(--muted); }
+/* 底部标签栏毛玻璃 */
+[data-theme="dark"] .tabbar { background: rgba(18,22,36,.86); border-top-color: rgba(255,255,255,.08); }
+/* 主题切换器 */
+.theme-seg { display: flex; gap: 8px; }
+.theme-seg button { flex: 1; border: 2px solid var(--accent-soft); background: var(--card); color: var(--muted);
+  font-family: var(--font-head); font-weight: 600; font-size: 14px; border-radius: 12px; padding: 10px 6px; cursor: pointer; }
+.theme-seg button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
