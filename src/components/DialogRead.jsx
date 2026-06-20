@@ -150,7 +150,7 @@ export default function DialogRead() {
           <div style={{ fontSize: 80, marginBottom: 20 }}>{dlg.emoji}</div>
           <h2 style={{ fontFamily: 'var(--font-head)', color: 'var(--accent-deep)', margin: '0 0 8px' }}>{dlg.title}</h2>
           <p style={{ color: 'var(--muted)', fontWeight: 600, margin: '0 0 28px' }}>{dlg.cn} · {dlg.lines.length} 句</p>
-          <button className="btn primary" style={{ fontSize: 20, padding: '16px 36px' }} onClick={() => { setStarted(true); speakReal(dlg.lines[0].en); }}>
+          <button className="btn primary" style={{ fontSize: 20, padding: '16px 36px' }} onClick={() => { speakReal(dlg.lines[0].en); setStarted(true); }}>
             <i className="ti ti-player-play-filled"></i> 开始朗读
           </button>
           <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 14 }}>点击开始，之后每句会自动朗读</p>

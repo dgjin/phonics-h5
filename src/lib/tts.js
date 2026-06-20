@@ -60,7 +60,10 @@ function slug(s) {
 
 function webspeak(text, opts = {}) {
   if (!synth || !text) return;
-  synth.cancel();
+  try {
+    if (synth.paused) synth.resume();
+    synth.cancel();
+  } catch (e) {}
   const u = new SpeechSynthesisUtterance(String(text));
   if (opts.lang) {
     const vs = synth.getVoices();
@@ -74,7 +77,26 @@ function webspeak(text, opts = {}) {
   }
   u.rate = opts.rate != null ? opts.rate : 0.85;
   u.pitch = opts.pitch != null ? opts.pitch : 1.05;
-  synth.speak(u);
+  // 安卓 Chrome 部分设备首次 speak 不发声，用短延迟并捕获边界错误
+  try {
+    synth.speak(u);
+  } catch (e) {
+    // 若 Web Speech 不可用，尝试 Google Translate TTS 音频备选
+    googleTtsAudio(text, opts.lang || 'en-US');
+  }
+}
+
+/* Google Translate TTS 备选（句子/无 Web Speech 设备） */
+function googleTtsAudio(text, lang) {
+  if (!text) return;
+  const tl = (lang || 'en-US').replace('_', '-').toLowerCase().split('-')[0];
+  const src = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(text) + '&tl=' + encodeURIComponent(tl) + '&client=tw-ob';
+  const a = getEl();
+  try { a.pause(); a.onended = null; a.onerror = null; } catch (e) {}
+  a.src = src;
+  a.currentTime = 0;
+  const p = a.play();
+  if (p && p.catch) p.catch(() => {});
 }
 
 export function stop() {
@@ -177,7 +199,14 @@ export function unlock() {
     if (p && p.then) p.then(() => { try { a.pause(); a.currentTime = 0; } catch (e) {} }).catch(() => {});
   } catch (e) {}
   try {
-    if (synth) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; synth.speak(u); }
+    // 唤醒 Web Speech 引擎（安卓 Chrome 首次 speak 可能无声，先发一个空 utterance）
+    if (synth) {
+      if (synth.paused) synth.resume();
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      u.rate = 2;
+      synth.speak(u);
+    }
   } catch (e) {}
 }
 

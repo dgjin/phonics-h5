@@ -133,7 +133,7 @@ export default function StoryRead() {
           <div className="story-page-emoji" style={{ fontSize: 80, marginBottom: 20 }}>{story.emoji}</div>
           <h2 style={{ fontFamily: 'var(--font-head)', color: 'var(--accent-deep)', margin: '0 0 8px' }}>{story.title}</h2>
           <p style={{ color: 'var(--muted)', fontWeight: 600, margin: '0 0 28px' }}>{story.cn}</p>
-          <button className="btn primary" style={{ fontSize: 20, padding: '16px 36px' }} onClick={() => { setStarted(true); speakReal(story.lines[0].en); }}>
+          <button className="btn primary" style={{ fontSize: 20, padding: '16px 36px' }} onClick={() => { speakReal(story.lines[0].en); setStarted(true); }}>
             <i className="ti ti-player-play-filled"></i> 开始朗读
           </button>
           <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 14 }}>点击开始，之后每页会自动朗读</p>
