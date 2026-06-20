@@ -4,6 +4,7 @@
 export const STORIES = [
   {
     id: 'turnip', title: 'The Big Turnip', cn: '拔萝卜', emoji: '🥬', level: 'L1', color: 'green',
+    cover: '/stories/turnip-cover.png',
     lines: [
       { en: 'Grandpa plants a turnip.', cn: '老爷爷种了一个萝卜。', e: '👴' },
       { en: 'The turnip grows very big.', cn: '萝卜长得非常大。', e: '🥬' },
@@ -16,6 +17,7 @@ export const STORIES = [
   },
   {
     id: 'crow', title: 'The Thirsty Crow', cn: '乌鸦喝水', emoji: '🐦', level: 'L2', color: 'amber',
+    cover: '/stories/crow-cover.png',
     lines: [
       { en: 'A crow is very thirsty.', cn: '一只乌鸦很口渴。', e: '🐦' },
       { en: 'It finds a pitcher of water.', cn: '它找到一壶水。', e: '🏺' },
@@ -27,6 +29,7 @@ export const STORIES = [
   },
   {
     id: 'tortoise', title: 'The Tortoise and the Hare', cn: '龟兔赛跑', emoji: '🐢', level: 'L2', color: 'teal',
+    cover: '/stories/tortoise-cover.png',
     lines: [
       { en: 'A hare laughs at a tortoise.', cn: '兔子嘲笑乌龟跑得慢。', e: '🐰' },
       { en: '"Let us have a race!"', cn: '“我们来比赛吧！”', e: '🏁' },
@@ -39,6 +42,7 @@ export const STORIES = [
   },
   {
     id: 'lion', title: 'The Lion and the Mouse', cn: '狮子和老鼠', emoji: '🦁', level: 'L2', color: 'coral',
+    cover: '/stories/lion-cover.png',
     lines: [
       { en: 'A little mouse wakes a lion.', cn: '一只小老鼠吵醒了狮子。', e: '🐭' },
       { en: 'The lion is angry.', cn: '狮子很生气。', e: '😠' },
@@ -51,6 +55,7 @@ export const STORIES = [
   },
   {
     id: 'pigs', title: 'The Three Little Pigs', cn: '三只小猪', emoji: '🐷', level: 'L2', color: 'pink',
+    cover: '/stories/pigs-cover.png',
     lines: [
       { en: 'Three little pigs build houses.', cn: '三只小猪盖房子。', e: '🐷' },
       { en: 'The first house is straw.', cn: '第一座是稻草房。', e: '🌾' },
@@ -63,6 +68,7 @@ export const STORIES = [
   },
   {
     id: 'fox', title: 'The Fox and the Grapes', cn: '狐狸和葡萄', emoji: '🦊', level: 'L2', color: 'purple',
+    cover: '/stories/fox-cover.png',
     lines: [
       { en: 'A fox sees sweet grapes.', cn: '狐狸看见甜甜的葡萄。', e: '🦊' },
       { en: 'The grapes are very high.', cn: '葡萄挂得很高。', e: '🍇' },
@@ -74,6 +80,7 @@ export const STORIES = [
   },
   {
     id: 'duckling', title: 'The Ugly Duckling', cn: '丑小鸭', emoji: '🦆', level: 'L2', color: 'teal',
+    cover: '/stories/duckling-cover.png',
     lines: [
       { en: 'A grey duckling is born.', cn: '一只灰色的小鸭出生了。', e: '🐣' },
       { en: 'The others say he is ugly.', cn: '大家都说他很丑。', e: '😢' },
@@ -85,6 +92,7 @@ export const STORIES = [
   },
   {
     id: 'my-family', title: 'My Family', cn: '我的家人', emoji: '👨‍👩‍👧‍👦', level: 'L1', color: 'amber',
+    cover: '/stories/family-cover.png',
     lines: [
       { en: 'This is my dad.', cn: '这是我的爸爸。', e: '👨' },
       { en: 'This is my mum.', cn: '这是我的妈妈。', e: '👩' },

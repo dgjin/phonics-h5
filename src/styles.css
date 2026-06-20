@@ -487,6 +487,8 @@ i.ti { line-height: 1; vertical-align: -2px; }
   border-left: 8px solid var(--accent); transition: transform .14s; }
 .story-card:active { transform: scale(.98); }
 .story-cover { width: 52px; height: 52px; flex: none; border-radius: 14px; background: var(--accent-soft);
+  display: flex; align-items: center; justify-content: center; font-size: 28px; overflow: hidden; }
+.story-cover-img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px;
   display: grid; place-items: center; font-size: 30px; }
 .story-lv { font-family: var(--font-head); font-weight: 700; font-size: 12px; color: #fff; background: var(--accent);
   border-radius: 999px; padding: 1px 8px; vertical-align: 2px; margin-left: 4px; }

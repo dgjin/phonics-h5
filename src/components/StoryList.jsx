@@ -15,7 +15,7 @@ export default function StoryList() {
       <div className="unit-list">
         {STORIES.map((s) => (
           <button key={s.id} className={'story-card c-' + s.color} onClick={() => navigate('/story/' + s.id)}>
-            <div className="story-cover">{s.emoji}</div>
+            <div className="story-cover">{s.cover ? <img src={s.cover} alt={s.title} className="story-cover-img" /> : s.emoji}</div>
             <div className="unit-main">
               <div className="unit-title">{s.title} <span className="story-lv">{s.level}</span></div>
               <div className="unit-cn">{s.cn} · {s.lines.length} 句</div>
