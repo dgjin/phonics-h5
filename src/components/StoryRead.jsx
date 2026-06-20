@@ -29,6 +29,7 @@ export default function StoryRead() {
   const [qi, setQi] = useState(0);
   const [picked, setPicked] = useState(null);
   const [doneStars, setDoneStars] = useState(0);
+  const [started, setStarted] = useState(false); // iPad/Web Speech 需要手势才能播放
   const correct = useRef(0);
   const [fbNode, fire] = useFeedback();
 
@@ -40,12 +41,12 @@ export default function StoryRead() {
     }));
   }, [story, allLines]);
 
-  // 阅读：自动朗读当前句
+  // 阅读：自动朗读当前句（iPad/Safari 要求首次在用户手势内播放）
   useEffect(() => {
-    if (phase !== 'read' || !story) return;
+    if (phase !== 'read' || !story || !started) return;
     const t = setTimeout(() => speakReal(story.lines[idx].en), 250);
     return () => { clearTimeout(t); stop(); };
-  }, [phase, idx, story]);
+  }, [phase, idx, story, started]);
 
   // 小测：自动朗读题目句
   useEffect(() => {
@@ -124,6 +125,22 @@ export default function StoryRead() {
   /* ---------- 阅读 ---------- */
   const line = story.lines[idx];
   const last = idx === story.lines.length - 1;
+  if (!started) {
+    return (
+      <div className="c-teal">
+        <Header title={story.title} sub={story.cn} color="teal" backTo="/story" />
+        <div className="stage" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+          <div className="story-page-emoji" style={{ fontSize: 80, marginBottom: 20 }}>{story.emoji}</div>
+          <h2 style={{ fontFamily: 'var(--font-head)', color: 'var(--accent-deep)', margin: '0 0 8px' }}>{story.title}</h2>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, margin: '0 0 28px' }}>{story.cn}</p>
+          <button className="btn primary" style={{ fontSize: 20, padding: '16px 36px' }} onClick={() => { setStarted(true); speakReal(story.lines[0].en); }}>
+            <i className="ti ti-player-play-filled"></i> 开始朗读
+          </button>
+          <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 14 }}>点击开始，之后每页会自动朗读</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="c-teal">
       <Header title={story.title} sub={story.cn} color="teal" backTo="/story" />

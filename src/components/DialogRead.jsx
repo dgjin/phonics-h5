@@ -25,6 +25,7 @@ export default function DialogRead() {
   const [phase, setPhase] = useState('read'); // read | order | done
   const [idx, setIdx] = useState(0);
   const [doneStars, setDoneStars] = useState(0);
+  const [started, setStarted] = useState(false); // iPad/Safari 需要手势解锁音频
   // 录音
   const [recording, setRecording] = useState(false);
   const [myUrl, setMyUrl] = useState(null);
@@ -47,13 +48,13 @@ export default function DialogRead() {
     if (urlRef.current) { URL.revokeObjectURL(urlRef.current); urlRef.current = null; }
   };
 
-  // 阅读：自动朗读当前句，重置录音
+  // 阅读：自动朗读当前句，重置录音（iPad/Safari 要求首次在用户手势内播放）
   useEffect(() => {
-    if (phase !== 'read' || !dlg) return;
+    if (phase !== 'read' || !dlg || !started) return;
     clearRec(); setRecording(false); setMyUrl(null);
     const t = setTimeout(() => speakReal(dlg.lines[idx].en), 250);
     return () => { clearTimeout(t); stop(); clearRec(); };
-  }, [phase, idx, dlg]); // eslint-disable-line
+  }, [phase, idx, dlg, started]); // eslint-disable-line
 
   // 排序题：每题重置
   const q = orderQs[qi];
@@ -141,6 +142,22 @@ export default function DialogRead() {
   /* ========== 对话阅读 ========== */
   const line = dlg.lines[idx];
   const last = idx === dlg.lines.length - 1;
+  if (!started) {
+    return (
+      <div className="c-coral">
+        <Header title={dlg.title} sub={dlg.cn} color="coral" backTo="/dialog" />
+        <div className="stage" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+          <div style={{ fontSize: 80, marginBottom: 20 }}>{dlg.emoji}</div>
+          <h2 style={{ fontFamily: 'var(--font-head)', color: 'var(--accent-deep)', margin: '0 0 8px' }}>{dlg.title}</h2>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, margin: '0 0 28px' }}>{dlg.cn} · {dlg.lines.length} 句</p>
+          <button className="btn primary" style={{ fontSize: 20, padding: '16px 36px' }} onClick={() => { setStarted(true); speakReal(dlg.lines[0].en); }}>
+            <i className="ti ti-player-play-filled"></i> 开始朗读
+          </button>
+          <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 14 }}>点击开始，之后每句会自动朗读</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="c-coral">
       <Header title={dlg.title} sub={dlg.cn} color="coral" backTo="/dialog" />
