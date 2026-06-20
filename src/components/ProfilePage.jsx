@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth.jsx';
 import { useProgress } from '../lib/progress.jsx';
-import { useIsMobile } from '../lib/useIsMobile';
+import { useIsMobile } from '../lib/useDevice';
 import { getAccent, setAccent } from '../lib/tts';
 import { sfxOn, setSfxOn, sfxCorrect } from '../lib/sfx';
 import { getTheme, setTheme } from '../lib/theme';

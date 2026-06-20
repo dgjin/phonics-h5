@@ -4,7 +4,7 @@ import { CURRICULUM } from '../data/curriculum';
 import { TEXTBOOKS } from '../data/textbook';
 import { useProgress } from '../lib/progress.jsx';
 import { useAuth } from '../lib/auth.jsx';
-import { useIsMobile } from '../lib/useIsMobile';
+import { useIsMobile } from '../lib/useDevice';
 import LoginModal from './LoginModal.jsx';
 
 

@@ -853,3 +853,82 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .theme-seg button { flex: 1; border: 2px solid var(--accent-soft); background: var(--card); color: var(--muted);
   font-family: var(--font-head); font-weight: 600; font-size: 14px; border-radius: 12px; padding: 10px 6px; cursor: pointer; }
 .theme-seg button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+
+/* ===== Pad / 平板适配 ===== */
+/* 通用平板：增大内容区宽度、字体和触控目标 */
+.is-tablet #app {
+  max-width: 900px;
+  padding: 24px 24px calc(40px + env(safe-area-inset-bottom));
+}
+.is-tablet .hero-title { font-size: clamp(40px, 6vw, 58px); }
+.is-tablet .hero-sub { font-size: 18px; }
+.is-tablet .level-card { padding: 20px; }
+.is-tablet .lv-icon { width: 68px; height: 68px; font-size: 36px; }
+.is-tablet .lv-title { font-size: 26px; }
+.is-tablet .lv-cn { font-size: 15px; }
+.is-tablet .unit-card { padding: 18px; }
+.is-tablet .unit-no { width: 48px; height: 48px; font-size: 22px; }
+.is-tablet .unit-title { font-size: 20px; }
+.is-tablet .unit-cn { font-size: 14px; }
+.is-tablet .btn { font-size: 18px; padding: 16px 24px; }
+.is-tablet .tabbar-inner { max-width: 900px; }
+.is-tablet .tab { font-size: 13px; padding: 10px 0 9px; }
+.is-tablet .tab i { font-size: 28px; }
+.is-tablet .head-title { font-size: 26px; }
+.is-tablet .head-back { width: 48px; height: 48px; font-size: 24px; }
+.is-tablet .has-tabbar #app { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+
+/* 平板竖屏：保持单列但更舒适 */
+.is-pad-portrait .level-grid,
+.is-pad-portrait .act-menu,
+.is-pad-portrait .opt-grid { grid-template-columns: 1fr 1fr; }
+.is-pad-portrait .flash { max-width: 520px; padding: 32px 26px 36px; }
+.is-pad-portrait .nav-row,
+.is-pad-portrait .opt-grid,
+.is-pad-portrait .match-cols { max-width: 520px; }
+.is-pad-portrait .story-page { max-width: 620px; margin: 0 auto; }
+.is-pad-portrait .dialog { max-width: 620px; margin: 0 auto; }
+.is-pad-portrait .bubble-emoji { font-size: 34px; }
+.is-pad-portrait .bubble-en { font-size: 22px; }
+
+/* 平板横屏：两栏或更宽居中布局 */
+.is-pad-landscape #app { max-width: 1100px; }
+.is-pad-landscape .level-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
+.is-pad-landscape .act-menu { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.is-pad-landscape .unit-list { grid-template-columns: 1fr 1fr; gap: 16px; }
+.is-pad-landscape .story-list,
+.is-pad-landscape .unit-list,
+.is-pad-landscape .review-setup { max-width: 900px; margin: 0 auto; }
+.is-pad-landscape .stage {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+  align-items: start;
+}
+.is-pad-landscape .stage .flash,
+.is-pad-landscape .stage .story-page,
+.is-pad-landscape .stage .dialog { max-width: none; }
+.is-pad-landscape .nav-row,
+.is-pad-landscape .opt-grid,
+.is-pad-landscape .match-cols { max-width: none; grid-column: 1 / -1; }
+.is-pad-landscape .opt-grid { grid-template-columns: repeat(4, 1fr); }
+.is-pad-landscape .spell-pad { max-width: none; }
+.is-pad-landscape .result-actions { max-width: 420px; }
+.is-pad-landscape .tabbar-inner { max-width: 1100px; }
+
+/* 平板通用：增大游戏卡片和按钮 */
+.is-tablet .act-card { padding: 26px 16px; }
+.is-tablet .act-icon { width: 68px; height: 68px; font-size: 36px; }
+.is-tablet .act-name { font-size: 19px; }
+.is-tablet .opt { padding: 22px 14px; font-size: 18px; }
+.is-tablet .mtile { padding: 18px 12px; font-size: 18px; }
+.is-tablet .tile { min-width: 58px; height: 66px; font-size: 22px; }
+.is-tablet .slot { min-width: 54px; height: 66px; }
+.is-tablet .story-page { padding: 34px 28px; }
+.is-tablet .story-page-en { font-size: 28px; }
+.is-tablet .story-page-cn { font-size: 18px; }
+.is-tablet .story-page-emoji { font-size: 72px; }
+.is-tablet .bubble-en { font-size: 22px; }
+.is-tablet .bubble-cn { font-size: 15px; }
+.is-tablet .ord-tile { font-size: 20px; padding: 14px 18px; }

@@ -21,22 +21,29 @@ import TextbookUnit from "./components/textbook/TextbookUnit.jsx";
 import TextbookGame from "./components/textbook/TextbookGame.jsx";
 import TextbookBoard from "./components/textbook/TextbookBoard.jsx";
 import TabBar from "./components/TabBar.jsx";
-import { useIsMobile } from "./lib/useIsMobile";
+import { useDevice } from "./lib/useDevice";
 
 const ROOT_TABS = ["/", "/tb", "/review", "/me"];
 
 export default function App() {
   const loc = useLocation();
-  const isMobile = useIsMobile();
-  const showTabs = isMobile && (ROOT_TABS.includes(loc.pathname) || loc.pathname.startsWith('/tb/'));
+  const { isMobile, isTablet, isPad, isLandscape } = useDevice();
+  const showTabs = (isMobile || isTablet) && (ROOT_TABS.includes(loc.pathname) || loc.pathname.startsWith('/tb/'));
 
   useEffect(() => {
     document.body.classList.toggle("has-tabbar", showTabs);
     return () => document.body.classList.remove("has-tabbar");
   }, [showTabs]);
 
+  const appClass = [
+    "app",
+    isMobile ? "is-mobile" : isTablet ? "is-tablet" : "is-desktop",
+    isPad ? (isLandscape ? "is-pad-landscape" : "is-pad-portrait") : "",
+    isLandscape ? "is-landscape" : "is-portrait",
+  ].filter(Boolean).join(" ");
+
   return (
-    <div className={"app" + (isMobile ? " is-mobile" : "")}>
+    <div className={appClass}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/review" element={<ReviewPage />} />
