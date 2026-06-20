@@ -1,95 +1,95 @@
-/* 分级小故事：用简单句、复用常见词，配 emoji + 中文。
- * 每个故事：{ id, title, cn, emoji, level, color, lines:[{en, cn, e}] }
- * level: L1 最简单（3-4 句、每句 3-5 词），L2 稍长。 */
+/* 分级绘本：中国小学生熟悉的经典读物（伊索寓言 / 经典童话）英文简写版。
+ * 每条：{ id, title, cn, emoji, level, color, lines:[{en, cn, e}] }
+ * 句子简短、配 emoji 场景 + 中文，适合低/中年级朗读。 */
 export const STORIES = [
   {
-    id: 'pet-dog', title: 'My Pet Dog', cn: '我的小狗', emoji: '🐶', level: 'L1', color: 'teal',
+    id: 'turnip', title: 'The Big Turnip', cn: '拔萝卜', emoji: '🥬', level: 'L1', color: 'green',
     lines: [
-      { en: 'I have a dog.', cn: '我有一只狗。', e: '🐶' },
-      { en: 'The dog is big.', cn: '这只狗很大。', e: '🐕' },
-      { en: 'It is my friend.', cn: '它是我的朋友。', e: '🤝' },
-      { en: 'I love my dog.', cn: '我爱我的狗。', e: '❤️' },
+      { en: 'Grandpa plants a turnip.', cn: '老爷爷种了一个萝卜。', e: '👴' },
+      { en: 'The turnip grows very big.', cn: '萝卜长得非常大。', e: '🥬' },
+      { en: 'Grandpa pulls it, but it stays.', cn: '老爷爷拔，可是拔不动。', e: '💪' },
+      { en: 'Grandma helps Grandpa.', cn: '老奶奶来帮忙。', e: '👵' },
+      { en: 'The girl helps too.', cn: '小女孩也来帮忙。', e: '👧' },
+      { en: 'The dog helps too.', cn: '小狗也来帮忙。', e: '🐶' },
+      { en: 'Out comes the big turnip!', cn: '大萝卜终于拔出来啦！', e: '🎉' },
     ],
   },
   {
-    id: 'colours', title: 'Colours', cn: '五颜六色', emoji: '🎨', level: 'L1', color: 'pink',
+    id: 'crow', title: 'The Thirsty Crow', cn: '乌鸦喝水', emoji: '🐦', level: 'L2', color: 'amber',
     lines: [
-      { en: 'The sky is blue.', cn: '天空是蓝色的。', e: '🔵' },
-      { en: 'The tree is green.', cn: '树是绿色的。', e: '🌳' },
-      { en: 'The sun is yellow.', cn: '太阳是黄色的。', e: '☀️' },
-      { en: 'I like colours.', cn: '我喜欢颜色。', e: '🎨' },
+      { en: 'A crow is very thirsty.', cn: '一只乌鸦很口渴。', e: '🐦' },
+      { en: 'It finds a pitcher of water.', cn: '它找到一壶水。', e: '🏺' },
+      { en: 'But the water is too low.', cn: '可是水太浅了。', e: '💧' },
+      { en: 'The crow drops in small stones.', cn: '乌鸦丢进一些小石头。', e: '🪨' },
+      { en: 'The water comes up and up.', cn: '水慢慢升上来。', e: '⬆️' },
+      { en: 'Now the crow can drink!', cn: '现在乌鸦喝到水啦！', e: '😋' },
     ],
   },
   {
-    id: 'my-family', title: 'My Family', cn: '我的家', emoji: '👨‍👩‍👧‍👦', level: 'L1', color: 'coral',
+    id: 'tortoise', title: 'The Tortoise and the Hare', cn: '龟兔赛跑', emoji: '🐢', level: 'L2', color: 'teal',
+    lines: [
+      { en: 'A hare laughs at a tortoise.', cn: '兔子嘲笑乌龟跑得慢。', e: '🐰' },
+      { en: '"Let us have a race!"', cn: '“我们来比赛吧！”', e: '🏁' },
+      { en: 'The hare runs very fast.', cn: '兔子跑得飞快。', e: '💨' },
+      { en: 'The hare sleeps under a tree.', cn: '兔子在树下睡着了。', e: '😴' },
+      { en: 'The tortoise walks and walks.', cn: '乌龟一直慢慢地走。', e: '🐢' },
+      { en: 'The tortoise wins the race!', cn: '乌龟赢得了比赛！', e: '🏆' },
+      { en: 'Slow and steady wins.', cn: '坚持不懈就能赢。', e: '⭐' },
+    ],
+  },
+  {
+    id: 'lion', title: 'The Lion and the Mouse', cn: '狮子和老鼠', emoji: '🦁', level: 'L2', color: 'coral',
+    lines: [
+      { en: 'A little mouse wakes a lion.', cn: '一只小老鼠吵醒了狮子。', e: '🐭' },
+      { en: 'The lion is angry.', cn: '狮子很生气。', e: '😠' },
+      { en: '"Please let me go!"', cn: '“请放了我吧！”', e: '🙏' },
+      { en: 'The lion lets the mouse go.', cn: '狮子放走了老鼠。', e: '🦁' },
+      { en: 'One day the lion is trapped.', cn: '有一天狮子被网困住了。', e: '🕸️' },
+      { en: 'The mouse bites the net.', cn: '老鼠咬断了网。', e: '✂️' },
+      { en: 'Now they are good friends.', cn: '他们成了好朋友。', e: '❤️' },
+    ],
+  },
+  {
+    id: 'pigs', title: 'The Three Little Pigs', cn: '三只小猪', emoji: '🐷', level: 'L2', color: 'pink',
+    lines: [
+      { en: 'Three little pigs build houses.', cn: '三只小猪盖房子。', e: '🐷' },
+      { en: 'The first house is straw.', cn: '第一座是稻草房。', e: '🌾' },
+      { en: 'The second house is sticks.', cn: '第二座是木头房。', e: '🪵' },
+      { en: 'The third house is bricks.', cn: '第三座是砖头房。', e: '🧱' },
+      { en: 'A wolf blows the houses down.', cn: '大灰狼吹倒了房子。', e: '🐺' },
+      { en: 'But the brick house stays strong.', cn: '只有砖房很结实。', e: '💪' },
+      { en: 'The pigs are safe and happy.', cn: '小猪们安全又开心。', e: '🎉' },
+    ],
+  },
+  {
+    id: 'fox', title: 'The Fox and the Grapes', cn: '狐狸和葡萄', emoji: '🦊', level: 'L2', color: 'purple',
+    lines: [
+      { en: 'A fox sees sweet grapes.', cn: '狐狸看见甜甜的葡萄。', e: '🦊' },
+      { en: 'The grapes are very high.', cn: '葡萄挂得很高。', e: '🍇' },
+      { en: 'The fox jumps again and again.', cn: '狐狸一次又一次地跳。', e: '🦊' },
+      { en: 'But it cannot reach them.', cn: '可是怎么也够不到。', e: '😣' },
+      { en: '"These grapes are sour!"', cn: '“这些葡萄是酸的！”', e: '😤' },
+      { en: 'Then the fox walks away.', cn: '然后狐狸走开了。', e: '🚶' },
+    ],
+  },
+  {
+    id: 'duckling', title: 'The Ugly Duckling', cn: '丑小鸭', emoji: '🦆', level: 'L2', color: 'teal',
+    lines: [
+      { en: 'A grey duckling is born.', cn: '一只灰色的小鸭出生了。', e: '🐣' },
+      { en: 'The others say he is ugly.', cn: '大家都说他很丑。', e: '😢' },
+      { en: 'The duckling is sad and alone.', cn: '小鸭又伤心又孤单。', e: '🦆' },
+      { en: 'Winter comes and goes.', cn: '冬天来了又走了。', e: '❄️' },
+      { en: 'He grows up by the lake.', cn: '他在湖边长大了。', e: '🌊' },
+      { en: 'He is a beautiful swan!', cn: '他变成了美丽的天鹅！', e: '🦢' },
+    ],
+  },
+  {
+    id: 'my-family', title: 'My Family', cn: '我的家人', emoji: '👨‍👩‍👧‍👦', level: 'L1', color: 'amber',
     lines: [
       { en: 'This is my dad.', cn: '这是我的爸爸。', e: '👨' },
       { en: 'This is my mum.', cn: '这是我的妈妈。', e: '👩' },
       { en: 'This is me.', cn: '这是我。', e: '🧒' },
-      { en: 'I love my family.', cn: '我爱我的家。', e: '👨‍👩‍👧‍👦' },
-    ],
-  },
-  {
-    id: 'at-school', title: 'At School', cn: '在学校', emoji: '🏫', level: 'L2', color: 'green',
-    lines: [
-      { en: 'I go to school.', cn: '我去上学。', e: '🏫' },
-      { en: 'I have a book.', cn: '我有一本书。', e: '📖' },
-      { en: 'I have a pencil.', cn: '我有一支铅笔。', e: '✏️' },
-      { en: 'I read with my friend.', cn: '我和朋友一起读书。', e: '📚' },
-    ],
-  },
-  {
-    id: 'my-cat', title: 'My Cat', cn: '我的小猫', emoji: '🐱', level: 'L1', color: 'coral',
-    lines: [
-      { en: 'I have a cat.', cn: '我有一只猫。', e: '🐱' },
-      { en: 'The cat is soft.', cn: '这只猫软软的。', e: '🧶' },
-      { en: 'It can run fast.', cn: '它跑得很快。', e: '💨' },
-      { en: 'I love my cat.', cn: '我爱我的小猫。', e: '❤️' },
-    ],
-  },
-  {
-    id: 'numbers', title: 'One Two Three', cn: '数一数', emoji: '🔢', level: 'L1', color: 'amber',
-    lines: [
-      { en: 'I see one sun.', cn: '我看见一个太阳。', e: '☀️' },
-      { en: 'I see two birds.', cn: '我看见两只鸟。', e: '🐦' },
-      { en: 'I see three apples.', cn: '我看见三个苹果。', e: '🍎' },
-      { en: 'I like numbers.', cn: '我喜欢数字。', e: '🔢' },
-    ],
-  },
-  {
-    id: 'fruits', title: 'Fruits', cn: '好吃的水果', emoji: '🍓', level: 'L1', color: 'pink',
-    lines: [
-      { en: 'The apple is red.', cn: '苹果是红色的。', e: '🍎' },
-      { en: 'The banana is yellow.', cn: '香蕉是黄色的。', e: '🍌' },
-      { en: 'The grape is purple.', cn: '葡萄是紫色的。', e: '🍇' },
-      { en: 'I like fruit.', cn: '我喜欢水果。', e: '🍓' },
-    ],
-  },
-  {
-    id: 'my-room', title: 'My Room', cn: '我的房间', emoji: '🏠', level: 'L2', color: 'teal',
-    lines: [
-      { en: 'This is my room.', cn: '这是我的房间。', e: '🏠' },
-      { en: 'I have a bed and a desk.', cn: '我有一张床和一张书桌。', e: '🛏️' },
-      { en: 'My toys are in the box.', cn: '我的玩具在箱子里。', e: '🧸' },
-      { en: 'I clean my room every day.', cn: '我每天打扫房间。', e: '🧹' },
-    ],
-  },
-  {
-    id: 'on-farm', title: 'On the Farm', cn: '开心农场', emoji: '🚜', level: 'L2', color: 'green',
-    lines: [
-      { en: 'The cow says moo.', cn: '奶牛哞哞叫。', e: '🐄' },
-      { en: 'The pig says oink.', cn: '小猪哼哼叫。', e: '🐷' },
-      { en: 'The duck says quack.', cn: '小鸭嘎嘎叫。', e: '🦆' },
-      { en: 'I like the farm.', cn: '我喜欢农场。', e: '🚜' },
-    ],
-  },
-  {
-    id: 'weather', title: 'Weather', cn: '天气变变变', emoji: '🌈', level: 'L2', color: 'blue',
-    lines: [
-      { en: 'It is sunny today.', cn: '今天晴天。', e: '☀️' },
-      { en: 'It is rainy today.', cn: '今天下雨。', e: '🌧️' },
-      { en: 'It is windy today.', cn: '今天刮风。', e: '💨' },
-      { en: 'I see a rainbow.', cn: '我看见一道彩虹。', e: '🌈' },
+      { en: 'I love my family.', cn: '我爱我的家人。', e: '❤️' },
     ],
   },
 ];
