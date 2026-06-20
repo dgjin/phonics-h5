@@ -506,6 +506,35 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .story-opt.right { border-color: #46c08a; background: #eafaf2; }
 .story-opt.wrong { border-color: #ef6b6b; background: #fdeeee; }
 
+/* 句型对话 */
+.dialog { width: 100%; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.bubble { display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: 18px;
+  box-shadow: var(--shadow); padding: 11px 14px; max-width: 90%; animation: pop .3s ease; }
+.bubble.left { align-self: flex-start; border-bottom-left-radius: 6px; }
+.bubble.right { align-self: flex-end; flex-direction: row-reverse; text-align: right; border-bottom-right-radius: 6px; background: var(--accent-soft); }
+.bubble.cur { box-shadow: 0 0 0 2px var(--accent), var(--shadow); }
+.bubble-emoji { font-size: 34px; flex: none; }
+.bubble-body { flex: 1; min-width: 0; }
+.bubble-en { font-family: var(--font-head); font-weight: 700; font-size: 18px; color: var(--accent-deep); line-height: 1.2; }
+.bubble-cn { color: var(--muted); font-weight: 600; font-size: 13px; margin-top: 3px; }
+.bubble-play { border: none; background: none; color: var(--accent); font-size: 20px; cursor: pointer; flex: none; }
+.dialog-rec { display: flex; gap: 10px; justify-content: center; margin-top: 18px; }
+.dialog-mic { display: inline-flex; align-items: center; gap: 7px; border: none; border-radius: 14px;
+  background: var(--accent); color: #fff; font-family: var(--font-head); font-weight: 700; font-size: 15px;
+  padding: 12px 20px; cursor: pointer; box-shadow: 0 5px 0 var(--accent-dark); transition: transform .1s; }
+.dialog-mic:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--accent-dark); }
+.dialog-mic.rec { background: #ef4444; box-shadow: 0 5px 0 #b91c1c; animation: micpulse 1s ease-in-out infinite; }
+.dialog-mic.play { background: #fff; color: var(--accent-dark); border: 2px solid var(--accent-soft); box-shadow: none; }
+.ord-cn { font-family: var(--font-head); font-weight: 700; font-size: clamp(20px, 6vw, 26px); color: var(--accent-deep); text-align: center; margin: 6px 0 18px; }
+.ord-answer { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; min-height: 50px; width: 100%; max-width: 460px;
+  border-bottom: 3px dashed var(--accent-soft); padding-bottom: 14px; margin-bottom: 18px; }
+.ord-tray { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%; max-width: 460px; }
+.ord-tile { border: none; border-radius: 12px; background: var(--accent); color: #fff; font-family: var(--font-head);
+  font-weight: 700; font-size: 18px; padding: 10px 16px; cursor: pointer; box-shadow: 0 4px 0 var(--accent-dark); transition: transform .1s; }
+.ord-tile:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--accent-dark); }
+.ord-answer .ord-tile { background: var(--accent-soft); color: var(--accent-deep); box-shadow: none; }
+.ord-tile.used { background: #dcdce6; color: #b6b6c4; box-shadow: 0 4px 0 #c6c6d2; pointer-events: none; }
+
 /* 家长周报 */
 .rep-row { display: flex; gap: 10px; margin-bottom: 14px; }
 .rep-stat { flex: 1; background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 16px 6px; text-align: center; }

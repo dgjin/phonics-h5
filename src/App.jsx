@@ -13,6 +13,8 @@ import AchievementsPage from "./components/AchievementsPage.jsx";
 import ReportPage from "./components/ReportPage.jsx";
 import StoryList from "./components/StoryList.jsx";
 import StoryRead from "./components/StoryRead.jsx";
+import DialogList from "./components/DialogList.jsx";
+import DialogRead from "./components/DialogRead.jsx";
 import TextbookHome from "./components/textbook/TextbookHome.jsx";
 import TextbookSelect from "./components/textbook/TextbookSelect.jsx";
 import TextbookUnit from "./components/textbook/TextbookUnit.jsx";
@@ -45,6 +47,8 @@ export default function App() {
         <Route path="/report" element={<ReportPage />} />
         <Route path="/story" element={<StoryList />} />
         <Route path="/story/:id" element={<StoryRead />} />
+        <Route path="/dialog" element={<DialogList />} />
+        <Route path="/dialog/:id" element={<DialogRead />} />
         <Route path="/tb" element={<TextbookSelect />} />
         <Route path="/tb/:bookId" element={<TextbookBoard />} />
         <Route path="/tb/:bookId/home" element={<TextbookHome />} />
