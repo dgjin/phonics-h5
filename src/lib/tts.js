@@ -50,6 +50,10 @@ if (synth) {
   if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = pickVoice;
 }
 
+function isWord(text) {
+  return /^[a-zA-Z]+$/.test(String(text).trim());
+}
+
 function slug(s) {
   return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 }
@@ -104,6 +108,12 @@ export function speakReal(word, accent, onend) {
   if (!word) { if (onend) onend(); return; }
   stop();
   const acc = accent === 'uk' ? 'uk' : accent === 'us' ? 'us' : getAccent();
+  // 有道 dictvoice 主要支持单词；短语/句子直接走 Web Speech，避免拿到空/错误音频
+  if (!isWord(word)) {
+    webspeak(word, { lang: langOf(acc) });
+    if (onend) setTimeout(onend, 200);
+    return;
+  }
   playFile(youdaoUrl(word, acc), () => webspeak(word, { lang: langOf(acc) }), onend, 2500);
 }
 
@@ -114,10 +124,17 @@ export function speak(text, opts) {
   const acc = getAccent();
   const s = slug(text);
   const local = manifest.words[s] ? 'audio/w_' + s + '.m4a' : null;
-  playFile(youdaoUrl(text, acc), () => {
-    if (local) playFile(local, () => webspeak(text, { lang: langOf(acc) }), null, 2000);
-    else webspeak(text, Object.assign({ lang: langOf(acc) }, opts));
-  }, null, 2500);
+  // 单词：优先有道真人发音 -> 本地 m4a -> Web Speech
+  if (isWord(text)) {
+    playFile(youdaoUrl(text, acc), () => {
+      if (local) playFile(local, () => webspeak(text, { lang: langOf(acc) }), null, 2000);
+      else webspeak(text, Object.assign({ lang: langOf(acc) }, opts));
+    }, null, 2500);
+    return;
+  }
+  // 短语/句子：直接本地（如果存在）或 Web Speech，避免有道句子支持不稳定
+  if (local) playFile(local, () => webspeak(text, { lang: langOf(acc) }), null, 2000);
+  else webspeak(text, Object.assign({ lang: langOf(acc) }, opts));
 }
 
 /* 字母发音：在线真人(按全局口音) → 本地 m4a → 设备语音 */
