@@ -127,38 +127,48 @@ export default function StoryRead() {
   const last = idx === story.lines.length - 1;
   if (!started) {
     return (
-      <div className="c-teal">
-        <Header title={story.title} sub={story.cn} color="teal" backTo="/story" />
-        <div className="stage" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-          <div className="story-page-emoji" style={{ fontSize: 80, marginBottom: 20 }}>{story.emoji}</div>
-          <h2 style={{ fontFamily: 'var(--font-head)', color: 'var(--accent-deep)', margin: '0 0 8px' }}>{story.title}</h2>
-          <p style={{ color: 'var(--muted)', fontWeight: 600, margin: '0 0 28px' }}>{story.cn}</p>
-          <button className="btn primary" style={{ fontSize: 20, padding: '16px 36px' }} onClick={() => { speakReal(story.lines[0].en); setStarted(true); }}>
-            <i className="ti ti-player-play-filled"></i> 开始朗读
+      <div className={'c-' + story.color}>
+        <Header title="绘本" sub={story.cn} color={story.color} backTo="/story" />
+        <div className="book-cover">
+          <div className="book-cover-card" onClick={() => { speakReal(story.lines[0].en); setStarted(true); }}>
+            <div className="book-cover-lv">{story.level}</div>
+            <div className="book-cover-emoji">{story.emoji}</div>
+            <div className="book-cover-title">{story.title}</div>
+            <div className="book-cover-cn">{story.cn}</div>
+            <div className="book-cover-pages">{story.lines.length} 页</div>
+          </div>
+          <button className="btn primary book-cover-btn" onClick={() => { speakReal(story.lines[0].en); setStarted(true); }}>
+            <i className="ti ti-book"></i> 开始阅读
           </button>
-          <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 14 }}>点击开始，之后每页会自动朗读</p>
+          <p className="book-cover-hint">翻页阅读，每页自动朗读，读完做小测</p>
         </div>
       </div>
     );
   }
   return (
-    <div className="c-teal">
-      <Header title={story.title} sub={story.cn} color="teal" backTo="/story" />
-      <ProgressDots idx={idx} total={story.lines.length} />
-      <div className="stage">
-        <div className="story-page" onClick={() => speakReal(line.en)}>
-          <div className="story-page-emoji">{line.e || story.emoji}</div>
-          <div className="story-page-en">{line.en}</div>
-          <div className="story-page-cn">{line.cn}</div>
-          <div className="tap-hint"><i className="ti ti-volume"></i> 点卡片听整句朗读</div>
+    <div className={'c-' + story.color}>
+      <Header title={story.title} sub={'第 ' + (idx + 1) + ' / ' + story.lines.length + ' 页'} color={story.color} backTo="/story" />
+      <div className="book-stage">
+        <div className="book-page" key={idx} onClick={() => speakReal(line.en)}>
+          <div className="book-illus">
+            <span className="book-deco">{story.emoji}</span>
+            <span className="book-big">{line.e || story.emoji}</span>
+          </div>
+          <div className="book-text">
+            <div className="book-en">{line.en}</div>
+            <div className="book-cn">{line.cn}</div>
+            <div className="tap-hint"><i className="ti ti-volume"></i> 点一下听朗读</div>
+          </div>
         </div>
-        <div className="nav-row">
-          <button className="btn ghost" onClick={() => idx > 0 && setIdx(idx - 1)} aria-label="上一句"><i className="ti ti-arrow-left"></i></button>
-          <button className="btn primary" onClick={() => (last ? startQuiz() : setIdx(idx + 1))}>
-            {last ? <>读后小测 <i className="ti ti-arrow-right"></i></> : <>下一句 <i className="ti ti-arrow-right"></i></>}
-          </button>
-        </div>
+        <button className="book-arrow left" disabled={idx === 0} onClick={(e) => { e.stopPropagation(); idx > 0 && setIdx(idx - 1); }} aria-label="上一页"><i className="ti ti-chevron-left"></i></button>
+        {last
+          ? <button className="book-arrow right done" onClick={(e) => { e.stopPropagation(); startQuiz(); }} aria-label="读后小测"><i className="ti ti-check"></i></button>
+          : <button className="book-arrow right" onClick={(e) => { e.stopPropagation(); setIdx(idx + 1); }} aria-label="下一页"><i className="ti ti-chevron-right"></i></button>}
       </div>
+      <div className="book-dots">
+        {story.lines.map((_, i) => <span key={i} className={'book-dot' + (i === idx ? ' on' : '')}></span>)}
+      </div>
+      {last && <button className="btn primary block book-finish" onClick={startQuiz}>读完啦，做小测 <i className="ti ti-arrow-right"></i></button>}
     </div>
   );
 }

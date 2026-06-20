@@ -506,6 +506,45 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .story-opt.right { border-color: #46c08a; background: #eafaf2; }
 .story-opt.wrong { border-color: #ef6b6b; background: #fdeeee; }
 
+/* ===== 真·绘本翻页 ===== */
+.book-cover { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; padding-top: 10px; }
+.book-cover-card { position: relative; width: 100%; aspect-ratio: 4 / 5; max-height: 62vh; border-radius: 22px; cursor: pointer;
+  background: linear-gradient(160deg, var(--accent), var(--accent-dark)); color: #fff; box-shadow: var(--shadow-lift);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  border-left: 10px solid rgba(0,0,0,.18); animation: pop .4s ease; }
+.book-cover-lv { position: absolute; top: 16px; right: 16px; font-family: var(--font-head); font-weight: 700; font-size: 13px;
+  background: rgba(255,255,255,.25); border-radius: 999px; padding: 3px 12px; }
+.book-cover-emoji { font-size: clamp(80px, 26vw, 130px); line-height: 1; filter: drop-shadow(0 6px 10px rgba(0,0,0,.25)); }
+.book-cover-title { font-family: var(--font-head); font-weight: 800; font-size: clamp(26px, 8vw, 38px); margin-top: 14px; }
+.book-cover-cn { font-weight: 700; font-size: 17px; opacity: .92; }
+.book-cover-pages { font-weight: 600; font-size: 13px; opacity: .8; margin-top: 8px; }
+.book-cover-btn { margin-top: 22px; font-size: 19px; padding: 15px 40px; }
+.book-cover-hint { color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 12px; text-align: center; }
+
+.book-stage { position: relative; max-width: 440px; margin: 0 auto; }
+.book-page { background: var(--card); border-radius: 24px; box-shadow: var(--shadow-lift); overflow: hidden; cursor: pointer;
+  min-height: 56vh; display: flex; flex-direction: column; animation: pageIn .35s ease; }
+@keyframes pageIn { from { opacity: 0; transform: translateX(26px); } to { opacity: 1; transform: none; } }
+.book-illus { position: relative; flex: 1; min-height: 230px; display: grid; place-items: center;
+  background: linear-gradient(165deg, var(--accent-soft), var(--card)); }
+.book-big { font-size: clamp(92px, 30vw, 150px); line-height: 1; filter: drop-shadow(0 6px 12px rgba(0,0,0,.14)); animation: pop .4s ease; }
+.book-deco { position: absolute; top: 14px; right: 18px; font-size: 30px; opacity: .45; }
+.book-text { padding: 20px 22px 24px; text-align: center; }
+.book-en { font-family: var(--font-head); font-weight: 700; font-size: clamp(24px, 7vw, 34px); color: var(--accent-deep); line-height: 1.2; }
+.book-cn { color: var(--muted); font-weight: 700; font-size: 16px; margin-top: 8px; }
+.book-text .tap-hint { margin-top: 12px; }
+.book-arrow { position: absolute; top: 42%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%; border: none;
+  background: #fff; box-shadow: var(--shadow-lift); color: var(--accent-dark); font-size: 22px; cursor: pointer; display: grid; place-items: center; z-index: 5; }
+.book-arrow:active { transform: translateY(-50%) scale(.9); }
+.book-arrow.left { left: -10px; }
+.book-arrow.right { right: -10px; }
+.book-arrow.done { background: var(--accent); color: #fff; }
+.book-arrow[disabled] { opacity: .3; pointer-events: none; }
+.book-dots { display: flex; gap: 7px; justify-content: center; margin: 16px 0 6px; }
+.book-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-soft); transition: width .2s, background .2s; }
+.book-dot.on { background: var(--accent); width: 22px; border-radius: 999px; }
+.book-finish { max-width: 440px; margin: 12px auto 0; }
+
 /* 句型对话 */
 .dialog { width: 100%; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 .bubble { display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: 18px;
