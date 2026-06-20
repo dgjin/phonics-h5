@@ -78,15 +78,25 @@ export function stop() {
   if (synth) synth.cancel();
 }
 
-function playFile(src, fallback, onend) {
+function playFile(src, fallback, onend, timeoutMs = 2500) {
   const a = getEl();
-  try { a.pause(); } catch (e) {}
+  try { a.pause(); a.onended = null; a.onerror = null; a.oncanplay = null; a.onloadedmetadata = null; } catch (e) {}
   const fb = () => { if (typeof fallback === 'function') fallback(); else if (fallback) webspeak(fallback); };
-  a.onended = () => { a.onended = null; if (onend) onend(); };
-  a.onerror = () => { a.onerror = null; fb(); if (onend) onend(); };
-  try { a.src = src; a.currentTime = 0; } catch (e) {}
-  const p = a.play();
-  if (p && p.catch) p.catch(() => { fb(); if (onend) onend(); });
+  let resolved = false;
+  const finish = (ok) => {
+    if (resolved) return;
+    resolved = true;
+    clearTimeout(timer);
+    try { a.onended = null; a.onerror = null; a.oncanplay = null; a.onloadedmetadata = null; } catch (e) {}
+    if (!ok) fb();
+    if (onend) onend();
+  };
+  const timer = setTimeout(() => finish(false), timeoutMs);
+  a.onended = () => finish(true);
+  a.onerror = () => finish(false);
+  a.oncanplay = () => { if (!resolved) { const p = a.play(); if (p && p.catch) p.catch(() => finish(false)); } };
+  a.onloadedmetadata = () => { if (!resolved) { const p = a.play(); if (p && p.catch) p.catch(() => finish(false)); } };
+  try { a.src = src; a.currentTime = 0; a.load(); } catch (e) { finish(false); }
 }
 
 /* 在线真人发音（显式指定口音；用于背单词页等） */
@@ -94,7 +104,7 @@ export function speakReal(word, accent, onend) {
   if (!word) { if (onend) onend(); return; }
   stop();
   const acc = accent === 'uk' ? 'uk' : accent === 'us' ? 'us' : getAccent();
-  playFile(youdaoUrl(word, acc), () => webspeak(word, { lang: langOf(acc) }), onend);
+  playFile(youdaoUrl(word, acc), () => webspeak(word, { lang: langOf(acc) }), onend, 2500);
 }
 
 /* 单词发音：在线真人(按全局口音) → 本地 m4a → 设备语音 */
@@ -105,9 +115,9 @@ export function speak(text, opts) {
   const s = slug(text);
   const local = manifest.words[s] ? 'audio/w_' + s + '.m4a' : null;
   playFile(youdaoUrl(text, acc), () => {
-    if (local) playFile(local, () => webspeak(text, { lang: langOf(acc) }));
+    if (local) playFile(local, () => webspeak(text, { lang: langOf(acc) }), null, 2000);
     else webspeak(text, Object.assign({ lang: langOf(acc) }, opts));
-  });
+  }, null, 2500);
 }
 
 /* 字母发音：在线真人(按全局口音) → 本地 m4a → 设备语音 */
@@ -118,10 +128,10 @@ export function speakLetter(letter, onend) {
   const k = String(letter).toLowerCase();
   const local = manifest.letters[k] ? 'audio/l_' + k + '.m4a' : null;
   const fb = () => {
-    if (local) playFile(local, () => webspeak(letter, { lang: langOf(acc) }));
+    if (local) playFile(local, () => webspeak(letter, { lang: langOf(acc) }), null, 2000);
     else webspeak(letter, { lang: langOf(acc) });
   };
-  playFile(youdaoUrl(letter, acc), fb, onend);
+  playFile(youdaoUrl(letter, acc), fb, onend, 2500);
 }
 
 export function speakItem(item) {
