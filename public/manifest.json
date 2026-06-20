@@ -1,7 +1,7 @@
 {
-  "name": "Phonics Fun 自然拼读",
-  "short_name": "Phonics Fun",
-  "description": "面向儿童的自然拼读互动学习：听音、拼词、描红、闯关。",
+  "name": "Phonics+ 拼读加",
+  "short_name": "Phonics+",
+  "description": "儿童英语拼读+词汇+阅读+口语互动学习平台：闯关、跟读、绘本、成就。",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",

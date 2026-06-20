@@ -151,8 +151,8 @@ export default function HomePage() {
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
       <div className="hero">
         <div className="hero-emoji">🔤</div>
-        <h1 className="hero-title">Phonics Fun</h1>
-        <p className="hero-sub">自然拼读 · 听音 · 拼词 · 闯关学习</p>
+        <h1 className="hero-title">Phonics+</h1>
+        <p className="hero-sub">拼读 · 词汇 · 阅读 · 口语闯关</p>
       </div>
       <Dashboard />
       {srsDueCount > 0 && (

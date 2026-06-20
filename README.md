@@ -1,4 +1,4 @@
-# Phonics Fun · 自然拼读 H5
+# Phonics+ · 拼读加
 
 面向 3–10 岁儿童的英语自然拼读互动学习应用，兼容 KizPhonics 分级课程与外研版·新交际英语教材。基于 **React 19 + Vite + React Router**，自适应手机 / 平板 / 电脑，可安装为 PWA 离线使用，支持云端账号同步学习进度。
 
