@@ -973,3 +973,13 @@ i.ti { line-height: 1; vertical-align: -2px; }
 .is-tablet .bubble-en { font-size: 22px; }
 .is-tablet .bubble-cn { font-size: 15px; }
 .is-tablet .ord-tile { font-size: 20px; padding: 14px 18px; }
+
+/* Story page image */
+.book-page-img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}

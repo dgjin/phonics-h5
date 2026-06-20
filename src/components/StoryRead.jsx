@@ -152,7 +152,7 @@ export default function StoryRead() {
         <div className="book-page" key={idx} onClick={() => speakReal(line.en)}>
           <div className="book-illus">
             <span className="book-deco">{story.emoji}</span>
-            <span className="book-big">{line.e || story.emoji}</span>
+            {line.img ? <img src={line.img} alt={line.en} className="book-page-img" /> : <span className="book-big">{line.e || story.emoji}</span>}
           </div>
           <div className="book-text">
             <div className="book-en">{line.en}</div>
