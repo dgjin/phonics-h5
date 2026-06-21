@@ -185,6 +185,54 @@ export function ProgressProvider({ children }) {
     });
   }, [pushRemote]);
 
+  /* 每日挑战：存储/获取今日题目 */
+  const setDailyChallenge = useCallback((tasks) => {
+    setData((prev) => {
+      const daily = { ...(prev.daily || {}) };
+      const t = todayStr();
+      daily[t] = { ...(daily[t] || {}), challenge: { tasks, done: false, ts: Date.now() } };
+      const next = { ...prev, daily };
+      save(ctxRef.current.userId, next);
+      pushRemote(next);
+      return next;
+    });
+  }, [pushRemote]);
+
+  const getDailyChallenge = useCallback(() => {
+    const t = todayStr();
+    const d = data.daily && data.daily[t] && data.daily[t].challenge;
+    return d || null;
+  }, [data.daily]);
+
+  const completeDailyChallenge = useCallback((stars) => {
+    setData((prev) => {
+      const daily = { ...(prev.daily || {}) };
+      const t = todayStr();
+      daily[t] = { ...(daily[t] || {}), challenge: { ...(daily[t] && daily[t].challenge || {}), done: true, stars, ts: Date.now() } };
+      const next = { ...prev, daily };
+      save(ctxRef.current.userId, next);
+      pushRemote(next);
+      return next;
+    });
+  }, [pushRemote]);
+
+  const challengeDoneToday = () => {
+    const t = todayStr();
+    const d = data.daily && data.daily[t] && data.daily[t].challenge;
+    return !!(d && d.done);
+  };
+
+  const challengeStreak = () => {
+    let n = 0;
+    const d = new Date();
+    while (true) {
+      const s = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const rec = data.daily && data.daily[s] && data.daily[s].challenge;
+      if (rec && rec.done) { n++; d.setDate(d.getDate() - 1); } else break;
+    }
+    return n;
+  };
+
   const value = useMemo(() => {
     const levelStars = (level) => {
       let got = 0;
@@ -235,19 +283,46 @@ export function ProgressProvider({ children }) {
     const allStars = Object.values(data.stars || {}).reduce((a, b) => a + (b || 0), 0);
     const units = completedUnits();
     const st = streak();
+    // 统计绘本和对话完成情况
+    const storyStars = Object.entries(data.stars || {}).filter(([k]) => k.startsWith('story/')).reduce((a, [,v]) => a + (v || 0), 0);
+    const dialogStars = Object.entries(data.stars || {}).filter(([k]) => k.startsWith('dialog/')).reduce((a, [,v]) => a + (v || 0), 0);
+    const challengeSt = challengeStreak();
+    const mistakeCount = Object.keys(data.mistakes || {}).length;
+
     const achDefs = [
+      // === 闯关类 ===
       { id: 'first', emoji: '🌱', name: '初次启程', desc: '完成第 1 关', cur: units, target: 1 },
       { id: 'unit10', emoji: '📚', name: '闯关达人', desc: '通关 10 个单元', cur: units, target: 10 },
       { id: 'unit30', emoji: '🧭', name: '闯关大师', desc: '通关 30 个单元', cur: units, target: 30 },
+      { id: 'unit50', emoji: '🏆', name: '全能勇者', desc: '通关 50 个单元', cur: units, target: 50 },
+      // === 星星类 ===
       { id: 'star10', emoji: '⭐', name: '星光初现', desc: '累计 10 颗星', cur: allStars, target: 10 },
       { id: 'star50', emoji: '🌟', name: '星光熠熠', desc: '累计 50 颗星', cur: allStars, target: 50 },
       { id: 'star100', emoji: '💫', name: '百星达人', desc: '累计 100 颗星', cur: allStars, target: 100 },
+      { id: 'star200', emoji: '✨', name: '星光璀璨', desc: '累计 200 颗星', cur: allStars, target: 200 },
+      // === 打卡类 ===
       { id: 'streak3', emoji: '🔥', name: '坚持三天', desc: '连续打卡 3 天', cur: st, target: 3 },
       { id: 'streak7', emoji: '🏅', name: '一周不断', desc: '连续打卡 7 天', cur: st, target: 7 },
       { id: 'streak30', emoji: '👑', name: '月度学霸', desc: '连续打卡 30 天', cur: st, target: 30 },
+      { id: 'streak100', emoji: '💎', name: '百日传奇', desc: '连续打卡 100 天', cur: st, target: 100 },
+      // === 词汇类 ===
       { id: 'word20', emoji: '🗣️', name: '词汇新手', desc: '学习 20 个单词', cur: srsTotal, target: 20 },
       { id: 'word60', emoji: '🎓', name: '词汇能手', desc: '学习 60 个单词', cur: srsTotal, target: 60 },
       { id: 'word120', emoji: '📖', name: '词汇高手', desc: '学习 120 个单词', cur: srsTotal, target: 120 },
+      { id: 'word300', emoji: '🧠', name: '词汇大师', desc: '学习 300 个单词', cur: srsTotal, target: 300 },
+      // === 绘本类 ===
+      { id: 'story3', emoji: '📕', name: '绘本新手', desc: '读完 3 本绘本', cur: storyStars, target: 3 },
+      { id: 'story10', emoji: '📗', name: '小书虫', desc: '绘本累计 10 颗星', cur: storyStars, target: 10 },
+      { id: 'story24', emoji: '📘', name: '阅读达人', desc: '绘本累计 24 颗星', cur: storyStars, target: 24 },
+      // === 对话类 ===
+      { id: 'dialog3', emoji: '💬', name: '对话新手', desc: '完成 3 个对话', cur: dialogStars, target: 3 },
+      { id: 'dialog10', emoji: '🗨️', name: '口语达人', desc: '对话累计 10 颗星', cur: dialogStars, target: 10 },
+      // === 每日挑战类 ===
+      { id: 'challenge1', emoji: '🎯', name: '初次挑战', desc: '完成 1 次每日挑战', cur: challengeSt, target: 1 },
+      { id: 'challenge7', emoji: '⚔️', name: '挑战勇者', desc: '连续 7 天完成挑战', cur: challengeSt, target: 7 },
+      { id: 'challenge30', emoji: '🛡️', name: '挑战王者', desc: '连续 30 天完成挑战', cur: challengeSt, target: 30 },
+      // === 错题类 ===
+      { id: 'mistake5', emoji: '🔧', name: '知错能改', desc: '错题本积累 5 个词', cur: mistakeCount, target: 5 },
     ];
     const achievements = achDefs.map((d) => ({
       ...d, got: d.cur >= d.target, pct: Math.min(100, Math.round((d.cur / d.target) * 100)),
@@ -271,6 +346,7 @@ export function ProgressProvider({ children }) {
       profile: data.profile || {}, setProfile,
       srsReview, srsDue, srsDueCount, srsTotal, srsMastered, srsBox,
       dailyGoal, todayLessons, achievements, achievedCount, achievementTotal: achievements.length,
+      setDailyChallenge, getDailyChallenge, completeDailyChallenge, challengeDoneToday: challengeDoneToday(), challengeStreak: challengeStreak(),
       weekReport,
     };
   }, [data, getStars, setStars, addMistake, removeMistake, setProfile, srsReview]);

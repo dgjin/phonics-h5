@@ -988,3 +988,125 @@ i.ti { line-height: 1; vertical-align: -2px; }
   object-fit: cover;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
+
+/* ===== 每日挑战 ===== */
+.dc-intro {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 20px; text-align: center;
+}
+.dc-chest {
+  font-size: 80px; margin-bottom: 16px;
+  animation: dc-bounce 1.5s ease-in-out infinite;
+}
+@keyframes dc-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.dc-intro h2 {
+  font-family: var(--font-head); color: var(--accent-deep);
+  margin: 0 0 8px; font-size: 24px;
+}
+.dc-intro p { color: var(--muted); margin: 0 0 24px; }
+.dc-task-preview {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%; max-width: 280px; margin-bottom: 28px;
+}
+.dc-preview-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card-bg); border-radius: 12px;
+  padding: 12px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.dc-preview-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
+}
+.dc-preview-type { font-weight: 600; font-size: 15px; }
+.dc-progress {
+  display: flex; justify-content: center; gap: 8px; padding: 12px 0;
+}
+.dc-dot {
+  width: 36px; height: 6px; border-radius: 3px;
+  background: var(--accent-soft);
+}
+.dc-dot.done { background: var(--accent); }
+.dc-dot.on { background: var(--accent-deep); }
+.dc-card {
+  background: var(--card-bg); border-radius: 20px;
+  padding: 24px 20px; margin: 16px auto; max-width: 360px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.dc-type {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-weight: 700; font-size: 16px; color: var(--accent-deep);
+  margin-bottom: 16px;
+}
+.dc-play {
+  background: var(--accent-soft); border: none; border-radius: 12px;
+  padding: 10px 20px; font-size: 15px; font-weight: 600;
+  color: var(--accent-deep); cursor: pointer; margin-bottom: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.dc-play:active { transform: scale(0.95); }
+.dc-hint {
+  color: var(--muted); font-size: 14px; margin-bottom: 12px;
+}
+.dc-pic-emoji {
+  font-size: 64px; margin-bottom: 8px;
+}
+.dc-pic-cn {
+  font-size: 16px; font-weight: 600; color: var(--text);
+  margin-bottom: 16px;
+}
+.dc-opts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.dc-opt {
+  background: var(--card-bg); border: 2px solid var(--border);
+  border-radius: 14px; padding: 14px 8px; font-size: 17px;
+  font-weight: 700; text-transform: lowercase; cursor: pointer;
+  transition: all 0.2s;
+}
+.dc-opt:active { transform: scale(0.95); }
+.dc-opt.ok { border-color: #22c55e; background: #dcfce7; color: #166534; }
+.dc-opt.no { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+.dc-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 20px; text-align: center;
+}
+.dc-empty-emoji { font-size: 60px; margin-bottom: 16px; }
+.dc-empty p { color: var(--muted); margin-bottom: 20px; }
+.dc-done {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 20px; text-align: center;
+}
+.dc-done-chest {
+  font-size: 80px; margin-bottom: 16px;
+  animation: dc-bounce 1.5s ease-in-out infinite;
+}
+.dc-done h2 {
+  font-family: var(--font-head); color: var(--accent-deep);
+  margin: 0 0 20px; font-size: 22px;
+}
+.dc-score {
+  margin-bottom: 16px;
+}
+.dc-score-num {
+  font-size: 48px; font-weight: 800; color: var(--accent-deep);
+  font-family: var(--font-head);
+}
+.dc-score-num span { font-size: 24px; color: var(--muted); font-weight: 600; }
+.dc-score-lab { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.dc-stars-row {
+  display: flex; gap: 8px; margin-bottom: 28px;
+}
+.dc-star {
+  font-size: 32px; color: var(--border);
+  transition: color 0.3s;
+}
+.dc-star.on { color: #f59e0b; }
+.dc-done-actions {
+  display: flex; gap: 12px;
+}

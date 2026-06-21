@@ -10,6 +10,7 @@ import ProfilePage from "./components/ProfilePage.jsx";
 import MistakesPage from "./components/MistakesPage.jsx";
 import HelpPage from "./components/HelpPage.jsx";
 import AchievementsPage from "./components/AchievementsPage.jsx";
+import DailyChallenge from "./components/DailyChallenge.jsx";
 import ReportPage from "./components/ReportPage.jsx";
 import StoryList from "./components/StoryList.jsx";
 import StoryRead from "./components/StoryRead.jsx";
@@ -51,6 +52,7 @@ export default function App() {
         <Route path="/mistakes" element={<MistakesPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/achievements" element={<AchievementsPage />} />
+        <Route path="/daily" element={<DailyChallenge />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/story" element={<StoryList />} />
         <Route path="/story/:id" element={<StoryRead />} />

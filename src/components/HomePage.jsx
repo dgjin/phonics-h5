@@ -141,7 +141,7 @@ function Dashboard() {
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { levelStars, srsDueCount } = useProgress();
+  const { levelStars, srsDueCount, challengeDoneToday } = useProgress();
   const [showLogin, setShowLogin] = useState(false);
   const isMobile = useIsMobile();
 
@@ -165,6 +165,14 @@ export default function HomePage() {
           <i className="ti ti-chevron-right re-arrow"></i>
         </button>
       )}
+      <button className="review-entry c-purple" onClick={() => navigate('/daily')}>
+        <div className="re-icon"><i className="ti ti-swords"></i></div>
+        <div className="re-main">
+          <div className="re-title">每日挑战</div>
+          <div className="re-cn">每天 3 道题 · 赢宝箱奖励{challengeDoneToday ? ' · ✅ 今日已完成' : ''}</div>
+        </div>
+        <i className="ti ti-chevron-right re-arrow"></i>
+      </button>
       <button className="review-entry c-green" onClick={() => navigate('/tb')}>
         <div className="re-icon"><i className="ti ti-book-2"></i></div>
         <div className="re-main">
