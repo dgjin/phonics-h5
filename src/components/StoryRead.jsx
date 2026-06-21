@@ -18,6 +18,19 @@ function useFeedback() {
   return [fb ? <Feedback ok={fb === 'ok'} /> : null, fire];
 }
 
+/* 整页插画：有图显图，加载失败回退 emoji */
+function BookIllus({ line, story }) {
+  const [err, setErr] = useState(false);
+  return (
+    <div className="book-illus">
+      <span className="book-deco">{story.emoji}</span>
+      {line.img && !err
+        ? <img src={line.img} alt={line.en} className="book-page-img" onError={() => setErr(true)} />
+        : <span className="book-big">{line.e || story.emoji}</span>}
+    </div>
+  );
+}
+
 export default function StoryRead() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -131,11 +144,12 @@ export default function StoryRead() {
         <Header title="绘本" sub={story.cn} color={story.color} backTo="/story" />
         <div className="book-cover">
           <div className="book-cover-card" onClick={() => { speakReal(story.lines[0].en); setStarted(true); }}>
+            {story.cover ? <img src={story.cover} alt={story.title} className="book-cover-img" /> : <div className="book-cover-emoji">{story.emoji}</div>}
             <div className="book-cover-lv">{story.level}</div>
-            <div className="book-cover-emoji">{story.emoji}</div>
-            <div className="book-cover-title">{story.title}</div>
-            <div className="book-cover-cn">{story.cn}</div>
-            <div className="book-cover-pages">{story.lines.length} 页</div>
+            <div className="book-cover-meta">
+              <div className="book-cover-title">{story.title}</div>
+              <div className="book-cover-cn">{story.cn} · {story.lines.length} 页</div>
+            </div>
           </div>
           <button className="btn primary book-cover-btn" onClick={() => { speakReal(story.lines[0].en); setStarted(true); }}>
             <i className="ti ti-book"></i> 开始阅读
@@ -150,10 +164,7 @@ export default function StoryRead() {
       <Header title={story.title} sub={'第 ' + (idx + 1) + ' / ' + story.lines.length + ' 页'} color={story.color} backTo="/story" />
       <div className="book-stage">
         <div className="book-page" key={idx} onClick={() => speakReal(line.en)}>
-          <div className="book-illus">
-            <span className="book-deco">{story.emoji}</span>
-            {line.img ? <img src={line.img} alt={line.en} className="book-page-img" /> : <span className="book-big">{line.e || story.emoji}</span>}
-          </div>
+          <BookIllus line={line} story={story} />
           <div className="book-text">
             <div className="book-en">{line.en}</div>
             <div className="book-cn">{line.cn}</div>
