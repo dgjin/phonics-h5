@@ -4,7 +4,7 @@
 export const STORIES = [
   {
     id: 'turnip', title: 'The Big Turnip', cn: '拔萝卜', emoji: '🥬', level: 'L1', color: 'green',
-    cover: '/stories/turnip-cover.png',
+    cover: '/stories/turnip-7.png',
     lines: [
       { en: 'Grandpa plants a turnip.', cn: '老爷爷种了一个萝卜。', e: '👴', img: '/stories/turnip-1.png' },
       { en: 'The turnip grows very big.', cn: '萝卜长得非常大。', e: '🥬', img: '/stories/turnip-2.png' },
@@ -29,7 +29,7 @@ export const STORIES = [
   },
   {
     id: 'tortoise', title: 'The Tortoise and the Hare', cn: '龟兔赛跑', emoji: '🐢', level: 'L2', color: 'teal',
-    cover: '/stories/tortoise-cover.png',
+    cover: '/stories/tortoise-1.png',
     lines: [
       { en: 'A hare laughs at a tortoise.', cn: '兔子嘲笑乌龟跑得慢。', e: '🐰', img: '/stories/tortoise-1.png' },
       { en: '"Let us have a race!"', cn: '“我们来比赛吧！”', e: '🏁', img: '/stories/tortoise-2.png' },
@@ -80,7 +80,7 @@ export const STORIES = [
   },
   {
     id: 'duckling', title: 'The Ugly Duckling', cn: '丑小鸭', emoji: '🦆', level: 'L2', color: 'teal',
-    cover: '/stories/duckling-cover.png',
+    cover: '/stories/duckling-6.jpg',
     lines: [
       { en: 'A grey duckling is born.', cn: '一只灰色的小鸭出生了。', e: '🐣', img: '/stories/duckling-1.jpg' },
       { en: 'The others say he is ugly.', cn: '大家都说他很丑。', e: '😢', img: '/stories/duckling-2.jpg' },
