@@ -17,7 +17,7 @@ export const STORIES = [
   },
   {
     id: 'crow', title: 'The Thirsty Crow', cn: '乌鸦喝水', emoji: '🐦', level: 'L2', color: 'amber',
-    cover: '/stories/crow-cover.png',
+    cover: '/stories/crow-2.png',
     lines: [
       { en: 'A crow is very thirsty.', cn: '一只乌鸦很口渴。', e: '🐦', img: '/stories/crow-1.png' },
       { en: 'It finds a pitcher of water.', cn: '它找到一壶水。', e: '🏺', img: '/stories/crow-2.png' },
@@ -42,7 +42,7 @@ export const STORIES = [
   },
   {
     id: 'lion', title: 'The Lion and the Mouse', cn: '狮子和老鼠', emoji: '🦁', level: 'L2', color: 'coral',
-    cover: '/stories/lion-cover.png',
+    cover: '/stories/lion-1.jpg',
     lines: [
       { en: 'A little mouse wakes a lion.', cn: '一只小老鼠吵醒了狮子。', e: '🐭', img: '/stories/lion-1.jpg' },
       { en: 'The lion is angry.', cn: '狮子很生气。', e: '😠', img: '/stories/lion-2.jpg' },
@@ -55,7 +55,7 @@ export const STORIES = [
   },
   {
     id: 'pigs', title: 'The Three Little Pigs', cn: '三只小猪', emoji: '🐷', level: 'L2', color: 'pink',
-    cover: '/stories/pigs-cover.png',
+    cover: '/stories/pigs-1.jpg',
     lines: [
       { en: 'Three little pigs build houses.', cn: '三只小猪盖房子。', e: '🐷', img: '/stories/pigs-1.jpg' },
       { en: 'The first house is straw.', cn: '第一座是稻草房。', e: '🌾', img: '/stories/pigs-2.jpg' },
@@ -68,7 +68,7 @@ export const STORIES = [
   },
   {
     id: 'fox', title: 'The Fox and the Grapes', cn: '狐狸和葡萄', emoji: '🦊', level: 'L2', color: 'purple',
-    cover: '/stories/fox-cover.png',
+    cover: '/stories/fox-1.jpg',
     lines: [
       { en: 'A fox sees sweet grapes.', cn: '狐狸看见甜甜的葡萄。', e: '🦊', img: '/stories/fox-1.jpg' },
       { en: 'The grapes are very high.', cn: '葡萄挂得很高。', e: '🍇', img: '/stories/fox-2.jpg' },
@@ -92,7 +92,7 @@ export const STORIES = [
   },
   {
     id: 'my-family', title: 'My Family', cn: '我的家人', emoji: '👨‍👩‍👧‍👦', level: 'L1', color: 'amber',
-    cover: '/stories/family-cover.png',
+    cover: '/stories/family-4.jpg',
     lines: [
       { en: 'This is my dad.', cn: '这是我的爸爸。', e: '👨', img: '/stories/family-1.jpg' },
       { en: 'This is my mum.', cn: '这是我的妈妈。', e: '👩', img: '/stories/family-2.jpg' },
