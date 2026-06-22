@@ -25,7 +25,7 @@ function BookIllus({ line, story }) {
     <div className="book-illus">
       <span className="book-deco">{story.emoji}</span>
       {line.img && !err
-        ? <img src={line.img} alt={line.en} className="book-page-img" onError={() => setErr(true)} />
+        ? <img src={line.img} alt={line.en} className="book-page-img" decoding="async" onError={() => setErr(true)} />
         : <span className="book-big">{line.e || story.emoji}</span>}
     </div>
   );
@@ -60,6 +60,12 @@ export default function StoryRead() {
     const t = setTimeout(() => speakReal(story.lines[idx].en), 250);
     return () => { clearTimeout(t); stop(); };
   }, [phase, idx, story, started]);
+
+  // 预加载下一页图片，翻页更顺滑
+  useEffect(() => {
+    const next = story?.lines[idx + 1]?.img;
+    if (next) { const im = new Image(); im.src = next; }
+  }, [idx, story]);
 
   // 小测：自动朗读题目句
   useEffect(() => {
@@ -144,7 +150,7 @@ export default function StoryRead() {
         <Header title="绘本" sub={story.cn} color={story.color} backTo="/story" />
         <div className="book-cover">
           <div className="book-cover-card" onClick={() => { speakReal(story.lines[0].en); setStarted(true); }}>
-            {story.cover ? <img src={story.cover} alt={story.title} className="book-cover-img" /> : <div className="book-cover-emoji">{story.emoji}</div>}
+            {story.cover ? <img src={story.cover} alt={story.title} className="book-cover-img" decoding="async" /> : <div className="book-cover-emoji">{story.emoji}</div>}
             <div className="book-cover-lv">{story.level}</div>
             <div className="book-cover-meta">
               <div className="book-cover-title">{story.title}</div>
